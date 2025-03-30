@@ -1,13 +1,678 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Pogshop</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StreamMarket - Interactive Products for Twitch Streamers</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  </head>
+  <body class="bg-gray-900 text-white font-sans">
+    <!-- Navigation -->
+    <nav class="bg-purple-900 shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 flex items-center">
+              <svg
+                class="h-8 w-8 text-purple-400"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"
+                />
+              </svg>
+              <span class="ml-2 text-xl font-bold">StreamMarket</span>
+            </div>
+            <div class="hidden md:ml-6 md:flex md:space-x-8">
+              <a
+                href="#"
+                class="border-b-2 border-purple-500 text-white px-3 py-2 text-sm font-medium"
+                >Home</a
+              >
+              <a
+                href="#"
+                class="border-transparent text-gray-300 hover:text-white hover:border-purple-300 px-3 py-2 text-sm font-medium"
+                >Browse</a
+              >
+              <a
+                href="#"
+                class="border-transparent text-gray-300 hover:text-white hover:border-purple-300 px-3 py-2 text-sm font-medium"
+                >Categories</a
+              >
+              <a
+                href="#"
+                class="border-transparent text-gray-300 hover:text-white hover:border-purple-300 px-3 py-2 text-sm font-medium"
+                >For Streamers</a
+              >
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div
+              class="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center space-x-4"
+            >
+              <button
+                class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+              >
+                Sign In
+              </button>
+              <button
+                class="bg-purple-500 hover:bg-purple-400 text-white px-4 py-2 rounded-md text-sm font-medium"
+              >
+                Create Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative bg-gray-800">
+      <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 lg:py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <h1
+              class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
+            >
+              Monetize Your
+              <span class="text-purple-400">Stream</span> Experience
+            </h1>
+            <p class="mt-6 text-xl text-gray-300">
+              The marketplace for Twitch streamers to create, sell, and manage
+              interactive products directly to their audience.
+            </p>
+            <div class="mt-8 flex space-x-4">
+              <a
+                href="#"
+                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700"
+              >
+                Start your store
+              </a>
+            </div>
+          </div>
+          <div class="mt-10 lg:mt-0">
+            <div class="relative rounded-lg overflow-hidden shadow-xl">
+              <div
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
+              >
+                <div class="flex items-center">
+                  <div
+                    class="h-10 w-10 rounded-full bg-purple-500 flex items-center justify-center"
+                  >
+                    <svg
+                      class="h-5 w-5 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <span class="ml-2 text-sm text-white font-medium"
+                    >Watch how it works</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h2
+          class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
+        >
+          Popular Interactive Challenges
+        </h2>
+        <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-300 sm:mt-4">
+          Boost your stream engagement with these viewer-triggered activities
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Product Card 1 -->
+        <div
+          class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700 hover:border-purple-500 transition-all"
+        >
+          <div class="flex-shrink-0">
+            <img
+              class="h-48 w-full object-cover"
+              src="/api/placeholder/400/200"
+              alt="Drink Water Challenge"
+            />
+            <div class="absolute top-0 right-0 m-2">
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+              >
+                Popular
+              </span>
+            </div>
+          </div>
+          <div class="flex-1 p-6 flex flex-col justify-between">
+            <div class="flex-1">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-sm font-medium text-purple-400">
+                    Health Challenge
+                  </span>
+                </div>
+                <div class="text-sm text-gray-400">
+                  <div class="flex items-center">
+                    <svg
+                      class="h-4 w-4 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      />
+                    </svg>
+                    <span class="ml-1">4.9 (312)</span>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="block mt-2">
+                <p class="text-xl font-semibold text-white">
+                  Drink a Sip of Water
+                </p>
+                <p class="mt-3 text-base text-gray-400">
+                  Viewers can trigger a hydration reminder! Customize how many
+                  sips, sound effects, and overlay animations when activated.
+                </p>
+              </a>
+            </div>
+            <div class="mt-6 flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    class="h-10 w-10 rounded-full"
+                    src="/api/placeholder/40/40"
+                    alt="Creator"
+                  />
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-white">HydroHomie</p>
+                </div>
+              </div>
+              <span class="text-xl font-bold text-white">$2.99</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card 2 -->
+        <div
+          class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700 hover:border-purple-500 transition-all"
+        >
+          <div class="flex-shrink-0">
+            <img
+              class="h-48 w-full object-cover"
+              src="/api/placeholder/400/200"
+              alt="TikTok Dance"
+            />
+            <div class="absolute top-0 right-0 m-2">
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+              >
+                Trending
+              </span>
+            </div>
+          </div>
+          <div class="flex-1 p-6 flex flex-col justify-between">
+            <div class="flex-1">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-sm font-medium text-purple-400">
+                    Dance Challenge
+                  </span>
+                </div>
+                <div class="text-sm text-gray-400">
+                  <div class="flex items-center">
+                    <svg
+                      class="h-4 w-4 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      />
+                    </svg>
+                    <span class="ml-1">4.8 (278)</span>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="block mt-2">
+                <p class="text-xl font-semibold text-white">
+                  Do a TikTok Dance
+                </p>
+                <p class="mt-3 text-base text-gray-400">
+                  Viewers can make you perform the latest TikTok dance! Includes
+                  curated dance library, music integration, and timer options.
+                </p>
+              </a>
+            </div>
+            <div class="mt-6 flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    class="h-10 w-10 rounded-full"
+                    src="/api/placeholder/40/40"
+                    alt="Creator"
+                  />
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-white">DanceVibes</p>
+                </div>
+              </div>
+              <span class="text-xl font-bold text-white">$5.99</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card 3 -->
+        <div
+          class="flex flex-col rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700 hover:border-purple-500 transition-all"
+        >
+          <div class="flex-shrink-0">
+            <img
+              class="h-48 w-full object-cover"
+              src="/api/placeholder/400/200"
+              alt="Push-up Challenge"
+            />
+          </div>
+          <div class="flex-1 p-6 flex flex-col justify-between">
+            <div class="flex-1">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-sm font-medium text-purple-400">
+                    Fitness Challenge
+                  </span>
+                </div>
+                <div class="text-sm text-gray-400">
+                  <div class="flex items-center">
+                    <svg
+                      class="h-4 w-4 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      />
+                    </svg>
+                    <span class="ml-1">4.7 (195)</span>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="block mt-2">
+                <p class="text-xl font-semibold text-white">Do 5 Push-Ups</p>
+                <p class="mt-3 text-base text-gray-400">
+                  Let viewers challenge you to do push-ups mid-stream!
+                  Customizable rep count, cooldown timer, and automated push-up
+                  counter.
+                </p>
+              </a>
+            </div>
+            <div class="mt-6 flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    class="h-10 w-10 rounded-full"
+                    src="/api/placeholder/40/40"
+                    alt="Creator"
+                  />
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-white">StreamFit</p>
+                </div>
+              </div>
+              <span class="text-xl font-bold text-white">$3.99</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <a
+          href="#"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700"
+        >
+          View All Challenges
+          <svg
+            class="ml-2 -mr-1 h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- More Products Section -->
+    <div class="bg-gray-800">
+      <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-baseline sm:justify-between">
+          <h2 class="text-2xl font-extrabold tracking-tight text-white">
+            More Interactive Challenges
+          </h2>
+          <a
+            href="#"
+            class="hidden text-sm font-semibold text-purple-400 hover:text-purple-300 sm:block"
+          >
+            Browse all challenges<span aria-hidden="true"> &rarr;</span>
+          </a>
+        </div>
+
+        <div
+          class="mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-y-0 sm:gap-x-6 lg:gap-x-8"
+        >
+          <!-- More Challenge 1 -->
+          <div class="group relative">
+            <div
+              class="w-full h-64 bg-gray-700 rounded-lg overflow-hidden group-hover:opacity-75"
+            >
+              <img
+                src="/api/placeholder/400/300"
+                alt="Impersonation challenge"
+                class="w-full h-full object-center object-cover"
+              />
+            </div>
+            <h3 class="mt-4 text-base font-semibold text-white">
+              <a href="#">
+                <span class="absolute inset-0"></span>
+                Celebrity Impersonation
+              </a>
+            </h3>
+            <p class="mt-1 text-sm text-gray-400">$4.99</p>
+          </div>
+
+          <!-- More Challenge 2 -->
+          <div class="group relative">
+            <div
+              class="w-full h-64 bg-gray-700 rounded-lg overflow-hidden group-hover:opacity-75"
+            >
+              <img
+                src="/api/placeholder/400/300"
+                alt="Gaming challenge"
+                class="w-full h-full object-center object-cover"
+              />
+            </div>
+            <h3 class="mt-4 text-base font-semibold text-white">
+              <a href="#">
+                <span class="absolute inset-0"></span>
+                Play With One Hand
+              </a>
+            </h3>
+            <p class="mt-1 text-sm text-gray-400">$3.49</p>
+          </div>
+
+          <!-- More Challenge 3 -->
+          <div class="group relative">
+            <div
+              class="w-full h-64 bg-gray-700 rounded-lg overflow-hidden group-hover:opacity-75"
+            >
+              <img
+                src="/api/placeholder/400/300"
+                alt="Food challenge"
+                class="w-full h-full object-center object-cover"
+              />
+            </div>
+            <h3 class="mt-4 text-base font-semibold text-white">
+              <a href="#">
+                <span class="absolute inset-0"></span>
+                Eat a Spicy Snack
+              </a>
+            </h3>
+            <p class="mt-1 text-sm text-gray-400">$6.99</p>
+          </div>
+        </div>
+
+        <div class="mt-6 sm:hidden">
+          <a
+            href="#"
+            class="block text-sm font-semibold text-purple-400 hover:text-purple-300"
+          >
+            Browse all challenges<span aria-hidden="true"> &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="bg-gray-900">
+      <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+        <div class="lg:grid lg:grid-cols-3 lg:gap-8">
+          <div>
+            <h2 class="text-3xl font-extrabold text-white">
+              Why Streamers Love Us
+            </h2>
+            <p class="mt-4 text-lg text-gray-300">
+              StreamMarket helps creators monetize their content with tools
+              designed specifically for interactive challenges.
+            </p>
+          </div>
+          <div class="mt-12 lg:mt-0 lg:col-span-2">
+            <dl
+              class="space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10"
+            >
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white"
+                  >
+                    <svg
+                      class="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <dt class="text-lg leading-6 font-medium text-white">
+                    Direct Revenue
+                  </dt>
+                  <dd class="mt-2 text-base text-gray-300">
+                    Create new revenue streams beyond subscriptions and
+                    donations with fun interactive challenges.
+                  </dd>
+                </div>
+              </div>
+
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white"
+                  >
+                    <svg
+                      class="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <dt class="text-lg leading-6 font-medium text-white">
+                    Viewer Engagement
+                  </dt>
+                  <dd class="mt-2 text-base text-gray-300">
+                    Boost engagement with interactive challenges that keep your
+                    audience entertained and invested.
+                  </dd>
+                </div>
+              </div>
+
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white"
+                  >
+                    <svg
+                      class="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <dt class="text-lg leading-6 font-medium text-white">
+                    Easy Integration
+                  </dt>
+                  <dd class="mt-2 text-base text-gray-300">
+                    All challenges connect seamlessly with Twitch and other
+                    streaming platforms with minimal setup required.
+                  </dd>
+                </div>
+              </div>
+
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white"
+                  >
+                    <svg
+                      class="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <dt class="text-lg leading-6 font-medium text-white">
+                    Customization
+                  </dt>
+                  <dd class="mt-2 text-base text-gray-300">
+                    Set your own prices, cooldown times, and challenge
+                    variations to match your unique streaming style.
+                  </dd>
+                </div>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-purple-700">
+      <div
+        class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between"
+      >
+        <h2
+          class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
+        >
+          <span class="block">Ready to boost your stream income?</span>
+          <span class="block text-purple-200"
+            >Start selling your interactive challenges today.</span
+          >
+        </h2>
+        <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+          <div class="inline-flex rounded-md shadow">
+            <a
+              href="#"
+              class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-purple-600 bg-white hover:bg-purple-50"
+            >
+              Get Started
+            </a>
+          </div>
+          <div class="ml-3 inline-flex rounded-md shadow">
+            <a
+              href="#"
+              class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-800 hover:bg-purple-900"
+            >
+              Learn more
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900">
+      <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+        <div class="xl:grid xl:grid-cols-3 xl:gap-8">
+          <div class="space-y-8 xl:col-span-1">
+            <div class="flex items-center">
+              <svg
+                class="h-8 w-8 text-purple-400"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"
+                />
+              </svg>
+              <span class="ml-2 text-xl font-bold text-white"
+                >StreamMarket</span
+              >
+            </div>
+            <p class="text-gray-400 text-base">
+              The ultimate marketplace for Twitch streamers to monetize their
+              content with interactive challenges.
+            </p>
+            <div class="flex space-x-6">
+              <a href="#" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">Twitter</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
