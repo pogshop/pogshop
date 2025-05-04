@@ -1,0 +1,12 @@
+steps:
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    dir: "."
+    args:
+      - gcloud
+      - functions
+      - deploy
+      - users
+      - --region=us-central1
+      - --source=functions
+      - --trigger-http
+      - --runtime=nodejs22
