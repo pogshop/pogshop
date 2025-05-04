@@ -1,0 +1,18 @@
+steps:
+  # Step 1: Install dependencies
+  - name: "gcr.io/cloud-builders/npm"
+    dir: "./backend/services/users/functions" # Directory of your function
+    args: ["install"]
+
+  # Step 2: Deploy to Cloud Function
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    dir: "./backend/services/users" # Directory of your function
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud functions deploy users \
+          --runtime=nodejs22 \
+          --trigger-http \
+          --entry-point userServiceHandler \
+          --region=us-central1
