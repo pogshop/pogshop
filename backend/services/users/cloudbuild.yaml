@@ -10,3 +10,6 @@ steps:
       - --source=functions
       - --trigger-http
       - --runtime=nodejs22
+
+options:
+  logging: CLOUD_LOGGING_ONLY
