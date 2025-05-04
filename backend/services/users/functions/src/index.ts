@@ -13,7 +13,7 @@ import * as logger from 'firebase-functions/logger';
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const getUser = onRequest((request, response) => {
-  logger.info('Hello Get User logs!', { structuredData: true });
+export const userServiceHandler = onRequest((request, response) => {
+  logger.info('Hello user handler!', { structuredData: true });
   response.send('Get User!');
 });
