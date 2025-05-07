@@ -7,10 +7,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
+import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-auth-login',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NavBarComponent],
   templateUrl: './auth-login.component.html',
   styleUrl: './auth-login.component.css',
 })
@@ -19,7 +21,7 @@ export class AuthLoginComponent {
   pageType: 'login' | 'signup' = 'login';
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -27,7 +29,7 @@ export class AuthLoginComponent {
     });
   }
 
-  setPageType(type: 'login' | 'signup'): void {
-    this.pageType = type;
+  navigateToSignUp(): void {
+    this.router.navigate(['/signup']);
   }
 }

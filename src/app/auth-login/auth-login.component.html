@@ -2,7 +2,7 @@
   class="min-h-screen bg-gray-900 text-gray-100 font-sans relative overflow-hidden"
 >
   <!-- Background effects (no animations) -->
-  <div class="absolute inset-0 overflow-hidden">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="absolute -inset-10 opacity-30">
       <div
         class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70"
@@ -16,50 +16,11 @@
     </div>
   </div>
 
+  <!-- Navigation -->
+  <app-nav-bar class="relative z-50"></app-nav-bar>
+
   <!-- Content -->
   <div class="relative z-10">
-    <!-- Navigation -->
-    <nav class="flex justify-between items-center py-6 px-8">
-      <div class="flex items-center">
-        <i class="text-purple-500 mr-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="28"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-          </svg>
-        </i>
-        <span class="text-2xl font-bold">Pog Shop</span>
-      </div>
-      <div class="flex items-center space-x-4">
-        <button
-          (click)="setPageType('login')"
-          class="text-gray-300 hover:text-purple-400"
-          class="px-4 py-2 rounded-md transition-colors"
-        >
-          Log In
-        </button>
-        <button
-          (click)="setPageType('signup')"
-          [ngClass]="
-            pageType === 'signup'
-              ? 'bg-purple-600 text-white'
-              : 'text-gray-300 hover:text-purple-400'
-          "
-          class="px-4 py-2 rounded-md transition-colors"
-        >
-          Sign Up
-        </button>
-      </div>
-    </nav>
-
     <div
       class="flex items-center justify-center min-h-[calc(100vh-88px)] py-12 px-4"
     >
@@ -72,7 +33,7 @@
             <p class="text-gray-400 text-center mb-8">
               Don't have an account?
               <button
-                (click)="setPageType('signup')"
+                (click)="navigateToSignUp()"
                 class="text-purple-400 hover:text-purple-300 font-medium"
               >
                 Sign up
