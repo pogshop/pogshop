@@ -1,0 +1,79 @@
+<div class="min-h-screen bg-gray-900 text-gray-100 font-sans relative overflow-hidden">
+    <app-nav-bar class="relative z-50"></app-nav-bar>
+    <!-- Background effects -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -inset-10 opacity-30">
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+      </div>
+    </div>
+    
+    <!-- Content -->
+    <div class="relative z-10">
+
+      <div class="flex items-center justify-center min-h-[calc(100vh-176px)] py-12 px-4">
+        <div class="w-full max-w-md">
+          <div class="relative">
+            <div class="relative bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700">
+              <!-- Magic link icon -->
+              <div class="relative w-24 h-24 mx-auto mb-8">
+                <!-- Outer glow -->
+                <div class="absolute inset-0 bg-purple-500 rounded-full animate-ping opacity-20"></div>
+                <div class="absolute inset-2 bg-purple-600 rounded-full animate-pulse opacity-40"></div>
+                <!-- Main circle -->
+                <div class="absolute inset-0 bg-purple-900 rounded-full flex items-center justify-center border-4 border-purple-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400">
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                  </svg>
+                </div>
+     
+              </div>
+              
+              <h2 class="text-3xl font-bold mb-2 text-center">Check your email!</h2>
+              <p class="text-gray-400 text-center mb-8">
+                We've sent a magic link to your email. Click on the link to log in to your Pog shop account.
+              </p>
+              
+              <!-- Email instruction box -->
+              <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 mb-6">
+                <div class="flex items-center text-gray-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <p class="text-sm">
+                    Magic link sent! Don't forget to check your spam folder if you don't see it in your inbox.
+                  </p>
+                </div>
+              </div>
+              
+              <button (click)="resendMagicLink()" class="w-full bg-purple-600/20 hover:bg-purple-600/30 text-purple-400 py-3 px-4 rounded-md font-medium border border-purple-600 transition-colors">
+                Resend Magic Link
+              </button>
+              
+              <p class="mt-8 text-center text-sm text-gray-400">
+                Didn't receive an email?
+                <a href="javascript:void(0)" (click)="tryDifferentEmail()" class="text-purple-400 hover:text-purple-300 font-medium ml-1">
+                  Try a different email
+                </a>
+              </p>
+            </div>
+          </div>
+          
+          <!-- Secured by Magic note -->
+          <div class="mt-8 text-center">
+            <div class="inline-flex items-center px-4 py-2 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400 mr-2">
+                <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                <path d="M12 7v7"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+              <span class="text-sm text-gray-400">Secured by Firebase Magic Link</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

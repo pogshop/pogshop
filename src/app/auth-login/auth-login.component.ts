@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,6 +9,8 @@ import {
 } from '@angular/forms';
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 import { Router } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
+import { sendSignInLinkToEmail } from '@angular/fire/auth';
 @Component({
   selector: 'app-auth-login',
   standalone: true,
@@ -18,9 +20,10 @@ import { Router } from '@angular/router';
 })
 export class AuthLoginComponent {
   email: string = '';
-  pageType: 'login' | 'signup' = 'login';
   loginForm!: FormGroup;
-
+  private auth: Auth = inject(Auth);
+  showSuccessMessage: boolean = false;
+  errorMessage: string = '';
   constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
@@ -31,5 +34,26 @@ export class AuthLoginComponent {
 
   navigateToSignUp(): void {
     this.router.navigate(['/signup']);
+  }
+  sendMagicLink(): void {
+    const email = this.loginForm.value.email;
+    const actionCodeSettings = {
+      url: 'https://pogshop.gg',
+      handleCodeInApp: true
+    };
+    
+    sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
+      .then(() => {
+        // The link was successfully sent. Inform the user.
+        window.localStorage.setItem('emailForSignIn', email);
+        this.showSuccessMessage = true;
+        this.errorMessage = '';
+        this.router.navigate(['/magic-link-sent']);
+      })
+      .catch((error) => {
+        this.errorMessage = error.message;
+        this.showSuccessMessage = false;
+        console.log(error);
+      });
   }
 }
