@@ -1,0 +1,530 @@
+<div
+  class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative overflow-hidden"
+>
+  <!-- Floating emotes -->
+  <ng-container *ngIf="showFloatingEmotes">
+    <div
+      *ngFor="let emote of floatingEmotes; let i = index"
+      class="fixed pointer-events-none text-xl animate-float-up"
+      [style.left]="emote.left + '%'"
+      [style.bottom]="'-50px'"
+      [style.animation-delay]="emote.delay + 's'"
+      [style.animation-duration]="emote.duration + 's'"
+      [style.z-index]="40"
+    >
+      {{ emote.emoji }}
+    </div>
+  </ng-container>
+
+  <!-- Background effects -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute -inset-10 opacity-30">
+      <div
+        class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"
+      ></div>
+      <div
+        class="absolute top-0 -right-4 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"
+      ></div>
+      <div
+        class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"
+      ></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex justify-between items-center py-5 px-8 top-0 z-50">
+    <div class="flex items-center">
+      <i class="text-purple-500 mr-2 lucide-zap" style="font-size: 28px"></i>
+      <span class="text-2xl font-bold">Pog Shop</span>
+    </div>
+    <div>
+      <button
+        class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors mr-2"
+      >
+        Log In
+      </button>
+      <button
+        class="bg-transparent border border-purple-500 hover:bg-purple-500 hover:bg-opacity-20 text-white px-4 py-2 rounded-md transition-colors"
+      >
+        Sign Up
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="bg-gray-900 py-20 px-8 relative overflow-hidden">
+    <!-- Background effects -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -inset-10 opacity-30">
+        <div
+          class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"
+        ></div>
+        <div
+          class="absolute top-0 -right-4 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"
+        ></div>
+        <div
+          class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"
+        ></div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto text-center relative z-10">
+      <div class="flex flex-col items-center justify-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <span class="text-purple-400">The Livestream Shop</span> <br />Let
+          Fans Buy, <span class="text-pink-400">You Create</span>
+        </h1>
+        <p class="text-xl text-gray-300 max-w-2xl">
+          Set up your streamer store in minutes.
+        </p>
+        <p class="text-xl mb-4 text-gray-300 max-w-2xl">
+          Make income by letting your fans add hype to your livestreams
+        </p>
+
+        <div
+          class="flex items-center space-x-3 text-gray-300 justify-center mb-8"
+        >
+          <span>btw it's free! 🎉</span>
+        </div>
+
+        <div
+          class="flex flex-col sm:flex-row items-center gap-4 w-full max-w-md mb-12"
+        >
+          <div class="relative w-full">
+            <input
+              type="text"
+              placeholder="Enter username"
+              class="w-full pl-4 pr-10 py-3 border border-gray-600 bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
+            />
+          </div>
+          <button
+            class="w-auto bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-md font-medium flex items-center justify-center whitespace-nowrap text-sm"
+          >
+            Join PogShop
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 px-8 bg-gray-900">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="relative group">
+          <div
+            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
+          ></div>
+          <div
+            class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
+          >
+            <h3 class="text-3xl font-bold mb-6">Revenue Booster</h3>
+            <p class="text-xl text-gray-300 mb-8">
+              Increase your streaming income by selling what you already do on
+              streams with fun, interactive actions fans can trigger live. Oh,
+              and keep 100% of earnings, no platform fees.
+            </p>
+            <div class="w-32 h-32 mt-8">
+              <div class="relative w-full h-full">
+                <div class="relative z-10">
+                  <lucide-icon
+                    name="dollar-sign"
+                    [size]="80"
+                    class="text-green-400"
+                  ></lucide-icon>
+                </div>
+
+                <!-- Smaller animated dollar sign at top left -->
+                <div class="absolute -top-2 -left-2 animate-ping opacity-75">
+                  <lucide-icon
+                    name="dollar-sign"
+                    [size]="60"
+                    class="text-green-400"
+                  ></lucide-icon>
+                </div>
+
+                <!-- Smaller animated dollar sign at bottom right -->
+                <div
+                  class="absolute -bottom-2 -right-2 animate-pulse opacity-75"
+                >
+                  <lucide-icon
+                    name="dollar-sign"
+                    [size]="40"
+                    class="text-purple-400"
+                  ></lucide-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <div
+            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
+          ></div>
+          <div
+            class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
+          >
+            <h3 class="text-3xl font-bold mb-6">Stream Hype</h3>
+            <p class="text-xl text-gray-300 mb-8">
+              Boost viewer retention and chat activity with real-time fun.
+              Viewers aren't just watching — they're playing with you.
+            </p>
+            <div class="w-32 h-32 mt-8">
+              <div class="relative w-full h-full">
+                <!-- Background animation effect -->
+                <div
+                  class="absolute inset-0 bg-purple-600 rounded-full animate-ping opacity-30"
+                ></div>
+
+                <!-- Main flame icon -->
+                <div class="relative z-10">
+                  <lucide-icon
+                    name="flame"
+                    [size]="80"
+                    class="text-orange-400"
+                  ></lucide-icon>
+                </div>
+
+                <!-- Decorative element -->
+                <div
+                  class="absolute -bottom-4 -right-4 w-8 h-8 bg-yellow-400 rounded-full animate-pulse"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <div
+            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
+          ></div>
+          <div
+            class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
+          >
+            <h3 class="text-3xl font-bold mb-6">
+              Stand Out from Other Streamers
+            </h3>
+            <p class="text-xl text-gray-300 mb-8">
+              Everyone has overlays — few have streams fans can control. Let
+              fans trigger dances, chaos, and memes mid-stream.
+            </p>
+            <div class="w-32 h-32 mt-8">
+              <div class="relative w-full h-full">
+                <!-- Background animation effect -->
+                <div
+                  class="absolute inset-0 bg-blue-600 rounded-full animate-pulse opacity-30"
+                ></div>
+
+                <!-- Main crown icon -->
+                <div class="relative z-10">
+                  <lucide-icon
+                    name="crown"
+                    [size]="80"
+                    class="text-yellow-400"
+                  ></lucide-icon>
+                </div>
+
+                <!-- Decorative sparkles -->
+                <div class="absolute -top-2 -right-2 animate-pulse">
+                  <lucide-icon
+                    name="sparkles"
+                    [size]="25"
+                    class="text-yellow-300"
+                  ></lucide-icon>
+                </div>
+                <div
+                  class="absolute -bottom-2 -left-2 animate-pulse"
+                  style="animation-delay: 100ms"
+                >
+                  <lucide-icon
+                    name="sparkles"
+                    [size]="25"
+                    class="text-yellow-300"
+                  ></lucide-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Your Stream Section -->
+  <section
+    class="py-20 px-8 bg-white shadow-2xl relative z-20"
+    style="clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)"
+  >
+    <div class="max-w-5xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6 text-gray-900">
+        Your Stream. Your Shop. Your Rules.
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Pog Shop gives you interactive tools to let fans support you—on your
+        terms. Whether it's a dance, a dare, or your own merch, you choose what
+        fans can buy. Simple setup. No fees. Just hype.
+      </p>
+    </div>
+  </section>
+
+  <!-- Popular Products -->
+  <section id="products-section" class="py-20 px-8 bg-gray-900">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <h2 class="text-3xl font-bold text-center mb-4">
+        Popular Interactive Products
+      </h2>
+      <p class="text-center text-gray-300 max-w-3xl mx-auto mb-12">
+        Top-selling items that creators are using to engage their audience and
+        boost earnings
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Jump Scare product -->
+        <div
+          class="relative group transition-all duration-700"
+          [ngClass]="{
+            'animate-bubble-pop': visibleCards.products,
+            'opacity-0': !visibleCards.products
+          }"
+          [style.animation-delay]="'0ms'"
+          [style.opacity]="visibleCards.products ? 1 : 0"
+        >
+          <div
+            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300"
+          ></div>
+          <div class="bg-gray-900 rounded-lg overflow-hidden relative">
+            <div
+              class="h-48 bg-gray-800 relative overflow-hidden flex items-center justify-center"
+            >
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div
+                  class="w-32 h-32 bg-red-900 rounded-full flex items-center justify-center animate-pulse"
+                >
+                  <div
+                    class="w-24 h-24 bg-red-800 rounded-full flex items-center justify-center"
+                  >
+                    <div class="text-5xl text-red-200">👻</div>
+                  </div>
+                </div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-50"
+                ></div>
+              </div>
+              <div
+                class="absolute top-2 right-2 bg-purple-600 text-white text-sm font-bold rounded-full px-3 py-1 z-10"
+              >
+                $5.99
+              </div>
+            </div>
+            <div class="p-4">
+              <span class="text-xs text-gray-400 uppercase tracking-wider"
+                >Reaction</span
+              >
+              <h3 class="font-bold text-lg mt-1">Jump Scare</h3>
+              <p class="text-gray-400 text-sm mt-2">
+                Trigger a terrifying scream and visual jump scare
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voice Changer product -->
+        <div
+          class="relative group transition-all duration-700"
+          [ngClass]="{
+            'animate-bubble-pop': visibleCards.products,
+            'opacity-0': !visibleCards.products
+          }"
+          [style.animation-delay]="'150ms'"
+          [style.opacity]="visibleCards.products ? 1 : 0"
+        >
+          <div
+            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300"
+          ></div>
+          <div class="bg-gray-900 rounded-lg overflow-hidden relative">
+            <div
+              class="h-48 bg-gray-800 relative overflow-hidden flex items-center justify-center"
+            >
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="flex items-end space-x-1 h-24">
+                  <div
+                    *ngFor="
+                      let height of [3, 7, 12, 18, 22, 18, 12, 7, 3];
+                      let i = index
+                    "
+                    class="w-2 bg-gradient-to-t from-blue-600 to-purple-500 rounded-full animate-pulse"
+                    [style.height]="height + 'px'"
+                    [style.animation-delay]="i * 0.1 + 's'"
+                  ></div>
+                </div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-50"
+                ></div>
+              </div>
+              <div
+                class="absolute top-2 right-2 bg-purple-600 text-white text-sm font-bold rounded-full px-3 py-1 z-10"
+              >
+                $3.99
+              </div>
+            </div>
+            <div class="p-4">
+              <span class="text-xs text-gray-400 uppercase tracking-wider"
+                >Audio Effect</span
+              >
+              <h3 class="font-bold text-lg mt-1">Voice Changer</h3>
+              <p class="text-gray-400 text-sm mt-2">
+                Change streamer's voice for 30 seconds
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dance Break product -->
+        <div
+          class="relative group transition-all duration-700"
+          [ngClass]="{
+            'animate-bubble-pop': visibleCards.products,
+            'opacity-0': !visibleCards.products
+          }"
+          [style.animation-delay]="'300ms'"
+          [style.opacity]="visibleCards.products ? 1 : 0"
+        >
+          <div
+            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300"
+          ></div>
+          <div class="bg-gray-900 rounded-lg overflow-hidden relative">
+            <div
+              class="h-48 bg-gray-800 relative overflow-hidden flex items-center justify-center"
+            >
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div
+                  class="w-32 h-32 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center animate-spin-slow"
+                >
+                  <div
+                    class="w-28 h-28 bg-gray-800 rounded-full flex items-center justify-center"
+                  >
+                    <div class="text-5xl">🕺</div>
+                  </div>
+                </div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-50"
+                ></div>
+              </div>
+              <div
+                class="absolute top-2 right-2 bg-purple-600 text-white text-sm font-bold rounded-full px-3 py-1 z-10"
+              >
+                $7.99
+              </div>
+            </div>
+            <div class="p-4">
+              <span class="text-xs text-gray-400 uppercase tracking-wider"
+                >Challenge</span
+              >
+              <h3 class="font-bold text-lg mt-1">Dance Break</h3>
+              <p class="text-gray-400 text-sm mt-2">
+                Force a 15-second dance party
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple, Fast Section -->
+  <section class="py-10 px-8 bg-gray-900">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-12">
+        Easy. Simple. <span class="text-purple-500">Fast!</span>
+      </h2>
+
+      <div class="space-y-12">
+        <div class="grid grid-cols-1 gap-8 items-center">
+          <div class="relative group">
+            <div class="relative bg-gray-900 rounded-xl p-8">
+              <div class="flex items-center mb-4">
+                <div
+                  class="flex items-center justify-center w-10 h-10 bg-purple-900 rounded-full mr-3"
+                >
+                  <span class="text-purple-400 font-bold">1</span>
+                </div>
+                <h3 class="text-xl font-bold">Create & share your Pogshop</h3>
+              </div>
+              <p class="text-gray-400">
+                Choose presets like "Make me dance" or create your own and start
+                sharing your shop in minutes!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 items-center">
+          <div class="relative group">
+            <div
+              class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
+            ></div>
+            <div class="relative bg-gray-900 rounded-xl p-8">
+              <div class="flex items-center mb-4">
+                <div
+                  class="flex items-center justify-center w-10 h-10 bg-purple-900 rounded-full mr-3"
+                >
+                  <span class="text-purple-400 font-bold">2</span>
+                </div>
+                <h3 class="text-xl font-bold">
+                  Go Live and Let Fans Trigger Chaos
+                </h3>
+              </div>
+              <p class="text-gray-400">
+                Let your fans support you on Pogshop with more fun interactions
+                and hype!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 px-8 bg-purple-900 text-white relative z-10">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">Get started on Pogshop now!</h2>
+      <p class="text-xl mb-8 text-purple-100">Add hype to your streams</p>
+      <div
+        class="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto relative"
+      >
+        <input
+          type="text"
+          placeholder="Enter username"
+          class="px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 text-gray-800 w-full bg-white relative z-20 cursor-text pointer-events-auto"
+          (click)="$event.stopPropagation()"
+        />
+        <button
+          class="bg-white text-purple-900 hover:bg-purple-100 px-8 py-3 rounded-md font-medium whitespace-nowrap relative z-20"
+        >
+          Join Pogshop
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer
+    class="py-12 px-8 bg-gray-900 text-gray-400 border-t border-gray-800 relative"
+  >
+    <div class="max-w-6xl mx-auto text-center">
+      <div class="flex items-center justify-center mb-6">
+        <i class="lucide-zap text-purple-500 mr-2" style="font-size: 24px"></i>
+        <span class="text-xl font-bold text-white">Pogshop</span>
+      </div>
+      <p class="text-gray-500 max-w-md mx-auto">
+        The ultimate platform for streamers to monetize their content and engage
+        with fans.
+      </p>
+      <div class="mt-8 pt-8 border-t border-gray-800 text-gray-600">
+        © 2025 Pogshop. All rights reserved.
+      </div>
+    </div>
+  </footer>
+</div>
