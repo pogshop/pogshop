@@ -34,16 +34,31 @@
   <!-- Navigation -->
   <nav class="flex justify-between items-center py-5 px-8 top-0 z-50">
     <div class="flex items-center">
-      <i class="text-purple-500 mr-2 lucide-zap" style="font-size: 28px"></i>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-purple-500 mr-2"
+      >
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+      </svg>
       <span class="text-2xl font-bold">Pog Shop</span>
     </div>
     <div>
       <button
+        (click)="navigateToLogin()"
         class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors mr-2"
       >
         Log In
       </button>
       <button
+        (click)="navigateToSignUp()"
         class="bg-transparent border border-purple-500 hover:bg-purple-500 hover:bg-opacity-20 text-white px-4 py-2 rounded-md transition-colors"
       >
         Sign Up
@@ -71,14 +86,15 @@
     <div class="max-w-6xl mx-auto text-center relative z-10">
       <div class="flex flex-col items-center justify-center">
         <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-          <span class="text-purple-400">The Livestream Shop</span> <br />Let
-          Fans Buy, <span class="text-pink-400">You Create</span>
+          <span class="text-purple-400">The Livestream Shop</span> <br />Sell
+          Livestream Alerts
+          <span class="text-pink-400">to your Fans</span>
         </h1>
         <p class="text-xl text-gray-300 max-w-2xl">
           Set up your streamer store in minutes.
         </p>
         <p class="text-xl mb-4 text-gray-300 max-w-2xl">
-          Make income by letting your fans add hype to your livestreams
+          Make income by letting viewers trigger alerts on stream
         </p>
 
         <div
@@ -100,7 +116,7 @@
           <button
             class="w-auto bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-md font-medium flex items-center justify-center whitespace-nowrap text-sm"
           >
-            Join PogShop
+            Join Pog Shop
           </button>
         </div>
       </div>
@@ -118,12 +134,8 @@
           <div
             class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
           >
-            <h3 class="text-3xl font-bold mb-6">Revenue Booster</h3>
-            <p class="text-xl text-gray-300 mb-8">
-              Increase your streaming income by selling what you already do on
-              streams with fun, interactive actions fans can trigger live. Oh,
-              and keep 100% of earnings, no platform fees.
-            </p>
+            <h3 class="text-3xl font-bold mb-6">Boost Your Revenue</h3>
+            <p class="text-xl text-gray-300 mb-8">100% Yours. Zero Fees.</p>
             <div class="w-32 h-32 mt-8">
               <div class="relative w-full h-full">
                 <div class="relative z-10">
@@ -165,10 +177,9 @@
           <div
             class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
           >
-            <h3 class="text-3xl font-bold mb-6">Stream Hype</h3>
+            <h3 class="text-3xl font-bold mb-6">Add Hype</h3>
             <p class="text-xl text-gray-300 mb-8">
-              Boost viewer retention and chat activity with real-time fun.
-              Viewers aren't just watching — they're playing with you.
+              Live Sale Alerts. On-Stream Celebration.
             </p>
             <div class="w-32 h-32 mt-8">
               <div class="relative w-full h-full">
@@ -202,12 +213,9 @@
           <div
             class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
           >
-            <h3 class="text-3xl font-bold mb-6">
-              Stand Out from Other Streamers
-            </h3>
+            <h3 class="text-3xl font-bold mb-6">Fan Interaction</h3>
             <p class="text-xl text-gray-300 mb-8">
-              Everyone has overlays — few have streams fans can control. Let
-              fans trigger dances, chaos, and memes mid-stream.
+              Fans Trigger Chaos. Stream Mayhem.
             </p>
             <div class="w-32 h-32 mt-8">
               <div class="relative w-full h-full">
@@ -261,9 +269,12 @@
         Your Stream. Your Shop. Your Rules.
       </h2>
       <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-        Pog Shop gives you interactive tools to let fans support you—on your
-        terms. Whether it's a dance, a dare, or your own merch, you choose what
-        fans can buy. Simple setup. No fees. Just hype.
+        Sell interactive products on stream without having to count bits, subs,
+        or donos yourself.
+        <br />
+        Whether it's a dance or your own merch, sell anything to your fans.
+        <br />
+        Simple setup in minutes. No fees.
       </p>
     </div>
   </section>
@@ -434,10 +445,14 @@
 
   <!-- Simple, Fast Section -->
   <section class="py-10 px-8 bg-gray-900">
-    <div class="max-w-5xl mx-auto">
-      <h2 class="text-3xl font-bold text-center mb-12">
-        Easy. Simple. <span class="text-purple-500">Fast!</span>
-      </h2>
+    <div class="max-w-5xl mx-auto my-auto">
+      <div
+        class="border-2 border-gray-300 rounded-lg p-10 w-200 mx-auto my-auto shadow-md mb-10"
+      >
+        <h2 class="text-3xl font-bold text-center">
+          Add Stream Hype <span class="text-purple-500">FAST</span>
+        </h2>
+      </div>
 
       <div class="space-y-12">
         <div class="grid grid-cols-1 gap-8 items-center">
@@ -449,7 +464,7 @@
                 >
                   <span class="text-purple-400 font-bold">1</span>
                 </div>
-                <h3 class="text-xl font-bold">Create & share your Pogshop</h3>
+                <h3 class="text-xl font-bold">Create & share your Pog Shop</h3>
               </div>
               <p class="text-gray-400">
                 Choose presets like "Make me dance" or create your own and start
@@ -471,13 +486,11 @@
                 >
                   <span class="text-purple-400 font-bold">2</span>
                 </div>
-                <h3 class="text-xl font-bold">
-                  Go Live and Let Fans Trigger Chaos
-                </h3>
+                <h3 class="text-xl font-bold">Get Paid for Every Purchase</h3>
               </div>
               <p class="text-gray-400">
-                Let your fans support you on Pogshop with more fun interactions
-                and hype!
+                When a fan purchases your pog shop product, a stream alert goes
+                off and broadcasts it to everyone.
               </p>
             </div>
           </div>
@@ -489,8 +502,10 @@
   <!-- CTA -->
   <section class="py-20 px-8 bg-purple-900 text-white relative z-10">
     <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-6">Get started on Pogshop now!</h2>
-      <p class="text-xl mb-8 text-purple-100">Add hype to your streams</p>
+      <h2 class="text-3xl font-bold mb-6">
+        Create Your First Livestream Sale Alert
+      </h2>
+      <p class="text-xl mb-8 text-purple-100">Time to start the hype train</p>
       <div
         class="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto relative"
       >
@@ -503,7 +518,7 @@
         <button
           class="bg-white text-purple-900 hover:bg-purple-100 px-8 py-3 rounded-md font-medium whitespace-nowrap relative z-20"
         >
-          Join Pogshop
+          Join Pog Shop
         </button>
       </div>
     </div>
@@ -516,14 +531,14 @@
     <div class="max-w-6xl mx-auto text-center">
       <div class="flex items-center justify-center mb-6">
         <i class="lucide-zap text-purple-500 mr-2" style="font-size: 24px"></i>
-        <span class="text-xl font-bold text-white">Pogshop</span>
+        <span class="text-xl font-bold text-white">Pog Shop</span>
       </div>
       <p class="text-gray-500 max-w-md mx-auto">
-        The ultimate platform for streamers to monetize their content and engage
-        with fans.
+        The ultimate platform for streamers to monetize their content and hype
+        up their fans.
       </p>
       <div class="mt-8 pt-8 border-t border-gray-800 text-gray-600">
-        © 2025 Pogshop. All rights reserved.
+        © 2025 Pog Shop. All rights reserved.
       </div>
     </div>
   </footer>

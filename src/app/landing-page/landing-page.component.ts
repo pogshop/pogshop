@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import {
   trigger,
   state,
@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'landing-page',
@@ -52,9 +53,19 @@ export class LandingPageComponent implements OnInit {
     duration: number;
   }> = [];
 
+  constructor(private router: Router) {}
+
   ngOnInit() {
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
+  }
+
+  navigateToSignUp() {
+    this.router.navigate(['/signup']);
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 
   @HostListener('window:scroll', ['$event'])
