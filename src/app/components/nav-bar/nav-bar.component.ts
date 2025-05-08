@@ -10,17 +10,26 @@ import { CommonModule } from '@angular/common';
   styles: []
 })
 export class NavBarComponent {
+  isMenuOpen = false;
+
   constructor(private router: Router) {}
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
   navigateToSignUp() {
     this.router.navigate(['/signup']);
+    this.isMenuOpen = false;
   }
 
   navigateToLogin() {
     this.router.navigate(['/login']);
+    this.isMenuOpen = false;
   }
 
   navigateToLandingPage() {
     this.router.navigate(['/']);
+    this.isMenuOpen = false;
   }
 } 

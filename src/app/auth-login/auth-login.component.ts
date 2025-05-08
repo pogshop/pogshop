@@ -35,13 +35,14 @@ export class AuthLoginComponent {
   navigateToSignUp(): void {
     this.router.navigate(['/signup']);
   }
+
   sendMagicLink(): void {
     const email = this.loginForm.value.email;
     const actionCodeSettings = {
       url: 'https://pogshop.gg',
-      handleCodeInApp: true
+      handleCodeInApp: true,
     };
-    
+
     sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
       .then(() => {
         // The link was successfully sent. Inform the user.

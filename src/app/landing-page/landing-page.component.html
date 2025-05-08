@@ -24,12 +24,11 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
     <div class="absolute -inset-10 opacity-30">
       <div class="absolute top-20 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
       <div class="absolute top-20 -right-4 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-      <div class="absolute top-40 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
     </div>
   </div>
 
   <!-- Hero Section -->
-  <section class="min-h-screen bg-gray-900 px-8 relative overflow-hidden pt-[10vh] ">
+  <section class="bg-gray-900 px-8 relative overflow-hidden pt-[10vh] ">
     <!-- Background effects -->
     <div class="absolute inset-0 overflow-hidden">
       <div class="absolute -inset-10 opacity-30">
@@ -42,22 +41,19 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
       </div>
     </div>
 
-    <div class="max-w-6xl mx-auto text-center relative z-10 w-full">
-      <div class="flex flex-col items-center justify-center">
+    <div class="max-w-6xl mx-auto sm:text-center relative z-10 w-full">
+      <div class="flex flex-col items-start sm:items-center justify-center">
         <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">The Livestream Shop</span> <br />
           <span class="text-white">Sell Livestream Alerts</span> <br />
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">to Your Fans</span>
         </h1>
         <p class="text-xl text-gray-300 max-w-2xl leading-relaxed">
-          Set up your streamer store in minutes.
-        </p>
-        <p class="text-xl mb-4 text-gray-300 max-w-2xl leading-relaxed">
-          Make income by letting viewers trigger alerts on stream
+          Set up your streamer store in minutes. Make income by letting viewers trigger alerts on stream
         </p>
 
         <div
-          class="flex items-center space-x-3 text-gray-300 justify-center mb-8"
+          class="text-left sm:text-center text-gray-300 my-4"
         >
           <span>btw it's free! 🎉</span>
         </div>
@@ -73,7 +69,7 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
             />
           </div>
           <button
-            class="w-auto px-5 py-3 rounded-md font-medium flex items-center justify-center whitespace-nowrap text-sm  bg-purple-600 text-white hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+            class="w-full sm:w-auto px-5 py-3 rounded-md font-medium flex items-center justify-center whitespace-nowrap text-sm  bg-purple-600 text-white hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
           >
             Join Pog Shop
           </button>
@@ -86,6 +82,94 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
   <section class="py-20 px-8 bg-gray-900">
     <div class="max-w-6xl mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <div class="relative group">
+        <div
+          class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
+        ></div>
+        <div
+          class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
+        >
+          <h3 class="text-3xl font-bold mb-6">1. Create a Product</h3>
+          <p class="text-xl text-gray-300 mb-8">
+            Create products for viewers <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-semibold"> to buy on stream.</span> <br />
+          </p>
+          <div class="w-32 h-32 mt-8">
+            <div class="relative w-full h-full">
+              <!-- Background animation effect -->
+              <div
+                class="absolute inset-0 bg-blue-600 rounded-full animate-pulse opacity-30"
+              ></div>
+
+              <!-- Main crown icon -->
+              <div class="relative z-10">
+                <lucide-icon
+                  name="crown"
+                  [size]="80"
+                  class="text-yellow-400"
+                ></lucide-icon>
+              </div>
+
+              <!-- Decorative sparkles -->
+              <div class="absolute -top-2 -right-2 animate-pulse">
+                <lucide-icon
+                  name="sparkles"
+                  [size]="25"
+                  class="text-yellow-300"
+                ></lucide-icon>
+              </div>
+              <div
+                class="absolute -bottom-2 -left-2 animate-pulse"
+                style="animation-delay: 100ms"
+              >
+                <lucide-icon
+                  name="sparkles"
+                  [size]="25"
+                  class="text-yellow-300"
+                ></lucide-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="relative group">
+        <div
+          class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
+        ></div>
+        <div
+          class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
+        >
+          <h3 class="text-3xl font-bold mb-6">2. Chat is this real?</h3>
+          <p class="text-xl text-gray-300 mb-8">
+           Every sale will trigger an <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-semibold"> alert on stream.</span>
+          </p>
+          <div class="w-32 h-32 mt-8">
+            <div class="relative w-full h-full">
+              <!-- Background animation effect -->
+              <div
+                class="absolute inset-0 bg-purple-600 rounded-full animate-ping opacity-30"
+              ></div>
+
+              <!-- Main flame icon -->
+              <div class="relative z-10">
+                <lucide-icon
+                  name="flame"
+                  [size]="80"
+                  class="text-orange-400"
+                ></lucide-icon>
+              </div>
+
+              <!-- Decorative element -->
+              <div
+                class="absolute -bottom-4 -right-4 w-8 h-8 bg-yellow-400 rounded-full animate-pulse"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
         <div class="relative group">
           <div
             class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
@@ -93,8 +177,8 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
           <div
             class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
           >
-            <h3 class="text-3xl font-bold mb-6">Boost Your Revenue</h3>
-            <p class="text-xl text-gray-300 mb-8">100% Yours. <br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-semibold">Zero Fees.</span></p>
+            <h3 class="text-3xl font-bold mb-6">3. Get Paid</h3>
+            <p class="text-xl text-gray-300 mb-8">Sales are 100% Yours. <br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-semibold">Zero Fees.</span></p>
             <div class="w-32 h-32 mt-8">
               <div class="relative w-full h-full">
                 <div class="relative z-10">
@@ -128,92 +212,6 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
             </div>
           </div>
         </div>
-
-        <div class="relative group">
-          <div
-            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
-          ></div>
-          <div
-            class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
-          >
-            <h3 class="text-3xl font-bold mb-6">Add Hype</h3>
-            <p class="text-xl text-gray-300 mb-8">
-              Live Sale Alerts. <br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-semibold">On-Stream Celebration.</span>
-            </p>
-            <div class="w-32 h-32 mt-8">
-              <div class="relative w-full h-full">
-                <!-- Background animation effect -->
-                <div
-                  class="absolute inset-0 bg-purple-600 rounded-full animate-ping opacity-30"
-                ></div>
-
-                <!-- Main flame icon -->
-                <div class="relative z-10">
-                  <lucide-icon
-                    name="flame"
-                    [size]="80"
-                    class="text-orange-400"
-                  ></lucide-icon>
-                </div>
-
-                <!-- Decorative element -->
-                <div
-                  class="absolute -bottom-4 -right-4 w-8 h-8 bg-yellow-400 rounded-full animate-pulse"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="relative group">
-          <div
-            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
-          ></div>
-          <div
-            class="bg-gray-900 rounded-xl p-8 flex flex-col items-center text-center h-full relative shadow-xl"
-          >
-            <h3 class="text-3xl font-bold mb-6">Fan Interaction</h3>
-            <p class="text-xl text-gray-300 mb-8">
-              Fans Trigger Chaos. <br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-semibold">Chat is this real?</span>
-            </p>
-            <div class="w-32 h-32 mt-8">
-              <div class="relative w-full h-full">
-                <!-- Background animation effect -->
-                <div
-                  class="absolute inset-0 bg-blue-600 rounded-full animate-pulse opacity-30"
-                ></div>
-
-                <!-- Main crown icon -->
-                <div class="relative z-10">
-                  <lucide-icon
-                    name="crown"
-                    [size]="80"
-                    class="text-yellow-400"
-                  ></lucide-icon>
-                </div>
-
-                <!-- Decorative sparkles -->
-                <div class="absolute -top-2 -right-2 animate-pulse">
-                  <lucide-icon
-                    name="sparkles"
-                    [size]="25"
-                    class="text-yellow-300"
-                  ></lucide-icon>
-                </div>
-                <div
-                  class="absolute -bottom-2 -left-2 animate-pulse"
-                  style="animation-delay: 100ms"
-                >
-                  <lucide-icon
-                    name="sparkles"
-                    [size]="25"
-                    class="text-yellow-300"
-                  ></lucide-icon>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -239,26 +237,26 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
       </div>
     </div>
     <div class="max-w-5xl mx-auto text-center">
-      <h2 class="text-4xl font-bold mb-6 text-gray-900 leading-tight">
+      <h2 class="text-2xl sm:text-4xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
         "It's Like Paid Channel Point Redeems"
       </h2>
       <div class="flex items-center justify-center space-x-2 text-gray-600">
         <div class="w-8 h-px bg-gray-400"></div>
         <div class="flex flex-col items-center">
-          <a href="https://twitch.tv/Joannemilktea" class="text-base font-semibold text-purple-600 hover:text-purple-700 transition-colors">twitch.tv/Joannemilktea</a>
-          <span class="text-sm text-gray-500 mt-1">Twitch Partner</span>
+          <a href="https://twitch.tv/Joannemilktea" class="text-sm sm:text-base font-semibold text-purple-600 hover:text-purple-700 transition-colors">twitch.tv/Joannemilktea</a>
+          <span class="text-xs sm:text-sm text-gray-500 mt-1 flex items-center gap-1">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
+            </svg>
+            Twitch Partner
+          </span>
         </div>
         <div class="w-8 h-px bg-gray-400"></div>
       </div>
-      <p class="text-lg text-gray-600 max-w-3xl mx-auto mt-8 leading-relaxed">
-        Sell interactive products on stream without counting bits, subs,
-        or donos yourself.
-        <br />
-        Sell a dance. Sell your merch. Sell anything to your fans.
-        <br />
-        Setup shop in minutes. 
-        <br />
-        No fees.
+      <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mt-6 sm:mt-8 leading-relaxed px-4 sm:px-0 space-y-3 sm:space-y-2">
+        <span class="block text-[15px] sm:text-base">
+          I started my pog shop and now keep it on every stream (especially subathons). Now I don't have to count bits, subs, or donos myself :D
+        </span>
       </p>
     </div>
   </section>
@@ -428,30 +426,30 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
   </section>
 
   <!-- Simple, Fast Section -->
-  <section class="py-10 px-8 bg-gray-900">
+  <section class="py-10 px-4 sm:px-8 bg-gray-900">
     <div class="max-w-5xl mx-auto my-auto">
       <div
-        class="border-2 border-gray-300 rounded-lg p-10 w-200 mx-auto my-auto shadow-md mb-10"
+        class="border-2 border-gray-300 rounded-lg p-6 sm:p-10 w-full mx-auto my-auto shadow-md mb-10"
       >
-        <h2 class="text-3xl font-bold text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center">
           Add Stream Hype <span class="text-purple-500">FAST</span>
         </h2>
       </div>
 
-      <div class="space-y-8">
+      <div class="space-y-6 sm:space-y-8">
         <!-- Step 1 -->
         <div class="relative group">
           <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-          <div class="relative bg-gray-900 rounded-xl p-8 hover:bg-gray-800 transition-colors duration-300">
-            <div class="flex items-center gap-6">
+          <div class="relative bg-gray-900 rounded-xl p-6 sm:p-8 hover:bg-gray-800 transition-colors duration-300">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
               <div class="flex-shrink-0">
-                <div class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full shadow-lg">
-                  <span class="text-white font-bold text-xl">1</span>
+                <div class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full shadow-lg">
+                  <span class="text-white font-bold text-lg sm:text-xl">1</span>
                 </div>
               </div>
-              <div class="flex-grow">
-                <h3 class="text-2xl font-bold mb-2 text-white">Create & Share Your Pog Shop</h3>
-                <p class="text-gray-300 text-lg">
+              <div class="flex-grow text-center sm:text-left">
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-white">Create & Share Your Pog Shop</h3>
+                <p class="text-gray-300 text-base sm:text-lg">
                   Choose presets like "Make me dance" or create your own and start
                   sharing your shop in minutes!
                 </p>
@@ -463,16 +461,16 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
         <!-- Step 2 -->
         <div class="relative group">
           <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-          <div class="relative bg-gray-900 rounded-xl p-8 hover:bg-gray-800 transition-colors duration-300">
-            <div class="flex items-center gap-6">
+          <div class="relative bg-gray-900 rounded-xl p-6 sm:p-8 hover:bg-gray-800 transition-colors duration-300">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
               <div class="flex-shrink-0">
-                <div class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full shadow-lg">
-                  <span class="text-white font-bold text-xl">2</span>
+                <div class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full shadow-lg">
+                  <span class="text-white font-bold text-lg sm:text-xl">2</span>
                 </div>
               </div>
-              <div class="flex-grow">
-                <h3 class="text-2xl font-bold mb-2 text-white">Get Paid for Every Purchase</h3>
-                <p class="text-gray-300 text-lg">
+              <div class="flex-grow text-center sm:text-left">
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-white">Get Paid for Every Purchase</h3>
+                <p class="text-gray-300 text-base sm:text-lg">
                   When a fan purchases your pog shop product, a stream alert goes
                   off and broadcasts it to everyone.
                 </p>
@@ -489,8 +487,8 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
     <!-- Background effects -->
     <div class="absolute inset-0 overflow-hidden">
       <div class="absolute -inset-10 opacity-20">
-        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-        <div class="absolute top-0 -right-4 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute top-40 -left-4 w-36 h-36 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+        <div class="absolute top-40 -right-4 w-36 h-36 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
       </div>
     </div>
 
@@ -514,7 +512,7 @@ class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative o
               />
             </div>
             <button
-              class="px-8 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+              class="w-full sm:w-auto px-8 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
             >
               Join Pog Shop
             </button>

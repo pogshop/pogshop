@@ -16,19 +16,108 @@
       </svg>
       <button class="text-2xl font-bold" (click)="navigateToLandingPage()">Pog Shop</button>
     </div>
-    <div>
-        <button
-          (click)="navigateToSignUp()"
-          class=" bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors mr-2"
-          
-        >
-          Sign Up
-        </button>
+
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex items-center">
+      <button
+        (click)="navigateToSignUp()"
+        class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors mr-2"
+      >
+        Sign Up
+      </button>
       <button
         (click)="navigateToLogin()"
         class="bg-transparent border border-purple-500 hover:bg-purple-500 hover:bg-opacity-20 text-white px-4 py-2 rounded-md transition-colors"
       >
         Log In
       </button>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button 
+      class="md:hidden text-white"
+      (click)="toggleMenu()"
+      aria-label="Toggle menu"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Mobile Menu -->
+    <div 
+      *ngIf="isMenuOpen"
+      class="fixed inset-0 bg-gray-900 z-50 md:hidden"
+    >
+      <div class="flex flex-col h-full">
+        <!-- Menu Header -->
+        <div class="flex justify-between items-center p-8">
+          <div class="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-purple-500 mr-2"
+            >
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+            <span class="text-2xl font-bold text-white">Pog Shop</span>
+          </div>
+          <button 
+            class="text-white p-2"
+            (click)="toggleMenu()"
+            aria-label="Close menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Menu Content -->
+        <div class="flex-1 flex flex-col items-center justify-center p-8 space-y-6">
+          <button
+            (click)="navigateToSignUp()"
+            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-md transition-colors w-full max-w-xs text-lg"
+          >
+            Sign Up
+          </button>
+          <button
+            (click)="navigateToLogin()"
+            class="bg-transparent border border-purple-500 hover:bg-purple-500 hover:bg-opacity-20 text-white px-8 py-3 rounded-md transition-colors w-full max-w-xs text-lg"
+          >
+            Log In
+          </button>
+        </div>
+      </div>
     </div>
   </nav>
