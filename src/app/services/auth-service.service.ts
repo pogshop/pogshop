@@ -7,9 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private auth: Auth) {
-    getRedirectResult(this.auth).then(console.log);
-  }
+  constructor(private auth: Auth) {  }
 
   /**
    * Get the current user state as an observable
@@ -66,7 +64,6 @@ export class AuthService {
    * Get the appropriate redirect URL based on the environment
    */
   private getRedirectUrl(): string {
-    console.log('Environment production value:', environment.production);
     const url = environment.production
       ? 'https://pogshop.gg'
       : 'http://localhost:4200';
@@ -79,7 +76,6 @@ export class AuthService {
     // Optionally add scopes
     provider.addScope('user:read:email');
 
-    
-    signInWithRedirect(this.auth, provider);
+    signInWithRedirect(this.auth, provider).then();
   }
 }

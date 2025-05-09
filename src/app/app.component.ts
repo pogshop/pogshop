@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { connectAuthEmulator, getAuth, getRedirectResult } from '@angular/fire/auth';
 import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -11,5 +12,6 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 export class AppComponent implements OnInit {
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

@@ -27,7 +27,7 @@ import { routes } from './app.routes';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAPo4fJ30Lf0E7NntJ3lIbCyaNJ5UY_gdI',
-  authDomain: 'pogshop-387c5.firebaseapp.com',
+  authDomain: 'pogshop.gg',
   projectId: 'pogshop-387c5',
   storageBucket: 'pogshop-387c5.firebasestorage.app',
   messagingSenderId: '702534866054',

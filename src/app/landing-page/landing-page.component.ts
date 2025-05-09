@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
+import { Auth, getAuth, getRedirectResult } from '@angular/fire/auth';
 
 @Component({
   selector: 'landing-page',
