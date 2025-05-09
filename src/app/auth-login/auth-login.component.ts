@@ -11,6 +11,9 @@ import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { sendSignInLinkToEmail } from '@angular/fire/auth';
+import { AuthService } from '../services/auth-service.service';
+import { catchError } from 'rxjs';
+import { from } from 'rxjs';
 @Component({
   selector: 'app-auth-login',
   standalone: true,
@@ -22,9 +25,7 @@ export class AuthLoginComponent {
   email: string = '';
   loginForm!: FormGroup;
   private auth: Auth = inject(Auth);
-  showSuccessMessage: boolean = false;
-  errorMessage: string = '';
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -37,24 +38,17 @@ export class AuthLoginComponent {
   }
 
   sendMagicLink(): void {
-    const email = this.loginForm.value.email;
-    const actionCodeSettings = {
-      url: 'https://pogshop.gg',
-      handleCodeInApp: true,
-    };
+    this.authService.sendMagicLink(this.loginForm.value.email).subscribe(() => {
+      this.router.navigate(['/magic-link-sent']);
+    });
+  }
 
-    sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
-      .then(() => {
-        // The link was successfully sent. Inform the user.
-        window.localStorage.setItem('emailForSignIn', email);
-        this.showSuccessMessage = true;
-        this.errorMessage = '';
-        this.router.navigate(['/magic-link-sent']);
-      })
-      .catch((error) => {
-        this.errorMessage = error.message;
-        this.showSuccessMessage = false;
+  twitchLogin(): void {
+    this.authService.twitchLogin().pipe(
+      catchError(error => {
         console.log(error);
-      });
+        return from(Promise.reject(error));
+      })
+    ).subscribe(user => console.log(user));
   }
 }

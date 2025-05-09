@@ -1,25 +1,27 @@
 import { Routes } from '@angular/router';
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
-import { AuthLoginComponent } from './auth-login/auth-login.component';
-import { MagicLinkSentComponent } from './magic-link-sent/magic-link-sent.component';
+import { magicLinkGuard } from './guards/magic-link.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: LandingPageComponent,
+    loadComponent: () => import('./landing-page/landing-page.component').then(m => m.LandingPageComponent),
     title: 'Pogshop - Home',
+    canActivate: [magicLinkGuard],
   },
   {
     path: 'signup',
-    component: SignUpComponent,
+    loadComponent: () => import('./sign-up/sign-up.component').then(m => m.SignUpComponent),
   },
   {
     path: 'login',
-    component: AuthLoginComponent,
+    loadComponent: () => import('./auth-login/auth-login.component').then(m => m.AuthLoginComponent),
   },
   {
     path: 'magic-link-sent',
-    component: MagicLinkSentComponent,
+    loadComponent: () => import('./magic-link-sent/magic-link-sent.component').then(m => m.MagicLinkSentComponent),
   },
+  {
+    path: '**',
+    loadComponent: () => import('./landing-page/landing-page.component').then(m => m.LandingPageComponent),
+  }
 ];
