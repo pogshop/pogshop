@@ -44,11 +44,6 @@ export class AuthLoginComponent {
   }
 
   twitchLogin(): void {
-    this.authService.twitchLogin().pipe(
-      catchError(error => {
-        console.log(error);
-        return from(Promise.reject(error));
-      })
-    ).subscribe(user => console.log(user));
+    this.authService.twitchLogin();
   }
 }

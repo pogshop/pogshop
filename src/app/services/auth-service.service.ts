@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, User, isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, OAuthProvider, UserCredential, signInWithRedirect } from '@angular/fire/auth';
+import { Auth, User, isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, OAuthProvider, UserCredential, signInWithRedirect, getRedirectResult } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -7,7 +7,9 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth) {
+    getRedirectResult(this.auth).then(console.log);
+  }
 
   /**
    * Get the current user state as an observable
@@ -64,20 +66,20 @@ export class AuthService {
    * Get the appropriate redirect URL based on the environment
    */
   private getRedirectUrl(): string {
-    return environment.production
+    console.log('Environment production value:', environment.production);
+    const url = environment.production
       ? 'https://pogshop.gg'
       : 'http://localhost:4200';
+    return url;
   }
 
-  twitchLogin(): Observable<UserCredential> {
+  twitchLogin() {
     const provider = new OAuthProvider('oidc.twitch');
 
     // Optionally add scopes
     provider.addScope('user:read:email');
-    provider.setCustomParameters({
-      'redirect_uri': this.getRedirectUrl()+'/_/auth/handler'
-    });
- 
-    return from(signInWithRedirect(this.auth, provider));
+
+    
+    signInWithRedirect(this.auth, provider);
   }
 }
