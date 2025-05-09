@@ -40,3 +40,10 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase
+.firebase/
+.firebase/hosting.json
+.firebase/hosting.20250509.json
+.firebase/hosting.20250509.zip
+.firebase/hosting.20250509.zip.part
