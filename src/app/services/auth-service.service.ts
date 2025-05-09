@@ -65,17 +65,62 @@ export class AuthService {
    */
   private getRedirectUrl(): string {
     const url = environment.production
-      ? 'https://pogshop.gg'
-      : 'http://localhost:4200';
+      ? 'https://pogshop.gg/validate-magic-link'
+      : 'http://localhost:4200/validate-magic-link';
     return url;
   }
 
   twitchLogin() {
     const provider = new OAuthProvider('oidc.twitch');
 
-    // Optionally add scopes
+    // Add scopes for email and user info
     provider.addScope('user:read:email');
+    provider.setCustomParameters({
+      claims: JSON.stringify({
+        id_token: {
+          email: null,
+          email_verified: null
+        },
+        userinfo: {
+          email: null,
+          email_verified: null
+        }
+      })
+    });
 
     signInWithRedirect(this.auth, provider).then();
+  }
+
+  /**
+   * Handle the Twitch redirect result and get user claims
+   */
+  async handleTwitchRedirect(): Promise<{ email: string | null; user: User | null }> {
+    try {
+      const result = await getRedirectResult(this.auth);
+      if (!result) {
+        return { email: null, user: null };
+      }
+
+      // Get the Twitch OAuth credential
+      const credential = OAuthProvider.credentialFromResult(result);
+      if (!credential) {
+        return { email: null, user: result.user };
+      }
+
+      // Get the email from the credential
+      const email = result.user?.email;
+      
+      // Log the full result for debugging
+      console.log('Twitch auth result:', result);
+      console.log('User claims:', await result.user?.getIdTokenResult());
+      
+      return {
+        email,
+        user: result.user
+      };
+    } catch (error) {
+      console.error('Error handling Twitch redirect:', error);
+      return { email: null, user: null };
+    }
   }
 }

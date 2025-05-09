@@ -64,11 +64,12 @@ export class LandingPageComponent implements OnInit {
   // Needed to auto play video
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private auth: Auth) {}
 
   ngOnInit() {
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
+    getRedirectResult(this.auth).then((r)=>console.log("The result:",r ));
   }
 
   navigateToSignUp() {

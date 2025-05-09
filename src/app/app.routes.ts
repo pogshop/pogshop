@@ -6,7 +6,6 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./landing-page/landing-page.component').then(m => m.LandingPageComponent),
     title: 'Pogshop - Home',
-    canActivate: [magicLinkGuard],
   },
   {
     path: 'signup',
@@ -19,6 +18,11 @@ export const routes: Routes = [
   {
     path: 'magic-link-sent',
     loadComponent: () => import('./magic-link-sent/magic-link-sent.component').then(m => m.MagicLinkSentComponent),
+  },
+  {
+    path: 'validate-magic-link',
+    canActivate: [magicLinkGuard],
+    redirectTo: '',
   },
   {
     path: '**',

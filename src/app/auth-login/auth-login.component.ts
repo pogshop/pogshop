@@ -9,11 +9,8 @@ import {
 } from '@angular/forms';
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 import { Router } from '@angular/router';
-import { Auth, getRedirectResult } from '@angular/fire/auth';
-import { sendSignInLinkToEmail } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
 import { AuthService } from '../services/auth-service.service';
-import { catchError } from 'rxjs';
-import { from } from 'rxjs';
 @Component({
   selector: 'app-auth-login',
   standalone: true,
@@ -31,9 +28,6 @@ export class AuthLoginComponent {
     this.loginForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
     });
-
-    getRedirectResult(this.auth).then((r)=>console.log("The result:",r ));
-
   }
 
   navigateToSignUp(): void {
