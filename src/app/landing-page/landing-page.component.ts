@@ -1,4 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import {
   trigger,
   state,
@@ -54,6 +60,9 @@ export class LandingPageComponent implements OnInit {
     duration: number;
   }> = [];
 
+  // Needed to auto play video
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef;
+
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -67,6 +76,15 @@ export class LandingPageComponent implements OnInit {
 
   navigateToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  ngAfterViewInit() {
+    const video = this.videoPlayer.nativeElement;
+    video.muted = true; // Must be muted for autoplay to work
+    video.play().catch((err: any) => {
+      console.error('Autoplay failed:', err);
+      // Handle the error - perhaps show a play button
+    });
   }
 
   @HostListener('window:scroll', ['$event'])
