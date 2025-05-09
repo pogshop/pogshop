@@ -36,20 +36,18 @@ export class AuthService {
   /**
    * Send a magic link to the user's email
    */
-
   sendMagicLink(email: string): Observable<void> {
     const actionCodeSettings = {
       url: this.getRedirectUrl(),
       handleCodeInApp: true,
     };
 
+    console.log(actionCodeSettings.url);
     return from(sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
       .then(() => {
         window.localStorage.setItem('emailForSignIn', email);
       })
       .catch(error => {
-        console.error('Error sending magic link:', error);
-        throw error;
       }));
   }
 
@@ -70,7 +68,7 @@ export class AuthService {
     return url;
   }
 
-  twitchLogin() {
+  async twitchLogin() {
     const provider = new OAuthProvider('oidc.twitch');
 
     // Add scopes for email and user info
@@ -88,39 +86,11 @@ export class AuthService {
       })
     });
 
-    signInWithRedirect(this.auth, provider).then();
-  }
-
-  /**
-   * Handle the Twitch redirect result and get user claims
-   */
-  async handleTwitchRedirect(): Promise<{ email: string | null; user: User | null }> {
     try {
-      const result = await getRedirectResult(this.auth);
-      if (!result) {
-        return { email: null, user: null };
-      }
-
-      // Get the Twitch OAuth credential
-      const credential = OAuthProvider.credentialFromResult(result);
-      if (!credential) {
-        return { email: null, user: result.user };
-      }
-
-      // Get the email from the credential
-      const email = result.user?.email;
-      
-      // Log the full result for debugging
-      console.log('Twitch auth result:', result);
-      console.log('User claims:', await result.user?.getIdTokenResult());
-      
-      return {
-        email,
-        user: result.user
-      };
+      return await signInWithRedirect(this.auth, provider);
     } catch (error) {
-      console.error('Error handling Twitch redirect:', error);
-      return { email: null, user: null };
+      console.error('Error during Twitch login:', error);
+      throw error;
     }
   }
 }

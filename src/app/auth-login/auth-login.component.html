@@ -110,13 +110,12 @@
               </div>
 
               <button
+                #sendMagicLinkButton
                 type="button"
                 (click)="sendMagicLink()"
-                [disabled]="loginForm.invalid"
+                [disabled]="loginForm.invalid || disableMagicLinkButton"
                 [ngClass]="
-                  loginForm.valid
-                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                    : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                  sendMagicLinkButton.disabled ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700 text-white'
                 "
                 class="w-full text-white py-3 px-4 rounded-full font-medium transition-colors"
               >

@@ -6,7 +6,6 @@ import { isSignInWithEmailLink, signInWithEmailLink } from '@angular/fire/auth';
 export const magicLinkGuard: CanActivateFn = async (route, state) => {
   const auth = inject(Auth);
   const router = inject(Router);
-
   // Check if the URL is a sign-in with email link
   if (isSignInWithEmailLink(auth, window.location.href)) {
     try {
@@ -25,15 +24,18 @@ export const magicLinkGuard: CanActivateFn = async (route, state) => {
       
       // Clear the email from localStorage
       window.localStorage.removeItem('emailForSignIn');
-      
+      console.log("Magic link validated");
       router.navigate(['/']);
+      
       return true;
     } catch (error) {
       console.error('Error signing in with email link:', error);
       router.navigate(['/login']);
-      return true;
+      return false;
     }
   }
-
-  return true;
+  else {
+    router.navigate(['/login']);
+    return false;
+  }
 }; 
