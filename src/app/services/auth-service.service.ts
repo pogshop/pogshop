@@ -42,7 +42,6 @@ export class AuthService {
       handleCodeInApp: true,
     };
 
-    console.log(actionCodeSettings.url);
     return from(sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
       .then(() => {
         window.localStorage.setItem('emailForSignIn', email);

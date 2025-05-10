@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
-import { Auth, getAuth, getRedirectResult } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
 import { AuthService } from '../services/auth-service.service';
 
 @Component({
@@ -70,9 +70,6 @@ export class LandingPageComponent implements OnInit {
   ngOnInit() {
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
-    getRedirectResult(this.auth).then((r)=>console.log("The result:",r ));
-    this.authService.currentUser$.subscribe((user:any)=>console.log("The user:",user ));
-    
   }
 
   navigateToSignUp() {

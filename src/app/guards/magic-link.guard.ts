@@ -24,7 +24,6 @@ export const magicLinkGuard: CanActivateFn = async (route, state) => {
       
       // Clear the email from localStorage
       window.localStorage.removeItem('emailForSignIn');
-      console.log("Magic link validated");
       router.navigate(['/']);
       
       return true;

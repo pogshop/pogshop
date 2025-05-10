@@ -15,15 +15,21 @@ export class ShopNavbarComponent {
   @Input() currentTab: string = 'integrations';
   @Input() balance: string = '47.93';
   @Output() tabChange = new EventEmitter<string>();
+  isMobileMenuOpen = false;
 
   constructor(private router: Router, private authService: AuthService) {}
   
   setCurrentTab(tab: string): void {
     this.router.navigate([`/${tab}`]);
+    this.isMobileMenuOpen = false; // Close mobile menu after navigation
   }
 
   async signOut(): Promise<void> {
     await this.authService.signOut();
     this.router.navigate(['/']);
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 }
