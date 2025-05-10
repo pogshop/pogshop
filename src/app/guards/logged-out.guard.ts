@@ -1,10 +1,13 @@
+
+
+
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth-service.service';
 
-// Only allow acces to logged in users.
-export const loggedInGuard: CanActivateFn = (route, state) => {
+// Block access to logged in users.
+export const loggedOutGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -12,12 +15,11 @@ export const loggedInGuard: CanActivateFn = (route, state) => {
     take(1),
     map(user => {
       if (user) {
-        // The user is logged in, allow access to the route
-        return true;
-      } else {
-        // The user is not logged in, redirect to the landing page
+        // Block access to the route if the user is logged in
         router.navigate(['/']);
         return false;
+      } else {
+        return true;
       }
     })
   );

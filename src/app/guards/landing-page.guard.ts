@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth-service.service';
 
 // Only allow acces to logged in users.
-export const loggedInGuard: CanActivateFn = (route, state) => {
+export const landingPageGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -13,11 +13,11 @@ export const loggedInGuard: CanActivateFn = (route, state) => {
     map(user => {
       if (user) {
         // The user is logged in, allow access to the route
-        return true;
+        router.navigate(['/integrations']);
+        return false;
       } else {
         // The user is not logged in, redirect to the landing page
-        router.navigate(['/']);
-        return false;
+        return true;
       }
     })
   );

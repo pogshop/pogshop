@@ -1,0 +1,15 @@
+.nav-item-active {
+    @apply text-purple-400 border-b-2 border-purple-400;
+  }
+  
+  .nav-item-inactive {
+    @apply text-gray-300 hover:text-white;
+  }
+  
+  .navbar-brand {
+    @apply flex items-center;
+  }
+  
+  .navbar-balance {
+    @apply flex items-center bg-gray-700 px-3 py-1 rounded-full text-white;
+  }

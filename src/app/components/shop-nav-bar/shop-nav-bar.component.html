@@ -1,0 +1,51 @@
+<!-- navbar.component.html -->
+<nav class="flex justify-between items-center py-4 px-6 bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
+    <div class="flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500 mr-2">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+      </svg>
+      <span class="text-xl font-bold">Pog Shop</span>
+    </div>
+    
+    <div class="flex space-x-8">
+      <button 
+        (click)="setCurrentTab('shop')" 
+        [ngClass]="{'text-purple-400 border-b-2 border-purple-400': currentTab === 'shop', 'text-gray-300 hover:text-white': currentTab !== 'shop'}"
+        class="px-4 py-2 font-medium"
+      >
+        Shop
+      </button>
+      <button 
+        (click)="setCurrentTab('library')" 
+        [ngClass]="{'text-purple-400 border-b-2 border-purple-400': currentTab === 'library', 'text-gray-300 hover:text-white': currentTab !== 'library'}"
+        class="px-4 py-2 font-medium"
+      >
+        Library
+      </button>
+      <button 
+        (click)="setCurrentTab('orders')" 
+        [ngClass]="{'text-purple-400 border-b-2 border-purple-400': currentTab === 'orders', 'text-gray-300 hover:text-white': currentTab !== 'orders'}"
+        class="px-4 py-2 font-medium"
+      >
+        Orders
+      </button>
+      <button 
+        (click)="setCurrentTab('integrations')" 
+        [ngClass]="{'text-purple-400 border-b-2 border-purple-400': currentTab === 'integrations', 'text-gray-300 hover:text-white': currentTab !== 'integrations'}"
+        class="px-4 py-2 font-medium"
+      >
+        Integrations
+      </button>
+    </div>
+    <button (click)="signOut()" class="px-4 py-2 font-medium">Sign Out</button>
+    <!-- This should be it's own component to render the balance -->
+    <div class="flex items-center">
+      <div class="flex items-center bg-gray-700 px-3 py-1 rounded-full text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-1">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <span class="font-medium">{{ balance }}</span>
+      </div>
+    </div>
+  </nav>
