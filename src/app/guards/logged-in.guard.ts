@@ -8,17 +8,10 @@ export const loggedInGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  return authService.currentUser$.pipe(
-    take(1),
-    map(user => {
-      if (user) {
-        // The user is logged in, allow access to the route
-        return true;
-      } else {
-        // The user is not logged in, redirect to the landing page
-        router.navigate(['/']);
-        return false;
-      }
-    })
-  );
+  if (authService.isLoggedIn()) {
+    return true;
+  }
+  // User is logged out, block access to route
+  router.navigate(['/']);
+  return false;
 };
