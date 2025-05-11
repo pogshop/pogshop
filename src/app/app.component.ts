@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {} from '@angular/fire/auth';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth-service.service';
 

@@ -14,18 +14,9 @@ export class AuthService {
    * Get the current user state as an observable
    */
   get currentUser$(): Observable<User | null> {
-    this.isLoading$.next(true);
     return new Observable<User | null>(subscriber => {
-      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
-        subscriber.next(user);
-      }, (error) => {
-        subscriber.next(null);
-        subscriber.error(error);
-      });
-      return () => {
-        unsubscribe();
-        this.isLoading$.next(false);
-      };
+      const unsubscribe = onAuthStateChanged(this.auth, subscriber);
+      return unsubscribe;
     });
   }
   /**
