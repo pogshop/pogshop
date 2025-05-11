@@ -1,21 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Auth, User, isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, OAuthProvider, UserCredential, signInWithRedirect, getRedirectResult } from '@angular/fire/auth';
-import { Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  isLoading$ = new BehaviorSubject<boolean>(false);
   constructor(private auth: Auth) {  }
 
   /**
    * Get the current user state as an observable
    */
   get currentUser$(): Observable<User | null> {
+    this.isLoading$.next(true);
     return new Observable<User | null>(subscriber => {
-      const unsubscribe = onAuthStateChanged(this.auth, subscriber);
-      return unsubscribe;
+      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+        subscriber.next(user);
+      }, (error) => {
+        subscriber.next(null);
+        subscriber.error(error);
+      });
+      return () => {
+        unsubscribe();
+        this.isLoading$.next(false);
+      };
     });
   }
   /**
@@ -24,7 +34,6 @@ export class AuthService {
   getRedirectResult(): Observable<UserCredential | null> {
     return from(getRedirectResult(this.auth));
   }
-
   
 
   /**

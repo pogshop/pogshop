@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { connectAuthEmulator, getAuth, getRedirectResult } from '@angular/fire/auth';
+import {} from '@angular/fire/auth';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth-service.service';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  constructor() {}
+  constructor(public authService: AuthService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }
