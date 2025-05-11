@@ -22,7 +22,12 @@ export class AuthLoginComponent {
   email: string = '';
   loginForm!: FormGroup;
   disableMagicLinkButton = false;
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {}
+  handle: string = '';
+  isNewUser: boolean = false;
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
+    this.handle = this.router.getCurrentNavigation()?.extras.state?.['handle'] || '';
+    this.isNewUser = this.router.getCurrentNavigation()?.extras.state?.['isNewUser'] || false;
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

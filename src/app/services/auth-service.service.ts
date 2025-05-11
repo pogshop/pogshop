@@ -61,9 +61,9 @@ export class AuthService {
    * Get the appropriate redirect URL based on the environment
    */
   private getRedirectUrl(): string {
-    const url = environment.production
-      ? 'https://pogshop.gg/validate-magic-link'
-      : 'http://localhost:4200/validate-magic-link';
+    const url = `${environment.baseUrl}/validate-magic-link`;
+    console.log('Current environment:', environment);
+    console.log('Constructed URL:', url);
     return url;
   }
 

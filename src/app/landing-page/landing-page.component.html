@@ -64,18 +64,60 @@
           <span>btw it's free! 🎉</span>
         </div>
 
-        <div
-          class="flex flex-col sm:flex-row items-center gap-4 w-full max-w-md mb-12"
-        >
-          <div class="relative w-full">
+        <div class="flex flex-col sm:flex-row items-stretch gap-2 w-full max-w-md mb-12">
+          <div class="flex flex-col w-full">
             <input
               type="text"
-              placeholder="Enter username"
-              class="w-full pl-4 pr-10 py-3 border border-gray-600 bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
+              [formControl]="handleFormControl"
+              placeholder="Enter your handle"
+              class="handle-input w-full"
+              [class.error]="handleStatus === 'taken' || handleStatus === 'invalid' || handleStatus === 'reserved'"
             />
+            <!-- Error messaging -->
+            <div
+              class="handle-status min-h-[28px] mt-2 break-words transition-all duration-200"
+              *ngIf="handleStatus"
+            >
+              <div class="flex items-center space-x-2" *ngIf="handleStatus === 'checking'">
+                <div class="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                <span class="checking text-gray-400">Checking availability...</span>
+              </div>
+              <div class="flex items-center space-x-2" *ngIf="handleStatus === 'available'">
+                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span class="available text-green-500 font-medium">Username is available!</span>
+              </div>
+              <div class="flex items-center space-x-2" *ngIf="handleStatus === 'taken'">
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                <span class="taken text-red-500 font-medium">Username is already taken</span>
+              </div>
+              <div class="flex items-center space-x-2" *ngIf="handleStatus === 'invalid'">
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                <span class="taken text-red-500 font-medium">
+                  Username must be at least 3 characters
+                  and contain only letters and numbers
+                </span>
+              </div>
+              <div class="flex items-center space-x-2" *ngIf="handleStatus === 'reserved'">
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                <span class="taken text-red-500 font-medium">This username is reserved</span>
+              </div>
+            </div>
           </div>
           <button
-            class="w-full sm:w-auto px-5 py-3 rounded-md font-medium flex items-center justify-center whitespace-nowrap text-sm bg-purple-600 text-white hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+            (click)="navigateToLogin()"
+            [disabled]="handleStatus === 'checking' || handleStatus === 'taken' || handleStatus === 'invalid' || handleStatus === 'reserved'"
+            [ngClass]="{
+              'opacity-50': handleStatus === 'checking' || handleStatus === 'taken' || handleStatus === 'invalid' || handleStatus === 'reserved'
+            }"
+            class="w-full sm:w-auto h-[50px] px-5 rounded-md font-medium flex items-center justify-center whitespace-nowrap text-sm bg-purple-600 text-white hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
           >
             Join Pog Shop
           </button>
@@ -573,7 +615,7 @@
       </div>
     </div>
 
-    <div class="max-w-4xl mx-auto text-center relative z-10">
+    <div class="max-w-4xl mx-auto text-center relative z-10 min-h-4xl">
       <div class="relative group">
         <div
           class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"
@@ -593,19 +635,67 @@
           <div
             class="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto relative"
           >
-            <div class="relative flex-grow">
-              <input
-                type="text"
-                placeholder="Enter username"
-                class="w-full px-6 py-4 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
-                (click)="$event.stopPropagation()"
-              />
+            <div class="flex-1">
+              <div class="relative">
+                <input
+                  type="text"
+                  placeholder="Enter username"
+                  [formControl]="handleFormControl"
+                  class="w-full px-4 py-4  rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                  [class.error]="handleStatus === 'taken' || handleStatus === 'invalid' || handleStatus === 'reserved'"
+                  (click)="$event.stopPropagation()"
+                />
+                <!-- Error messaging -->
+                <div
+                  class="handle-status left-0 right-0 mt-2 break-words transition-all duration-200"
+                  *ngIf="handleStatus"
+                >
+                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'checking'">
+                    <div class="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    <span class="checking text-gray-400">Checking availability...</span>
+                  </div>
+                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'available'">
+                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="available text-green-500 font-medium">Username is available!</span>
+                  </div>
+                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'taken'">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span class="taken text-red-500 font-medium">Username is already taken</span>
+                  </div>
+                  <div class="space-x-2 flex items-center" *ngIf="handleStatus === 'invalid'">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <span class="taken text-red-500 font-medium">
+                      Username must be at least 3 characters
+                      and contain only letters and numbers
+                    </span>
+                  </div>
+                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'reserved'">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <span class="taken text-red-500 font-medium">This username is reserved</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <button
-              class="w-full sm:w-auto px-8 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
-            >
-              Join Pog Shop
-            </button>
+            <div class="sm:w-[200px]">
+              <button
+                (click)="navigateToLogin()"
+                [disabled]="handleStatus === 'checking' || handleStatus === 'taken' || handleStatus === 'invalid' || handleStatus === 'reserved'"
+                [ngClass]="{
+                  'opacity-50': handleStatus === 'checking' || handleStatus === 'taken' || handleStatus === 'invalid' || handleStatus === 'reserved'
+                }"
+                class="px-8 h-[58px] w-full rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+              >
+                Join Pog Shop
+              </button>
+            </div>
           </div>
         </div>
       </div>

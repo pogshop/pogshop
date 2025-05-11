@@ -13,17 +13,19 @@ import {
   transition,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
-import { Auth } from '@angular/fire/auth';
-import { AuthService } from '../services/auth-service.service';
+import { HandleServiceService } from '../services/handle-service.service';
+import { FormControl } from '@angular/forms';
+import { EMPTY } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'landing-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, NavBarComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LucideAngularModule, NavBarComponent],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss'],
   animations: [
@@ -61,15 +63,54 @@ export class LandingPageComponent implements OnInit {
     delay: number;
     duration: number;
   }> = [];
+  handleIsTaken = false;
+  handleFormControl = new FormControl('');
+  isCheckingHandle = false;
+  handleStatus: 'available' | 'taken' | 'checking' | 'invalid' | 'reserved' | null = null;
 
   // Needed to auto play video
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
 
-  constructor(private router: Router, private auth: Auth, private authService: AuthService) {}
+  constructor(
+    private router: Router, 
+    private handleService: HandleServiceService
+  ) {}
 
   ngOnInit() {
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
+
+    // Set up handle availability check with debouncing
+    this.handleFormControl.valueChanges.pipe(
+      tap(()=> {
+        this.handleStatus = 'checking';
+      }),
+      debounceTime(500), // Wait for 500ms after the user stops typing
+      distinctUntilChanged(), // Only check if the value has changed
+      switchMap(handle => {
+        if (!handle) {
+          this.handleStatus = null;
+          return EMPTY; // Return empty Observable
+        }
+
+        // Validate handle format
+        const isValidFormat = /^[a-zA-Z0-9]{3,}$/.test(handle);
+        if (!isValidFormat) {
+          this.handleStatus = 'invalid';
+          return EMPTY;
+        }
+
+        return this.handleService.checkHandleAvailability(handle);
+      })
+    ).subscribe({
+      next: (isAvailable) => {
+        this.handleStatus = isAvailable ? 'available' : 'taken';
+      },
+      error: (error) => {
+        console.error('Error checking handle availability:', error);
+        this.handleStatus = null;
+      }
+    });
   }
 
   navigateToSignUp() {
@@ -77,7 +118,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   navigateToLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], { state: { handle: this.handleFormControl.value || '' , isNewUser: true}});
   }
 
   ngAfterViewInit() {
@@ -142,3 +183,7 @@ export class LandingPageComponent implements OnInit {
     }
   }
 }
+function takeUntilDestroyed(): import("rxjs").OperatorFunction<string | null, unknown> {
+  throw new Error('Function not implemented.');
+}
+

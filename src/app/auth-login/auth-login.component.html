@@ -29,17 +29,20 @@
           <div
             class="relative bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700"
           >
-            <h2 class="text-3xl font-bold mb-2 text-center">Welcome back!</h2>
-            <p class="text-gray-400 text-center mb-8">
-              Don't have an account?
-              <button
+            <h2 class="text-3xl font-bold mb-2 text-center">Welcome{{ handle ? `, ${handle}` : ' back'}}!</h2>
+            <div class="mb-8">
+              <p *ngIf="isNewUser" class="text-gray-400 text-center mb-4">Sign up to create your livestream shop</p>
+              <p class="text-gray-400 text-center" *ngIf="!isNewUser">
+                Don't have an account?
+                <button
                 (click)="navigateToSignUp()"
                 class="text-purple-400 hover:text-purple-300 font-medium"
-              >
+                >
                 Sign up
               </button>
             </p>
-
+          </div>
+            
             <!-- Twitch login button -->
             <button
               (click)="twitchLogin()"
@@ -60,7 +63,7 @@
                   <path d="M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7"></path>
                 </svg>
               </i>
-              Login with Twitch
+              {{ isNewUser ? 'Sign up with Twitch' : 'Login with Twitch'}}
             </button>
 
             <div class="relative mb-6">
@@ -119,7 +122,7 @@
                 "
                 class="w-full text-white py-3 px-4 rounded-full font-medium transition-colors"
               >
-                Login
+                {{ isNewUser ? 'Sign up' : 'Login'}}
               </button>
             </div>
 
