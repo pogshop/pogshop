@@ -18,6 +18,14 @@ export class AuthService {
       return unsubscribe;
     });
   }
+  /**
+   * Get the result of a redirect-based sign-in attempt
+   */
+  getRedirectResult(): Observable<UserCredential | null> {
+    return from(getRedirectResult(this.auth));
+  }
+
+  
 
   /**
    * Check if a user is currently logged in
