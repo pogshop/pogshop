@@ -68,12 +68,18 @@
 
   <!-- Desktop Sign Out and Balance -->
   <div class="hidden md:flex items-center space-x-4">
-    <button
-      (click)="signOut()"
-      class="px-4 py-2 font-medium text-gray-300 hover:text-white"
-    >
-      Sign Out
-    </button>
+      <button
+        (click)="signOut()"
+        class="px-4 py-2 font-medium text-gray-300 hover:text-white"
+      >
+        Sign Out
+      </button>
+      <button
+        (click)="deleteUser()"
+        class="px-4 py-2 font-medium text-gray-300 hover:text-white bg-red-500 rounded-md"
+      >
+        Delete Account
+      </button>
     <div
       class="flex items-center bg-gray-700 px-3 py-1 rounded-full text-white"
     >

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, from, map, Observable, of, skip, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, filter, from, Observable, of, switchMap } from 'rxjs';
 import { AuthService } from './auth-service.service';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -56,7 +56,7 @@ export class UsersService {
 
     this.getAuthUserInProgress$.next(true);
     const request = this.getUserById(id);
-    
+
     request.subscribe((user) => {
       this.authUser$.next(user);
       this.getAuthUserInProgress$.next(false);
@@ -71,6 +71,10 @@ export class UsersService {
 
   getUserByHandle(handle: string): Observable<any> {
     return this.http.get<any>(`${API_URL}?handle=${handle}`);
+  }
+
+  deleteAccount(): Observable<any> {
+    return this.http.delete<any>(`${API_URL}/${this.auth.currentUser?.uid}`);
   }
 
   async signOut(): Promise<void> {

@@ -28,6 +28,19 @@ export class ShopNavbarComponent {
     await this.usersService.signOut();
   }
 
+  deleteUser() {
+    this.usersService.deleteAccount().subscribe({
+      next: () => {
+        this.usersService.signOut().then(() => {
+          this.router.navigate(['/']);
+        });
+      },
+      error: (error) => {
+        console.error('Error deleting user:', error);
+      }
+    });
+  }
+
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
