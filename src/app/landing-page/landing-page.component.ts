@@ -29,7 +29,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import { AuthService } from '../services/auth-service.service';
 import { IntegrationsPageComponent } from '../integrations-page/integrations-page.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UsersService } from '../services/users-service.service';
@@ -107,7 +106,7 @@ export class LandingPageComponent implements OnInit {
 
   ngOnInit() {
     // Check if user is logged in
-    this.usersService.getCurrentUser()
+    this.usersService.getAuthUser()
       .pipe(
         takeUntilDestroyed(this.destroyRef)
       )

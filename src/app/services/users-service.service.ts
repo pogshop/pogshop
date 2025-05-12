@@ -10,11 +10,12 @@ const API_URL = 'https://pogshop-gateway-8yqn4bye.wl.gateway.dev/v1/users';
   providedIn: 'root',
 })
 export class UsersService {
-  readonly currentUser$: BehaviorSubject<any | null> = new BehaviorSubject<
+  // This is the app user who is logged in. Not to be confused with the firebase auth user.
+  readonly authUser$: BehaviorSubject<any | null> = new BehaviorSubject<
     any | null
   >(null);
 
-  private getUserInProgress = new BehaviorSubject<boolean>(false);
+  public getAuthUserInProgress$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private auth: Auth,
@@ -24,14 +25,14 @@ export class UsersService {
   ) {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.getAndSetUserById(user.uid);
+        this.getAndSetAuthUserById(user.uid);
       } else {
-        this.currentUser$.next(null);
+        this.authUser$.next(null);
       }
     });
   }
 
-  getCurrentUser(): Observable<any> {
+  getAuthUser(): Observable<any> {
     return new Observable(subscriber => {
       const unsubscribe = onAuthStateChanged(this.auth, (user) => {
         subscriber.next(user);
@@ -39,24 +40,26 @@ export class UsersService {
       // Clean up subscription
       return () => unsubscribe();
     }).pipe(
-      switchMap(() => this.getUserInProgress),
+      switchMap(() => this.getAuthUserInProgress$),
       filter((inProgress) => !inProgress),
       switchMap(() => {
-        return this.currentUser$;
+        return this.authUser$;
       }),
     );
   }
 
-  getAndSetUserById(id: string) {
-    if (id === this.currentUser$.value?.id) {
-      this.getUserInProgress.next(false);
+  getAndSetAuthUserById(id: string) {
+    if (id === this.authUser$.value?.id) {
+      this.getAuthUserInProgress$.next(false);
       return of();
     }
-    this.getUserInProgress.next(true);
+
+    this.getAuthUserInProgress$.next(true);
     const request = this.getUserById(id);
+    
     request.subscribe((user) => {
-      this.currentUser$.next(user);
-      this.getUserInProgress.next(false);
+      this.authUser$.next(user);
+      this.getAuthUserInProgress$.next(false);
     });
     return;
   }
@@ -71,7 +74,7 @@ export class UsersService {
   }
 
   async signOut(): Promise<void> {
-    this.currentUser$.next(null);
+    this.authUser$.next(null);
     await this.authService.signOut();
     this.router.navigate(['/']);
   }

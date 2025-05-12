@@ -43,8 +43,8 @@ export class AuthService {
     // If we have a cached token that's not expired, return it as an observable
 
     // Get current user
-    const user = this.auth.currentUser;
-    if (!user) {
+    const firebaseUser = this.auth.currentUser;
+    if (!firebaseUser) {
       return of(null);
     }
 
@@ -58,7 +58,7 @@ export class AuthService {
 
     // Get fresh token as an observable
     return from(
-      user.getIdToken().then(token => {
+      firebaseUser.getIdToken().then(token => {
         this.cachedToken = token;
         this.tokenExpiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
         return token;
