@@ -1,18 +1,17 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map, take } from 'rxjs/operators';
-import { AuthService } from '../services/auth-service.service';
+import { UsersService} from '../services/users-service.service';
 
 // Only allow acces to logged in users.
 export const loggedInGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
+  const usersService = inject(UsersService);
   const router = inject(Router);
-  authService.isLoading$.next(true);
+  
 
-  return authService.currentUser$.pipe(
+  return usersService.currentUser$.pipe(
     take(1),
     map(user => {
-      authService.isLoading$.next(false);
       if (user) {
         return true;
       }

@@ -2,7 +2,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth-service.service';
+import { UsersService } from '../../services/users-service.service';
 
 @Component({
   selector: 'app-shop-nav-bar',
@@ -12,12 +12,12 @@ import { AuthService } from '../../services/auth-service.service';
   styleUrls: ['./shop-nav-bar.component.scss']
 })
 export class ShopNavbarComponent {
-  @Input() currentTab: string = 'integrations';
+  @Input() currentTab: string = 'shop';
   @Input() balance: string = '47.93';
   @Output() tabChange = new EventEmitter<string>();
   isMobileMenuOpen = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private usersService: UsersService) {}
   
   setCurrentTab(tab: string): void {
     this.router.navigate([`/${tab}`]);
@@ -25,8 +25,7 @@ export class ShopNavbarComponent {
   }
 
   async signOut(): Promise<void> {
-    await this.authService.signOut();
-    this.router.navigate(['/']);
+    await this.usersService.signOut();
   }
 
   toggleMobileMenu(): void {

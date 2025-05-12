@@ -1,18 +1,13 @@
 import { Routes } from '@angular/router';
 import { magicLinkGuard } from './guards/magic-link.guard';
 import { loggedInGuard } from './guards/logged-in.guard';
-import { IntegrationsPageComponent } from './integrations-page/integrations-page.component';
 
 import { loggedOutGuard } from './guards/logged-out.guard';
-import { landingPageGuard } from './guards/landing-page.guard';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () =>
-      import('./landing-page/landing-page.component').then(
-        (m) => m.LandingPageComponent
-      ),
-    canActivate: [landingPageGuard],
+    component: LandingPageComponent,
     title: 'Pogshop - Home',
   },
   {
@@ -20,6 +15,9 @@ export const routes: Routes = [
     canActivate: [loggedOutGuard],
     loadComponent: () =>
       import('./sign-up/sign-up.component').then((m) => m.SignUpComponent),
+    data: {
+      preload: true,
+    },
   },
   {
     path: 'integrations',
@@ -30,12 +28,22 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'shop',
+    loadComponent: () =>
+      import('./creator-banner/creator-banner.component').then(
+        (m) => m.CreatorBannerComponent
+      ),
+  },
+  {
     path: 'login',
     canActivate: [loggedOutGuard],
     loadComponent: () =>
       import('./auth-login/auth-login.component').then(
         (m) => m.AuthLoginComponent
       ),
+    data: {
+      preload: true,
+    },
   },
   {
     path: 'magic-link-sent',

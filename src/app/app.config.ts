@@ -3,9 +3,10 @@ import {
   importProvidersFrom,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
 import {
   provideHttpClient,
+  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { getAnalytics, provideAnalytics } from '@angular/fire/analytics';
@@ -24,6 +25,8 @@ import {
 } from 'lucide-angular';
 
 import { routes } from './app.routes';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { authInterceptor } from './interceptors/auth-interceptor.interceptor';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAPo4fJ30Lf0E7NntJ3lIbCyaNJ5UY_gdI',
@@ -38,8 +41,9 @@ const firebaseConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
+    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(
       LucideAngularModule.pick({
         DollarSign,

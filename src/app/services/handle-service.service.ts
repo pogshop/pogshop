@@ -102,7 +102,6 @@ export class HandleServiceService {
     if (RESERVED_PATHS.includes(handle.toLowerCase())) {
       return of(false);
     }
-
     return this.http.get<{ available: boolean }>(`${this.API_URL}/handles/available`, {
       params: { handle }
     }).pipe(

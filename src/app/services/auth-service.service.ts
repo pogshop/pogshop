@@ -1,45 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Auth, User, isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, OAuthProvider, UserCredential, signInWithRedirect, getRedirectResult } from '@angular/fire/auth';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import {
+  Auth,
+  sendSignInLinkToEmail,
+  OAuthProvider,
+  signInWithRedirect,
+} from '@angular/fire/auth';
+import {  Observable, from, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  isLoading$ = new BehaviorSubject<boolean>(false);
-  constructor(private auth: Auth) {  }
+  private cachedToken: string | null = null;
+  private tokenExpiration: number | null = null;
 
-  /**
-   * Get the current user state as an observable
-   */
-  get currentUser$(): Observable<User | null> {
-    return new Observable<User | null>(subscriber => {
-      const unsubscribe = onAuthStateChanged(this.auth, subscriber);
-      return unsubscribe;
-    });
-  }
-  /**
-   * Get the result of a redirect-based sign-in attempt
-   */
-  getRedirectResult(): Observable<UserCredential | null> {
-    return from(getRedirectResult(this.auth));
-  }
-  
-
-  /**
-   * Check if a user is currently logged in
-   */
-  isLoggedIn(): boolean {
-    return this.auth.currentUser !== null;
-  }
-
-  /**
-   * Get the current user
-   */
-  getCurrentUser(): User | null {
-    return this.auth.currentUser;
-  }
+  constructor(private auth: Auth) {}
 
   /**
    * Send a magic link to the user's email
@@ -50,12 +26,47 @@ export class AuthService {
       handleCodeInApp: true,
     };
 
-    return from(sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
-      .then(() => {
-        window.localStorage.setItem('emailForSignIn', email);
+    return from(
+      sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
+        .then(() => {
+          window.localStorage.setItem('emailForSignIn', email);
+        })
+        .catch((error) => {})
+    );
+  }
+
+  /**
+   * Get a valid JWT token from Firebase Auth
+   * Caches the token and refreshes if expired
+   */
+  getIdToken$(): Observable<string | null> {
+    // If we have a cached token that's not expired, return it as an observable
+
+    // Get current user
+    const user = this.auth.currentUser;
+    if (!user) {
+      return of(null);
+    }
+
+    if (
+      this.cachedToken &&
+      this.tokenExpiration &&
+      Date.now() < this.tokenExpiration
+    ) {
+      return of(this.cachedToken);
+    }
+
+    // Get fresh token as an observable
+    return from(
+      user.getIdToken().then(token => {
+        this.cachedToken = token;
+        this.tokenExpiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
+        return token;
+      }).catch(error => {
+        console.error('Error getting auth token:', error);
+        return null;
       })
-      .catch(error => {
-      }));
+    );
   }
 
   /**
@@ -70,8 +81,6 @@ export class AuthService {
    */
   private getRedirectUrl(): string {
     const url = `${environment.baseUrl}/validate-magic-link`;
-    console.log('Current environment:', environment);
-    console.log('Constructed URL:', url);
     return url;
   }
 
@@ -84,13 +93,13 @@ export class AuthService {
       claims: JSON.stringify({
         id_token: {
           email: null,
-          email_verified: null
+          email_verified: null,
         },
         userinfo: {
           email: null,
-          email_verified: null
-        }
-      })
+          email_verified: null,
+        },
+      }),
     });
 
     try {
