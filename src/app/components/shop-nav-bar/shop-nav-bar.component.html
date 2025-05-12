@@ -75,7 +75,7 @@
         Sign Out
       </button>
       <button
-        (click)="deleteUser()"
+        (click)="deleteAccount()"
         class="px-4 py-2 font-medium text-gray-300 hover:text-white bg-red-500 rounded-md"
       >
         Delete Account
@@ -229,11 +229,17 @@
           </div>
         </div>
         <button
-          (click)="signOut()"
-          class="w-full px-4 py-2 font-medium text-gray-300 hover:text-white bg-gray-700 rounded-lg"
+        (click)="deleteAccount()"
+          class="w-full px-4 py-2 font-medium text-gray-300 hover:text-white bg-gray-700 rounded-lg bg-red-500 mb-4"
         >
-          Sign Out
-        </button>
+        Delete Account
+      </button>
+          <button
+            (click)="signOut()"
+            class="w-full px-4 py-2 font-medium text-gray-300 hover:text-white bg-gray-700 rounded-lg"
+          >
+            Sign Out
+          </button>
       </div>
     </div>
   </div>

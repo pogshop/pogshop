@@ -28,7 +28,7 @@ export class ShopNavbarComponent {
     await this.usersService.signOut();
   }
 
-  deleteUser() {
+  deleteAccount() {
     this.usersService.deleteAccount().subscribe({
       next: () => {
         this.usersService.signOut().then(() => {
