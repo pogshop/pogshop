@@ -8,7 +8,7 @@ export const loggedOutGuard: CanActivateFn = (route, state) => {
   const usersService = inject(UsersService);
   const router = inject(Router);
 
-  return usersService.currentUser$.pipe(
+  return usersService.getCurrentUser().pipe(
     take(1),
     map((user) => {
       if (user) {

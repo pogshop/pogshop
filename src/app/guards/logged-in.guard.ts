@@ -9,7 +9,7 @@ export const loggedInGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   
 
-  return usersService.currentUser$.pipe(
+  return usersService.getCurrentUser().pipe(
     take(1),
     map(user => {
       if (user) {
