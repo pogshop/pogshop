@@ -11,7 +11,7 @@ import { take } from 'rxjs';
   imports: [ShopNavbarComponent, ShopNavbarComponent, CommonModule],
 })
 export class CreatorBannerComponent {
-  @Input() creatorName: string = 'Jennifer Milk';
+  @Input() creatorName: string = 'Display Name';
   @Input() username: string = '@joannemilktea';
   @Input() bio: string =
     'Gaming, cooking, and IRL adventures! Get your interactive alerts here and help support the stream 💜';
