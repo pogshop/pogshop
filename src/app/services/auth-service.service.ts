@@ -59,6 +59,7 @@ export class AuthService {
     // Get fresh token as an observable
     return from(
       firebaseUser.getIdToken().then(token => {
+        
         this.cachedToken = token;
         this.tokenExpiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
         return token;

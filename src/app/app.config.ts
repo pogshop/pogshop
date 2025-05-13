@@ -30,7 +30,7 @@ import { authInterceptor } from './interceptors/auth-interceptor.interceptor';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAPo4fJ30Lf0E7NntJ3lIbCyaNJ5UY_gdI',
-  authDomain: 'pogshop.gg',
+  // authDomain: 'localhost:4200',
   projectId: 'pogshop-387c5',
   storageBucket: 'pogshop-387c5.firebasestorage.app',
   messagingSenderId: '702534866054',

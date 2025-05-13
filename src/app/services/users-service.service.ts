@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, from, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, from, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { AuthService } from './auth-service.service';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -71,6 +71,23 @@ export class UsersService {
 
   getUserByHandle(handle: string): Observable<any> {
     return this.http.get<any>(`${API_URL}?handle=${handle}`);
+  }
+
+  patchUser(userData: any): Observable<any> {
+    if (!this.auth.currentUser) {
+      return throwError(() => new Error('User not authenticated'));
+    }
+    
+    return this.http.patch<any>(`${API_URL}/${this.auth.currentUser.uid}`, userData).pipe(
+      tap((updatedUser) => {
+        // Update the auth user in the BehaviorSubject if successful
+        this.authUser$.next(updatedUser);
+      }),
+      catchError((error) => {
+        console.error('Error updating user:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   deleteAccount(): Observable<any> {
