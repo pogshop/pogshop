@@ -46,13 +46,24 @@ export class CreatorBannerComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        const formData = new FormData();
-        formData.append('profilePhotoFile', base64String);
-        this.usersService.patchUser(formData).pipe(take(1)).subscribe();
+      
+      reader.onload = (e: any) => {
+        const base64Image = e.target.result;
+        // Check file size before uploading
+        const base64String = base64Image.toString();
+        const sizeInBytes = Math.ceil((base64String.length * 3) / 4);
+        const sizeInMB = sizeInBytes / (1024 * 1024);
+        
+        if (sizeInMB > 5) {
+          alert('Profile photo must be less than 5MB');
+          return;
+        }
+        
+        const data = {'profilePhotoFile': base64Image};
+        this.usersService.patchUser(data).pipe(take(1)).subscribe();
       };
+      
+      reader.readAsDataURL(file);
     }
   }
 }

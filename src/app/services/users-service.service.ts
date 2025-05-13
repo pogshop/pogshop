@@ -78,7 +78,7 @@ export class UsersService {
       return throwError(() => new Error('User not authenticated'));
     }
     
-    return this.http.patch<any>(`${API_URL}/${this.auth.currentUser.uid}`, userData).pipe(
+    return this.http.patch<any>(`${API_URL}/${this.auth.currentUser.uid}`, userData, { headers: { 'Content-Type': 'application/json' } }).pipe(
       tap((updatedUser) => {
         // Update the auth user in the BehaviorSubject if successful
         this.authUser$.next(updatedUser);
