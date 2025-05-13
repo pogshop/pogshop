@@ -16,6 +16,7 @@ export class UsersService {
   >(null);
 
   public getAuthUserInProgress$ = new BehaviorSubject<boolean>(false);
+  private getUserCache: Map<string, any> = new Map();
 
   constructor(
     private auth: Auth,
@@ -27,6 +28,7 @@ export class UsersService {
       if (user) {
         this.getAndSetAuthUserById(user.uid);
       } else {
+        console.log('User is not logged in');
         this.authUser$.next(null);
       }
     });
@@ -57,7 +59,12 @@ export class UsersService {
     this.getAuthUserInProgress$.next(true);
     const request = this.getUserById(id);
 
-    request.subscribe((user) => {
+    request.pipe(catchError((error) => {
+      this.authUser$.next(null);
+
+      this.getAuthUserInProgress$.next(false);
+      return throwError(() => error);
+    })).subscribe((user) => {
       this.authUser$.next(user);
       this.getAuthUserInProgress$.next(false);
     });
@@ -70,7 +77,14 @@ export class UsersService {
   }
 
   getUserByHandle(handle: string): Observable<any> {
-    return this.http.get<any>(`${API_URL}?handle=${handle}`);
+    if (this.getUserCache.has(handle)) {
+      return of(this.getUserCache.get(handle));
+    }
+    return this.http.get<any>(`${API_URL}?handle=${handle}`).pipe(
+      tap((user) => {
+        this.getUserCache.set(handle, user);
+      })
+    );
   }
 
   patchUser(userData: any): Observable<any> {

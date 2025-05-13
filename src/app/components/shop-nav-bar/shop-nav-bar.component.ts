@@ -20,7 +20,12 @@ export class ShopNavbarComponent {
   constructor(private router: Router, private usersService: UsersService) {}
   
   setCurrentTab(tab: string): void {
-    this.router.navigate([`/${tab}`]);
+    if (tab === 'shop') {
+      this.router.navigate([`/${this.usersService.authUser$.value?.handle}`]);
+    }
+    else {
+      this.router.navigate([`/${tab}`]);
+    }
     this.isMobileMenuOpen = false; // Close mobile menu after navigation
   }
 

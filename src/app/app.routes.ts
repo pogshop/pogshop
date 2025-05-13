@@ -28,14 +28,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'shop',
-    canActivate: [loggedInGuard],
-    loadComponent: () =>
-      import('./creator-banner/creator-banner.component').then(
-        (m) => m.CreatorBannerComponent
-      ),
-  },
-  {
     path: 'login',
     canActivate: [loggedOutGuard],
     loadComponent: () =>
@@ -66,8 +58,8 @@ export const routes: Routes = [
   {
     path: '**',
     loadComponent: () =>
-      import('./landing-page/landing-page.component').then(
-        (m) => m.LandingPageComponent
+      import('./creator-banner/creator-banner.component').then(
+        (m) => m.CreatorBannerComponent
       ),
   },
 ];
