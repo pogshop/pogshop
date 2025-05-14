@@ -112,7 +112,7 @@
                   <input
                     #handleInput
                     type="text"
-                    [(ngModel)]="tempHandle"
+                    [(ngModel)]="tempHandle" (ngModelChange)="tempHandle = tempHandle.toLowerCase()"
                     (ngModelChange)="onHandleInput()"
                     class="max-w-[140px] sm:max-w-full sm:min-w-[100px] w-full bg-gray-800 text-gray-100 px-2 sm:py-0.5 py-1 rounded border border-gray-700 focus:border-purple-500 focus:outline-none h-[24px] leading-none"
                     [class.border-red-500]="handleStatus === HANDLE_STATUS.TAKEN || handleStatus === HANDLE_STATUS.INVALID"
