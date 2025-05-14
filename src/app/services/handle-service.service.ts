@@ -98,8 +98,9 @@ export class HandleServiceService {
    * @returns Observable<boolean> True if handle is available, false if taken
    */
   checkHandleAvailability(handle: string): Observable<boolean> {
+    handle = handle.toLowerCase();
     // First check if the handle is in the reserved list
-    if (RESERVED_PATHS.includes(handle.toLowerCase())) {
+    if (RESERVED_PATHS.includes(handle)) {
       return of(false);
     }
     return this.http.get<{ available: boolean }>(`${this.API_URL}/handles/available`, {

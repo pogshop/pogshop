@@ -91,7 +91,7 @@ export class CreatorBannerComponent {
   }
 
   private validateHandleAvailability(control?: AbstractControl): Observable<ValidationErrors | null> {
-    const value = control?.value;
+    const value = control?.value.toLowerCase();
     if (!value) {
       return of(null);
     }
@@ -103,7 +103,6 @@ export class CreatorBannerComponent {
     return timer(500)
       .pipe(switchMap(() => this.handleService.checkHandleAvailability(value)),
         take(1),
-        tap(()=> console.error('hi')),
         map(isAvailable => {
           this.cdRef.detectChanges();
           return isAvailable ? null : { handleTaken: true };
@@ -131,6 +130,13 @@ export class CreatorBannerComponent {
         this.validateHandleAvailability.bind(this)
       ]
     });
+    this.handleFormControl.valueChanges.pipe(
+      tap(value => {
+        if (value && value !== value.toLowerCase()) {
+          this.handleFormControl.setValue(value.toLowerCase(), { emitEvent: false });
+        }
+      })
+    ).subscribe();
 
   }
 
@@ -179,7 +185,7 @@ export class CreatorBannerComponent {
           this.bannerPhotoURL = base64Image;
           data = { bannerPhotoFile: base64Image };
         }
-
+        this.cdRef.detectChanges();
         this.usersService
           .patchUser(data)
           .pipe(take(1))
@@ -209,7 +215,6 @@ export class CreatorBannerComponent {
 
   saveHandle() {
     if (this.handleFormControl.valid) {
-      this.handleFormControl.setValue(this.handleFormControl.value);
       this.isEditingHandle = false;
       const data = { handle: this.handleFormControl.value };
       this.usersService
@@ -217,9 +222,8 @@ export class CreatorBannerComponent {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.handleFormControl.setValue(this.handleFormControl.value);
             this.handleFormControl.setErrors(null, {emitEvent: true});
-            window.history.replaceState({}, '', `/${this.tempHandle}`);
+            window.history.replaceState({}, '', `/${this.handleFormControl.value}`);
             this.cdRef.detectChanges();
           },
           error: (error) => {

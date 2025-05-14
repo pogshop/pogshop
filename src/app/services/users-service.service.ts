@@ -109,6 +109,10 @@ export class UsersService {
     if (!this.auth.currentUser) {
       return throwError(() => new Error('User not authenticated'));
     }
+
+    if (userData.handle) {
+      userData.handle = userData.handle.toLowerCase();
+    }
     
     return this.http.patch<any>(`${API_URL}/${this.auth.currentUser.uid}`, userData, { headers: { 'Content-Type': 'application/json' } }).pipe(
       tap((updatedUser) => {
