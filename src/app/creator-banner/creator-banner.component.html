@@ -75,7 +75,7 @@
         </div>
 
         <div class="sm:ml-6 sm:mt-12 mt-6">
-          <div class="relative min-h-[32px] sm:max-w-full">
+          <div class="relative h-[36px] sm:max-w-full">
             <div
             [ngClass]="{'cursor-pointer': canEditProfile}"
             *ngIf="!isEditingDisplayName" (click)="startEditingDisplayName()" class="group flex items-center space-x-2">
@@ -108,7 +108,7 @@
             </div>
             <div *ngIf="isEditingHandle" class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 mt-1">
               <div class="flex w-full">
-                <div class="mr-2">
+                <div class="sm:mr-2 mr-6">
                   <input
                     #handleInput
                     type="text"
@@ -125,7 +125,7 @@
                     <span *ngIf="handleStatus === HANDLE_STATUS.INVALID" class="text-red-400">Handle must be 3+ alphanumeric characters</span>
                   </div>
                 </div>
-                <div>
+                <div class="flex justify-center gap-6">
                 <button
                   (click)="saveHandle()"
                   [disabled]="handleStatus !== HANDLE_STATUS.AVAILABLE"
