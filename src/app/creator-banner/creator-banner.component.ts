@@ -59,7 +59,6 @@ export class CreatorBannerComponent {
 
   private handleInputSubject = new Subject<string>();
 
-
   constructor(
     private usersService: UsersService,
     private handleService: HandleServiceService,

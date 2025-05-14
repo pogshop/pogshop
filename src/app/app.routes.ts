@@ -56,6 +56,14 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'shop',
+    canActivate: [loggedInGuard],
+    loadComponent: () =>
+      import('./creator-banner/creator-banner.component').then(
+        (m) => m.CreatorBannerComponent
+      ),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./creator-banner/creator-banner.component').then(

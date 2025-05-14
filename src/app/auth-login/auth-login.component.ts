@@ -40,6 +40,9 @@ export class AuthLoginComponent {
   }
 
   sendMagicLink(): void {
+    if (this.loginForm.invalid) {
+      return;
+    }
     // Ensure only one magic link is sent at a time
     this.disableMagicLinkButton = true;
     this.router.navigate(['/magic-link-sent'], { state: { email: this.loginForm.value.email } });
