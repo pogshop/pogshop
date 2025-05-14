@@ -48,7 +48,6 @@ export class UsersService {
       return this.authUser$;
     }
     
-    this.getAuthUserInProgress$.next(true);
     return new Observable(subscriber => {
       const unsubscribe = onIdTokenChanged(this.auth, (user) => {
         subscriber.next(user);
