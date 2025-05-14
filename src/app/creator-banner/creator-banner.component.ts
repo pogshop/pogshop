@@ -204,7 +204,6 @@ export class CreatorBannerComponent {
       this.usersService.patchUser(data).pipe(take(1)).subscribe({
         next: () => {
           this.handle = '@' + this.tempHandle;
-          window.history.replaceState({}, '', `/${this.tempHandle}`);
           this.isEditingHandle = false;
         },
         error: (error) => {
