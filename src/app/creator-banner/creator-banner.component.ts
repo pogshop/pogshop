@@ -63,9 +63,7 @@ export class CreatorBannerComponent {
     private usersService: UsersService,
     private handleService: HandleServiceService,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
+  ){
     combineLatest([
       this.usersService.getUserByHandle(this.router.url.split('/')[1]),
       this.usersService.getAuthUser()
@@ -75,9 +73,9 @@ export class CreatorBannerComponent {
       this.displayName = user?.displayName || this.displayName;
       this.handle = `@${user?.handle || this.handle}`;
       this.bio = user?.bio || this.bio;
-      this.pageLoaded = true;
       // Check if the current authenticated user is the profile owner
       this.canEditProfile = !!authUser && authUser.id === user?.id;
+      this.pageLoaded = true;
     });
 
     this.handleInputSubject.pipe(debounceTime(300)).subscribe((value) => {
@@ -122,8 +120,23 @@ export class CreatorBannerComponent {
           return;
         }
         
-        const data = imageType === IMAGE_TYPE.PROFILE ? {'profilePhotoFile': base64Image} : {'bannerPhotoFile': base64Image};
-        this.usersService.patchUser(data).pipe(take(1)).subscribe();
+        let data;
+        if (imageType === IMAGE_TYPE.PROFILE) {
+          this.profilePhotoURL = base64Image;
+          data = {'profilePhotoFile': base64Image}
+
+        } else {
+          this.bannerPhotoURL = base64Image;
+          data = {'bannerPhotoFile': base64Image}
+        }
+        
+        this.usersService.patchUser(data).pipe(take(1)).subscribe((result)=> {
+          if (imageType === IMAGE_TYPE.PROFILE) {
+            this.profilePhotoURL = result.profilePhotoURL;
+          } else {
+            this.bannerPhotoURL = result.bannerPhotoURL;
+          }
+        });
       };
       
       reader.readAsDataURL(file);

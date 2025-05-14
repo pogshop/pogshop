@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, filter, from, Observable, of, switchMap, t
 import { AuthService } from './auth-service.service';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 const API_URL = 'https://pogshop-gateway-8yqn4bye.wl.gateway.dev/v1/users';
 
 @Injectable({
@@ -28,8 +29,14 @@ export class UsersService {
       if (user) {
         this.getAndSetAuthUserById(user.uid);
       } else {
-        console.log('User is not logged in');
         this.authUser$.next(null);
+        this.signOut();
+      }
+    });
+
+    this.authUser$.pipe(takeUntilDestroyed()).subscribe((user) => {
+      if (user) {
+        this.getUserCache.set(user.handle, user);
       }
     });
   }
@@ -77,7 +84,7 @@ export class UsersService {
   }
 
   getUserByHandle(handle: string): Observable<any> {
-    if (this.getUserCache.has(handle)) {
+    if (handle && this.getUserCache.has(handle)) {
       return of(this.getUserCache.get(handle));
     }
     return this.http.get<any>(`${API_URL}?handle=${handle}`).pipe(
@@ -95,6 +102,13 @@ export class UsersService {
     return this.http.patch<any>(`${API_URL}/${this.auth.currentUser.uid}`, userData, { headers: { 'Content-Type': 'application/json' } }).pipe(
       tap((updatedUser) => {
         // Update the auth user in the BehaviorSubject if successful
+        if (userData.profilePhotoFile) {
+          updatedUser.profilePhotoURL = userData.profilePhotoFile;
+        }
+        if (userData.bannerPhotoFile) {
+          updatedUser.bannerPhotoURL = userData.bannerPhotoFile;
+        }
+       
         this.authUser$.next(updatedUser);
       }),
       catchError((error) => {

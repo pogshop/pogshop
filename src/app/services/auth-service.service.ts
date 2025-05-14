@@ -58,13 +58,16 @@ export class AuthService {
 
     // Get fresh token as an observable
     return from(
-      firebaseUser.getIdToken().then(token => {
+        firebaseUser.getIdToken().then(token => {
         
         this.cachedToken = token;
         this.tokenExpiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
         return token;
       }).catch(error => {
         console.error('Error getting auth token:', error);
+        // Sign out the user if the token cannot be refreshed
+        // This happens when a user deletes their account
+        this.signOut();
         return null;
       })
     );
