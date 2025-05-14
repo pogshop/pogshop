@@ -31,7 +31,7 @@ enum IMAGE_TYPE {
 })
 export class CreatorBannerComponent {
   displayName: string = 'Display Name';
-  handle: string = '@handle';
+  handle: string = 'handle';
   bio: string = 'There\'s nothing here yet but they\'ll be here soon!';
   isVerified: boolean = true;
   profilePhotoURL: string = ''; 
@@ -59,28 +59,43 @@ export class CreatorBannerComponent {
 
   private handleInputSubject = new Subject<string>();
 
+
   constructor(
     private usersService: UsersService,
     private handleService: HandleServiceService,
     private router: Router
   ){
-    combineLatest([
-      this.usersService.getUserByHandle(this.router.url.split('/')[1]),
-      this.usersService.getAuthUser()
-    ]).pipe(take(1)).subscribe(([user, authUser]) => {
-      this.profilePhotoURL = user?.profilePhotoURL || this.profilePhotoURL;
-      this.bannerPhotoURL = user?.bannerPhotoURL || this.bannerPhotoURL;
-      this.displayName = user?.displayName || this.displayName;
-      this.handle = `@${user?.handle || this.handle}`;
-      this.bio = user?.bio || this.bio;
-      // Check if the current authenticated user is the profile owner
-      this.canEditProfile = !!authUser && authUser.id === user?.id;
-      this.pageLoaded = true;
-    });
+
+    if (this.router.url.split('/')[1] === 'shop') {
+      this.usersService.getAuthUser().pipe(take(1)).subscribe((user) => {
+        this.initializeProfile(user);
+      });
+    }
+    else {
+        combineLatest([
+          this.usersService.getUserByHandle(this.router.url.split('/')[1]),
+          this.usersService.getAuthUser()
+        ]).pipe(take(1)).subscribe(([user]) => {
+          this.initializeProfile(user);
+        });
+      }
 
     this.handleInputSubject.pipe(debounceTime(300)).subscribe((value) => {
       this._onHandleInput(value);
     });
+    
+  }
+
+  private initializeProfile(user:any) {
+    this.profilePhotoURL = user?.profilePhotoURL || this.profilePhotoURL;
+    this.bannerPhotoURL = user?.bannerPhotoURL || this.bannerPhotoURL;
+    this.displayName = user?.displayName || this.displayName;
+    this.handle = `@${user?.handle || this.handle}`;
+    this.bio = user?.bio || this.bio;
+    // Check if the current authenticated user is the profile owner
+    const authUser = this.usersService.authUser$.value;
+    this.canEditProfile = !!authUser && authUser.id === user?.id;
+    this.pageLoaded = true;
   }
 
   handleShare(): void {

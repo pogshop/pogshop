@@ -21,7 +21,9 @@ export class ShopNavbarComponent {
   
   setCurrentTab(tab: string): void {
     if (tab === 'shop') {
-      this.router.navigate([`/${this.usersService.authUser$.value?.handle}`]);
+      // Handle the case where a user hasn't set their handle yet
+      const path = this.usersService.authUser$.value?.handle || 'shop';
+      this.router.navigate([`/${path}`]);
     }
     else {
       this.router.navigate([`/${tab}`]);
