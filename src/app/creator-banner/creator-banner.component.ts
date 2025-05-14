@@ -211,6 +211,7 @@ export class CreatorBannerComponent {
       this.tempDisplayName = this.displayName;
       return;
     }
+    this.displayName = newName;
       const data = { displayName: newName };
       this.usersService.patchUser(data).pipe(take(1)).subscribe({
         complete: () => {
