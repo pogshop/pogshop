@@ -23,42 +23,42 @@
   <!-- Desktop Menu -->
   <div class="hidden md:flex space-x-8">
     <button
-      (click)="setCurrentTab('shop')"
+      (click)="setCurrentTab(TABS.SHOP)"
       [ngClass]="{
-        'text-purple-400 border-b-2 border-purple-400': currentTab === 'shop',
-        'text-gray-300 hover:text-white': currentTab !== 'shop'
+        'text-purple-400 border-b-2 border-purple-400': currentTab === TABS.SHOP,
+        'text-gray-300 hover:text-white': currentTab !== TABS.SHOP
       }"
       class="px-4 py-2 font-medium"
     >
-      Your Shop
+      {{ isOwnShop ? 'Your Shop' : 'Back to Your Shop' }}
     </button>
     <button
-      (click)="setCurrentTab('library')"
+      (click)="setCurrentTab(TABS.LIBRARY)"
       [ngClass]="{
         'text-purple-400 border-b-2 border-purple-400':
-          currentTab === 'library',
-        'text-gray-300 hover:text-white': currentTab !== 'library'
+          currentTab === TABS.LIBRARY,
+        'text-gray-300 hover:text-white': currentTab !== TABS.LIBRARY
       }"
       class="px-4 py-2 font-medium"
     >
       Library
     </button>
     <button
-      (click)="setCurrentTab('orders')"
+      (click)="setCurrentTab(TABS.ORDERS)"
       [ngClass]="{
-        'text-purple-400 border-b-2 border-purple-400': currentTab === 'orders',
-        'text-gray-300 hover:text-white': currentTab !== 'orders'
+        'text-purple-400 border-b-2 border-purple-400': currentTab === TABS.ORDERS,
+        'text-gray-300 hover:text-white': currentTab !== TABS.ORDERS
       }"
       class="px-4 py-2 font-medium"
     >
       Orders
     </button>
     <button
-      (click)="setCurrentTab('integrations')"
+      (click)="setCurrentTab(TABS.INTEGRATION)"
       [ngClass]="{
         'text-purple-400 border-b-2 border-purple-400':
-          currentTab === 'integrations',
-        'text-gray-300 hover:text-white': currentTab !== 'integrations'
+          currentTab === TABS.INTEGRATION,
+        'text-gray-300 hover:text-white': currentTab !== TABS.INTEGRATION
       }"
       class="px-4 py-2 font-medium"
     >
@@ -164,18 +164,18 @@
         <button
           (click)="setCurrentTab('shop')"
           [ngClass]="{
-            'text-purple-400': currentTab === 'shop',
-            'text-gray-300 hover:text-white': currentTab !== 'shop'
+            'text-purple-400': currentTab === TABS.SHOP,
+            'text-gray-300 hover:text-white': currentTab !== TABS.SHOP
           }"
           class="px-4 py-2 font-medium text-left"
         >
-          Shop
+          {{ isOwnShop ? 'Shop' : 'Back to Your Shop' }}
         </button>
         <button
           (click)="setCurrentTab('library')"
           [ngClass]="{
-            'text-purple-400': currentTab === 'library',
-            'text-gray-300 hover:text-white': currentTab !== 'library'
+            'text-purple-400': currentTab === TABS.LIBRARY,
+            'text-gray-300 hover:text-white': currentTab !== TABS.LIBRARY
           }"
           class="px-4 py-2 font-medium text-left"
         >
@@ -184,8 +184,8 @@
         <button
           (click)="setCurrentTab('orders')"
           [ngClass]="{
-            'text-purple-400': currentTab === 'orders',
-            'text-gray-300 hover:text-white': currentTab !== 'orders'
+            'text-purple-400': currentTab === TABS.ORDERS,
+            'text-gray-300 hover:text-white': currentTab !== TABS.ORDERS
           }"
           class="px-4 py-2 font-medium text-left"
         >
@@ -194,8 +194,8 @@
         <button
           (click)="setCurrentTab('integrations')"
           [ngClass]="{
-            'text-purple-400': currentTab === 'integrations',
-            'text-gray-300 hover:text-white': currentTab !== 'integrations'
+            'text-purple-400': currentTab === TABS.INTEGRATION,
+            'text-gray-300 hover:text-white': currentTab !== TABS.INTEGRATION
           }"
           class="px-4 py-2 font-medium text-left"
         >

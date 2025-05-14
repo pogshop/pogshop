@@ -4,11 +4,14 @@ import { loggedInGuard } from './guards/logged-in.guard';
 
 import { loggedOutGuard } from './guards/logged-out.guard';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { authUserResolver } from './resolvers/auth-user.resolver';
+
 export const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
     title: 'Pogshop - Home',
+
   },
   {
     path: 'signup',
@@ -63,6 +66,13 @@ export const routes: Routes = [
         (m) => m.CreatorBannerComponent
       ),
   },
+  {
+    // Used as a literal route to logout the user since the route won't reload when the user is logged out.
+    path: 'logout',
+    component: LandingPageComponent,
+    title: 'Pogshop - Home',
+  },
+
   {
     path: '**',
     loadComponent: () =>

@@ -17,7 +17,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 import { HandleServiceService } from '../services/handle-service.service';
 import { FormControl } from '@angular/forms';
@@ -101,19 +101,19 @@ export class LandingPageComponent implements OnInit {
     private handleService: HandleServiceService,
     private usersService: UsersService,
     private destroyRef: DestroyRef,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
-
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {
+    
+  }
+  
   ngOnInit() {
-    // Check if user is logged in
-    this.usersService.getAuthUser()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe((user) => {
-        this.isLoggedIn = !!user ? 'loggedIn' : 'loggedOut';
-        this.changeDetectorRef.detectChanges();
-      });
+    this.usersService.getAuthUser().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(user => {
+      this.isLoggedIn = user ? 'loggedIn' : 'loggedOut';
+      this.changeDetectorRef.markForCheck();
+    });
+
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
 

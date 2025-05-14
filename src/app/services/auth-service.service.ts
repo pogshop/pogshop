@@ -76,8 +76,9 @@ export class AuthService {
   /**
    * Sign out the current user
    */
-  signOut(): Promise<void> {
-    return this.auth.signOut();
+  async signOut() {
+    await this.auth.signOut();
+
   }
 
   /**

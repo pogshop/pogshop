@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, from, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { AuthService } from './auth-service.service';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Auth, onIdTokenChanged,  } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 const API_URL = 'https://pogshop-gateway-8yqn4bye.wl.gateway.dev/v1/users';
@@ -25,12 +25,12 @@ export class UsersService {
     private authService: AuthService,
     private router: Router
   ) {
-    onAuthStateChanged(this.auth, (user) => {
+    onIdTokenChanged(this.auth, (user) => {
       if (user) {
         this.getAndSetAuthUserById(user.uid);
       } else {
+        this.getAuthUserInProgress$.next(false);
         this.authUser$.next(null);
-        this.signOut();
       }
     });
 
@@ -39,16 +39,28 @@ export class UsersService {
         this.getUserCache.set(user.handle, user);
       }
     });
+
   }
 
   getAuthUser(): Observable<any> {
+    if (this.authUser$.value) {
+      this.getAuthUserInProgress$.next(false);
+      return this.authUser$;
+    }
+    
+    this.getAuthUserInProgress$.next(true);
     return new Observable(subscriber => {
-      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+      const unsubscribe = onIdTokenChanged(this.auth, (user) => {
         subscriber.next(user);
       });
       // Clean up subscription
       return () => unsubscribe();
     }).pipe(
+      tap((user) => {
+        if (!user) {
+          this.getAuthUserInProgress$.next(false);
+        }
+      }),
       switchMap(() => this.getAuthUserInProgress$),
       filter((inProgress) => !inProgress),
       switchMap(() => {
