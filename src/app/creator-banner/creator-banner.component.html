@@ -17,7 +17,7 @@
     />
     <img
       *ngIf="bannerPhotoURL"
-      [src]="bannerPhotoURL"
+      [src]="bannerPhotoURL | cdnImage"
       alt="Banner"
       class="absolute inset-0 w-full h-full object-cover"
     />
@@ -49,7 +49,7 @@
             *ngIf="canEditProfile"
           />
           <img
-            [src]="profilePhotoURL || 'assets/profile_placeholder.jpg'"
+            [src]="(profilePhotoURL | cdnImage) || 'assets/profile_placeholder.jpg'"
             alt="Profile"
             [ngClass]="{ 'group-hover:opacity-70': canEditProfile }"
             class="w-full h-full object-cover transition"

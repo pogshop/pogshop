@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
   Auth,
-  sendSignInLinkToEmail,
   OAuthProvider,
   signInWithRedirect,
 } from '@angular/fire/auth';
 import {  Observable, from, of } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+const API_URL = 'https://pogshop-gateway-8yqn4bye.wl.gateway.dev/v1/emails';
 
 @Injectable({
   providedIn: 'root',
@@ -15,23 +16,19 @@ export class AuthService {
   private cachedToken: string | null = null;
   private tokenExpiration: number | null = null;
 
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth, private http: HttpClient) {}
 
   /**
    * Send a magic link to the user's email
    */
-  sendMagicLink(email: string): Observable<void> {
-    const actionCodeSettings = {
-      url: this.getRedirectUrl(),
-      handleCodeInApp: true,
-    };
-
-    return from(
-      sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
-        .then(() => {
-          window.localStorage.setItem('emailForSignIn', email);
-        })
-        .catch((error) => {})
+  sendMagicLink(email: string): Observable<any> {
+    const redirectUrl = this.getRedirectUrl();
+    
+    window.localStorage.setItem('emailForSignIn', email);
+    return this.http.post(
+      `${API_URL}`,
+      { email, redirectUrl },
+      { headers: { 'Content-Type': 'application/json' } }
     );
   }
 

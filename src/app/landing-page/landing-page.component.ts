@@ -6,6 +6,7 @@ import {
   ViewChild,
   DestroyRef,
   ChangeDetectorRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   trigger,
@@ -15,23 +16,27 @@ import {
   transition,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+} from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 import { HandleServiceService } from '../services/handle-service.service';
-import { FormControl } from '@angular/forms';
-import { EMPTY } from 'rxjs';
+import { FormControl, Validators } from '@angular/forms';
+import { EMPTY, Observable, of, timer } from 'rxjs';
 import {
-  debounceTime,
-  distinctUntilChanged,
-  skipWhile,
+  map,
   switchMap,
-  tap,
+  take,
 } from 'rxjs/operators';
 import { IntegrationsPageComponent } from '../integrations-page/integrations-page.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UsersService } from '../services/users-service.service';
+import { CdnImagePipe } from '../pipes/cdn-image.pipe';
 
 @Component({
   selector: 'landing-page',
@@ -43,9 +48,11 @@ import { UsersService } from '../services/users-service.service';
     LucideAngularModule,
     NavBarComponent,
     IntegrationsPageComponent,
+    CdnImagePipe,
   ],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('bubblePop', [
       state(
@@ -82,16 +89,7 @@ export class LandingPageComponent implements OnInit {
     delay: number;
     duration: number;
   }> = [];
-  handleIsTaken = false;
-  handleFormControl = new FormControl('');
-  isCheckingHandle = false;
-  handleStatus:
-    | 'available'
-    | 'taken'
-    | 'checking'
-    | 'invalid'
-    | 'reserved'
-    | null = null;
+  handleFormControl: FormControl;
 
   // Needed to auto play video
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
@@ -101,55 +99,50 @@ export class LandingPageComponent implements OnInit {
     private handleService: HandleServiceService,
     private usersService: UsersService,
     private destroyRef: DestroyRef,
-    private changeDetectorRef: ChangeDetectorRef,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
-    
-  }
-  
-  ngOnInit() {
-    this.usersService.getAuthUser().pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(user => {
-      this.isLoggedIn = user ? 'loggedIn' : 'loggedOut';
-      this.changeDetectorRef.markForCheck();
+    this.handleFormControl = new FormControl<string | null>('', {
+      validators: [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9]{3,}$/),
+      ],
+      asyncValidators: [this.validateHandleAvailability.bind(this)],
     });
 
+    this.usersService
+      .getAuthUser()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => {
+        this.isLoggedIn = user ? 'loggedIn' : 'loggedOut';
+        this.changeDetectorRef.detectChanges();
+        this.handleVideo();
+      });
+  }
+
+  ngOnInit() {
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
+    this.handleFormControl.valueChanges.subscribe(() => {
+      this.changeDetectorRef.detectChanges();
+    });
+  }
 
-    // Set up handle availability check with debouncing
-    this.handleFormControl.valueChanges
-      .pipe(
-        tap(() => {
-          this.handleStatus = 'checking';
-        }),
-        debounceTime(500), // Wait for 500ms after the user stops typing
-        distinctUntilChanged(), // Only check if the value has changed
-        switchMap((handle) => {
-          if (!handle) {
-            this.handleStatus = null;
-            return EMPTY; // Return empty Observable
-          }
+  private validateHandleAvailability(
+    control?: AbstractControl
+  ): Observable<ValidationErrors | null> {
+    const value = control?.value.toLowerCase();
+    if (!value) {
+      return of(null);
+    }
 
-          // Validate handle format
-          const isValidFormat = /^[a-zA-Z0-9]{3,}$/.test(handle);
-          if (!isValidFormat) {
-            this.handleStatus = 'invalid';
-            return EMPTY;
-          }
-
-          return this.handleService.checkHandleAvailability(handle);
-        })
-      )
-      .subscribe({
-        next: (isAvailable) => {
-          this.handleStatus = isAvailable ? 'available' : 'taken';
-        },
-        error: (error) => {
-          console.error('Error checking handle availability:', error);
-          this.handleStatus = null;
-        },
-      });
+    return timer(0).pipe(
+      switchMap(() => this.handleService.checkHandleAvailability(value)),
+      take(1),
+      map((isAvailable) => {
+        this.changeDetectorRef.detectChanges();
+        return isAvailable ? null : { handleTaken: true };
+      })
+    );
   }
 
   navigateToSignUp() {
@@ -162,10 +155,11 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {
+  private handleVideo() {
     if (this.isLoggedIn === 'loggedOut') {
       const video = this.videoPlayer.nativeElement;
       video.muted = true; // Must be muted for autoplay to work
+      video.play();
       video.play().catch((err: any) => {
         console.error('Autoplay failed:', err);
         // Handle the error - perhaps show a play button

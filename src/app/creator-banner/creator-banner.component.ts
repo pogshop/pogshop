@@ -14,6 +14,7 @@ import { FormControl, ReactiveFormsModule, FormsModule, Validators, AsyncValidat
 import { combineLatest, take, Subject, Observable, timer, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { map, switchMap, tap } from 'rxjs/operators';
+import { CdnImagePipe } from '../pipes/cdn-image.pipe';
 
 enum IMAGE_TYPE {
   BANNER = 'BANNER',
@@ -30,6 +31,7 @@ enum IMAGE_TYPE {
     ShopNavbarComponent,
     CommonModule,
     FormsModule,
+    CdnImagePipe,
     ReactiveFormsModule,
   ],
 })
@@ -121,6 +123,13 @@ export class CreatorBannerComponent {
     this.canEditProfile = !!authUser && authUser.id === user?.id;
     this.pageLoaded = true;
     
+    if(!this.canEditProfile) {
+      this.handleFormControl = new FormControl(`${user?.handle}`);
+      this.handleFormControl.disable();
+      this.cdRef.detectChanges();
+      return;
+    }
+    
     this.handleFormControl = new FormControl(`${user?.handle}` || 'Set your handle here', {
       validators: [
         Validators.required,
@@ -138,6 +147,7 @@ export class CreatorBannerComponent {
       })
     ).subscribe();
 
+    this.cdRef.detectChanges();
   }
 
   handleShare(): void {
@@ -186,6 +196,7 @@ export class CreatorBannerComponent {
           data = { bannerPhotoFile: base64Image };
         }
         this.cdRef.detectChanges();
+        
         this.usersService
           .patchUser(data)
           .pipe(take(1))

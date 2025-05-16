@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 
 const RESERVED_PATHS = [
@@ -106,7 +106,7 @@ export class HandleServiceService {
     return this.http.get<{ available: boolean }>(`${this.API_URL}/handles/available`, {
       params: { handle }
     }).pipe(
-      map(response => response.available)
+      map(response => response.available),
     );
   }
 
