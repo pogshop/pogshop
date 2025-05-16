@@ -7,7 +7,7 @@ import {
 import {  Observable, from, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-const API_URL = 'https://pogshop-gateway-8yqn4bye.wl.gateway.dev/v1/emails';
+const API_URL = `${environment.apiUrl}/v1/emails`;
 
 @Injectable({
   providedIn: 'root',

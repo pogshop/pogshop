@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 
 const RESERVED_PATHS = [
@@ -87,7 +88,7 @@ const RESERVED_PATHS = [
 })
 
 export class HandleServiceService {
-  private readonly API_URL = 'https://pogshop-gateway-8yqn4bye.wl.gateway.dev/v1';
+  private readonly API_URL = `${environment.apiUrl}/v1/handles/available`;
   
 
   constructor(private http: HttpClient) { }
@@ -103,7 +104,7 @@ export class HandleServiceService {
     if (RESERVED_PATHS.includes(handle)) {
       return of(false);
     }
-    return this.http.get<{ available: boolean }>(`${this.API_URL}/handles/available`, {
+    return this.http.get<{ available: boolean }>(`${this.API_URL}`, {
       params: { handle }
     }).pipe(
       map(response => response.available),

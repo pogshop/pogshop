@@ -5,7 +5,9 @@ import { AuthService } from './auth-service.service';
 import { Auth, onIdTokenChanged,  } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-const API_URL = 'https://pogshop-gateway-8yqn4bye.wl.gateway.dev/v1/users';
+import { environment } from '../../environments/environment';
+
+const API_URL = `${environment.apiUrl}/v1/users`;
 
 @Injectable({
   providedIn: 'root',
