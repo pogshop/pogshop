@@ -5,7 +5,7 @@ export const cdnImage = (url: string): string => {
 
   if (url.includes('storage.googleapis.com/pogshop-387c5.firebasestorage.app')) {
     const path = url.split('.app')[1];
-    return `https://images.pogshop.gg${path}`;
+    return `https://cdn.pogshop.gg${path}`;
   }
 
   return url;
