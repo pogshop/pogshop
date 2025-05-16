@@ -135,7 +135,7 @@ export class LandingPageComponent implements OnInit {
       return of(null);
     }
 
-    return timer(0).pipe(
+    return timer(700).pipe(
       switchMap(() => this.handleService.checkHandleAvailability(value)),
       take(1),
       map((isAvailable) => {

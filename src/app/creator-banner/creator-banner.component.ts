@@ -102,7 +102,7 @@ export class CreatorBannerComponent {
       return of({isSameAsCurrentHandle: true});
     }
     
-    return timer(500)
+    return timer(700)
       .pipe(switchMap(() => this.handleService.checkHandleAvailability(value)),
         take(1),
         map(isAvailable => {
