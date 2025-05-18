@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { UsersService } from '../services/users-service.service';
 import { HandleServiceService } from '../services/handle-service.service';
 import { FormControl, ReactiveFormsModule, FormsModule, Validators, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { combineLatest, take, Subject, Observable, timer, of } from 'rxjs';
+import { combineLatest, take, Observable, timer, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { CdnImagePipe } from '../pipes/cdn-image.pipe';

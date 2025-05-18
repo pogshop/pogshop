@@ -1,60 +1,92 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
+// stripe-connection-banner.component.ts
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UsersService } from '../services/users-service.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
+import { take } from 'rxjs';
+import { StripeService } from '../services/stripe-service.service';
+
+interface CountryOption {
+  value: string;
+  label: string;
+  flag: string;
+}
 
 @Component({
   selector: 'app-stripe-banner',
   templateUrl: './stripe-banner.component.html',
+  styleUrls: ['./stripe-banner.component.scss'],
   imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ]
 })
-export class StripeBannerComponent {
-  loading = false;
-  error: string | null = null;
+export class StripeBannerComponent implements OnInit {
+  stripeForm: FormGroup;
+  showCountrySelector = true;
+  isDropdownOpen = false;
+  isLoading = false;
   
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private userService: UsersService,
-  ) {}
-  
-  connectStripe(): void {
-    this.loading = true;
-    this.error = null;
-    
-    // Example implementation with more detailed error handling
-    this.http.post<{ redirectUrl: string }>('https://api.pogshop.gg/v1/stripe/account_links', {account: this.userService.authUser$.value?.stripeMetadata.accountId}).subscribe({
-      next: (response) => {
-        // Redirect to Stripe's OAuth page
-        // window.location.href = response.redirectUrl;
-      },
-      error: (err) => {
-        this.loading = false;
-        if (err.status === 0) {
-          this.error = 'Network error. Please check your connection.';
-        } else if (err.status === 401) {
-          // User needs to login first
-          this.router.navigate(['/login'], { 
-            queryParams: { 
-              returnUrl: this.router.url,
-              reason: 'stripe-connect'
-            }
-          });
-        } else {
-          this.error = err.error?.message || 'Failed to connect to Stripe. Please try again.';
-        }
-      }
+  countryOptions: CountryOption[] = [
+    { value: 'US', label: 'United States', flag: '🇺🇸' },
+    { value: 'CA', label: 'Canada', flag: '🇨🇦' },
+    { value: 'GB', label: 'United Kingdom', flag: '🇬🇧' },
+    { value: 'AU', label: 'Australia', flag: '🇦🇺' },
+    { value: 'DE', label: 'Germany', flag: '🇩🇪' },
+    { value: 'FR', label: 'France', flag: '🇫🇷' },
+    { value: 'JP', label: 'Japan', flag: '🇯🇵' },
+    { value: 'BR', label: 'Brazil', flag: '🇧🇷' },
+    { value: 'MX', label: 'Mexico', flag: '🇲🇽' },
+    { value: 'ES', label: 'Spain', flag: '🇪🇸' }
+  ];
+
+  constructor(private fb: FormBuilder, private stripeService: StripeService) {
+    this.stripeForm = this.fb.group({
+      country: ['US', Validators.required]
     });
   }
-  
-  dismissError(): void {
-    this.error = null;
+
+  ngOnInit(): void {
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  closeDropdown(): void {
+    this.isDropdownOpen = false;
+  }
+
+  selectCountry(country: CountryOption): void {
+    this.stripeForm.get('country')?.setValue(country.value);
+    this.isDropdownOpen = false;
+  }
+
+  onContinue(): void {
+    this.showCountrySelector = false;
+  }
+
+  onChangeCountry(): void {
+    this.showCountrySelector = true;
+  }
+
+  onConnectStripe(): void {
+    if (this.stripeForm.valid) {
+      this.isLoading = true;
+      this.stripeService.createOnboardingLink(this.stripeForm.get('country')?.value)
+        .pipe(take(1))
+        .subscribe({
+          next: (response: any) => {
+            window.location.href = response.accountLink.url;
+          },
+          error: () => {
+            this.isLoading = false;
+          }
+        });
+    }
+  }
+
+  getSelectedCountry(): CountryOption {
+    const countryValue = this.stripeForm.get('country')?.value;
+    return this.countryOptions.find(c => c.value === countryValue) || this.countryOptions[0];
   }
 }
