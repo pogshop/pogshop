@@ -164,9 +164,9 @@
           </div>
           <button
             (click)="navigateToLogin()"
-            [disabled]="handleFormControl.invalid"
+            [disabled]="!handleFormControl.valid"
             [ngClass]="{
-              'opacity-50': handleFormControl.errors
+              'opacity-50': !handleFormControl.valid
             }"
             class="w-full sm:w-auto h-[50px] px-5 rounded-md font-medium flex items-center justify-center whitespace-nowrap text-sm bg-purple-600 text-white hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
           >
@@ -714,7 +714,7 @@
                   </div>
                   <div
                     class="flex items-center space-x-2"
-                    *ngIf="handleFormControl.valid"
+                    *ngIf="handleFormControl.valid && !handleFormControl.pending"
                   >
                     <svg
                       class="w-5 h-5 text-green-500"
@@ -782,9 +782,9 @@
             <div class="sm:w-[200px]">
               <button
                 (click)="navigateToLogin()"
-                [disabled]="handleFormControl.invalid"
+                [disabled]="!handleFormControl.valid"
                 [ngClass]="{
-                  'opacity-50': handleFormControl.errors
+                  'opacity-50': !handleFormControl.valid
                 }"
                 class="px-8 h-[58px] w-full rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
               >

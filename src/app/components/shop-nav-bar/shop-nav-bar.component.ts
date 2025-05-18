@@ -39,10 +39,14 @@ export class ShopNavbarComponent {
   
   setCurrentTab(tab: string): void {
     this.currentTab = tab;
-    if (tab === TABS.SHOP) {
-      // Handle the case where a user hasn't set their handle yet
-      const path = this.usersService.authUser$.value?.handle || 'shop';
+    const handle = this.usersService.authUser$.value?.handle;
+    if (tab === TABS.SHOP && handle) {
+      const path = handle;
       this.router.navigate([`/${path}`]);
+    }
+    else if (tab === TABS.SHOP && !handle) {
+      // Handle the case where a user hasn't set their handle yet
+      this.router.navigate([`/${tab}`], {queryParams: {userId: this.usersService.authUser$.value?.id}});
     }
     else {
       this.router.navigate([`/${tab}`]);

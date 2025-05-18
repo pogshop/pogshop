@@ -42,6 +42,14 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'orders',
+    canActivate: [loggedInGuard],
+    loadComponent: () =>
+     import('./orders-page/orders-page.component').then(
+        (m) => m.OrdersPageComponent
+      ),
+  },
+  {
     path: 'magic-link-sent',
     loadComponent: () =>
       import('./magic-link-sent/magic-link-sent.component').then(
@@ -60,7 +68,6 @@ export const routes: Routes = [
   },
   {
     path: 'shop',
-    canActivate: [loggedInGuard],
     loadComponent: () =>
       import('./creator-banner/creator-banner.component').then(
         (m) => m.CreatorBannerComponent

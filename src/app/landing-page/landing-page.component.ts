@@ -29,6 +29,7 @@ import { HandleServiceService } from '../services/handle-service.service';
 import { FormControl, Validators } from '@angular/forms';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import {
+  finalize,
   map,
   switchMap,
   take,
@@ -108,7 +109,10 @@ export class LandingPageComponent implements OnInit {
       ],
       asyncValidators: [this.validateHandleAvailability.bind(this)],
     });
+  
+  }
 
+  ngOnInit() {
     this.usersService
       .getAuthUser()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -117,9 +121,6 @@ export class LandingPageComponent implements OnInit {
         this.changeDetectorRef.detectChanges();
         this.handleVideo();
       });
-  }
-
-  ngOnInit() {
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
     this.handleFormControl.valueChanges.subscribe(() => {
@@ -134,6 +135,9 @@ export class LandingPageComponent implements OnInit {
     if (!value) {
       return of(null);
     }
+
+    this.handleFormControl.markAsPending();
+    this.changeDetectorRef.detectChanges();
 
     return timer(700).pipe(
       switchMap(() => this.handleService.checkHandleAvailability(value)),

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component,  ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { UsersService } from './services/users-service.service';
 

@@ -12,7 +12,7 @@ import { UsersService } from '../services/users-service.service';
 import { HandleServiceService } from '../services/handle-service.service';
 import { FormControl, ReactiveFormsModule, FormsModule, Validators, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { combineLatest, take, Subject, Observable, timer, of } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { CdnImagePipe } from '../pipes/cdn-image.pipe';
 
@@ -68,17 +68,22 @@ export class CreatorBannerComponent {
     private usersService: UsersService,
     private handleService: HandleServiceService,
     private router: Router,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
   ) {
   }
 
   ngOnInit() {
-    if (this.router.url.split('/')[1] === 'shop') {
-      this.usersService
-        .getAuthUser()
+    // Query params are used to view a profile if a handle has not been set
+    const userId = this.route.snapshot.queryParams['userId'];
+    if (userId) {
+      combineLatest([
+        this.usersService.getUserById(userId),
+        this.usersService.getAuthUser(),
+      ])
         .pipe(take(1))
-        .subscribe((user) => {
-          this.initializeProfile(user);
+        .subscribe(([user, authUser]) => {
+          this.initializeProfile(user, authUser);
         });
     } else {
       combineLatest([
@@ -86,8 +91,8 @@ export class CreatorBannerComponent {
         this.usersService.getAuthUser(),
       ])
         .pipe(take(1))
-        .subscribe(([user]) => {
-          this.initializeProfile(user);
+        .subscribe(([user, authUser]) => {
+          this.initializeProfile(user, authUser);
         });
     }
   }
@@ -112,14 +117,13 @@ export class CreatorBannerComponent {
       );
   }
 
-  private initializeProfile(user: any) {
+  private initializeProfile(user: any, authUser: any) {
     this.profilePhotoURL = user?.profilePhotoURL || this.profilePhotoURL;
     this.bannerPhotoURL = user?.bannerPhotoURL || this.bannerPhotoURL;
     this.displayName = user?.displayName || this.displayName;
     this.bio = user?.bio || this.bio;
     
     // Check if the current authenticated user is the profile owner
-    const authUser = this.usersService.authUser$.value;
     this.canEditProfile = !!authUser && authUser.id === user?.id;
     this.pageLoaded = true;
     
