@@ -14,4 +14,8 @@ export class StripeService {
   createOnboardingLink(countryCode: string): Observable<{ url: string }> {
     return this.http.post<{ url: string }>(`${this.apiUrl}/v1/stripe/onboard`, { countryCode });
   }
+
+  getAccountLink(stripeAccountId: string): Observable<{ url: string }> {
+    return this.http.get<{ url: string }>(`${this.apiUrl}/v1/stripe/onboard/accountLinks`, { params: { stripeAccountId } });
+  }
 }

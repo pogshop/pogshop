@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
 import { take } from 'rxjs';
 import { StripeService } from '../services/stripe-service.service';
+import { UsersService } from '../services/users-service.service';
 
 interface CountryOption {
   value: string;
@@ -39,7 +40,7 @@ export class StripeBannerComponent implements OnInit {
     { value: 'ES', label: 'Spain', flag: '🇪🇸' }
   ];
 
-  constructor(private fb: FormBuilder, private stripeService: StripeService) {
+  constructor(private fb: FormBuilder, private stripeService: StripeService, private userService: UsersService) {
     this.stripeForm = this.fb.group({
       country: ['US', Validators.required]
     });
@@ -70,8 +71,30 @@ export class StripeBannerComponent implements OnInit {
   }
 
   onConnectStripe(): void {
-    if (this.stripeForm.valid) {
-      this.isLoading = true;
+    if (this.stripeForm.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
+    const authUser = this.userService.authUser$.value;
+    const selectedCountry = this.stripeForm.get('country')?.value;
+    const currentCountry = authUser?.stripeMetadata?.countryCode;
+
+    if (selectedCountry === currentCountry) {
+      this.stripeService.getAccountLink(authUser?.stripeMetadata?.stripeAccountId)
+        .pipe(take(1))
+        .subscribe({
+          next: (response: any) => {
+            window.location.href = response.accountLink.url;
+          },
+          error: () => {
+            this.isLoading = false;
+          }
+        });
+      return;
+    }
+
+    if (!authUser?.stripeMetadata?.stripeAccountId || selectedCountry !== currentCountry) {
       this.stripeService.createOnboardingLink(this.stripeForm.get('country')?.value)
         .pipe(take(1))
         .subscribe({
@@ -82,7 +105,7 @@ export class StripeBannerComponent implements OnInit {
             this.isLoading = false;
           }
         });
-    }
+      }
   }
 
   getSelectedCountry(): CountryOption {
