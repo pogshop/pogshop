@@ -12,6 +12,12 @@ interface CountryOption {
   flag: string;
 }
 
+enum OnboardingStatus {
+  INCOMPLETE = 'INCOMPLETE',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED'
+}
+
 @Component({
   selector: 'app-stripe-banner',
   templateUrl: './stripe-banner.component.html',
@@ -26,6 +32,8 @@ export class StripeBannerComponent {
   showCountrySelector = true;
   isDropdownOpen = false;
   isLoading = false;
+  onboardingStatus: OnboardingStatus = OnboardingStatus.INCOMPLETE;
+  OnboardingStatus = OnboardingStatus;
   
   countryOptions: CountryOption[] = [
     { value: 'US', label: 'United States', flag: '🇺🇸' },
@@ -48,6 +56,9 @@ export class StripeBannerComponent {
       const existingUserCountryCode = user?.stripeMetadata?.countryCode;
       if(existingUserCountryCode) {
         this.stripeForm.get('country')?.setValue(existingUserCountryCode);
+      }
+      if(user?.stripeMetadata?.onboardingStatus) {
+        this.onboardingStatus = user?.stripeMetadata?.onboardingStatus as OnboardingStatus;
       }
     });
   }
