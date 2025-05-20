@@ -150,36 +150,36 @@
 </div>
 }
 @else if(onboardingStatus === OnboardingStatus.ERROR) {
-<div class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-red-500">
+<div class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-purple-500">
   <div class="flex flex-col sm:flex-row sm:items-start">
-    <div class="bg-red-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-300">
+    <div class="bg-purple-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-300">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
     </div>
     <div class="w-full">
-      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">Stripe account connection error</h3>
+      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">Complete your Stripe setup</h3>
       <p class="text-gray-300 mb-4 text-center sm:text-left">
-        There was an error connecting your Stripe account. Please try again.
+        There are outstanding requirements to complete before you can accept payments. Let's get your account fully set up!
       </p>
       <button 
-      type="button"
-      (click)="onConnectStripe()" 
-      [disabled]="isLoading"
-      class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-medium flex items-center justify-center sm:justify-start transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-        <line x1="1" y1="10" x2="23" y2="10"></line>
-      </svg>
-      <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      {{ isLoading ? 'Redirecting to Stripe...' : 'Fix Stripe Account' }}
-    </button>
+        type="button"
+        (click)="onConnectStripe()" 
+        [disabled]="isLoading"
+        class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-medium flex items-center justify-center sm:justify-start transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+          <line x1="1" y1="10" x2="23" y2="10"></line>
+        </svg>
+        <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        {{ isLoading ? 'Redirecting to Stripe...' : 'Complete Setup' }}
+      </button>
     </div>
   </div>
 </div>
