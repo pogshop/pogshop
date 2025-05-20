@@ -71,8 +71,9 @@
             <span class="font-medium text-white">{{getSelectedCountry().flag}} {{getSelectedCountry().label}}</span>
             <button 
               type="button"
+              [disabled]="isLoading"
               (click)="onChangeCountry()"
-              class="ml-2 text-purple-400 hover:text-purple-300 transition-colors duration-150"
+              class="disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-purple-400 ml-2 text-purple-400 hover:text-purple-300 transition-colors duration-150"
             >
               Change
             </button>

@@ -21,7 +21,7 @@ interface CountryOption {
     CommonModule
   ]
 })
-export class StripeBannerComponent implements OnInit {
+export class StripeBannerComponent {
   stripeForm: FormGroup;
   showCountrySelector = true;
   isDropdownOpen = false;
@@ -44,9 +44,9 @@ export class StripeBannerComponent implements OnInit {
     this.stripeForm = this.fb.group({
       country: ['US', Validators.required]
     });
-  }
-
-  ngOnInit(): void {
+    this.userService.authUser$.pipe(take(1)).subscribe((user) => {
+      this.stripeForm.get('country')?.setValue(user?.stripeMetadata?.countryCode);
+    });
   }
 
   toggleDropdown(): void {
