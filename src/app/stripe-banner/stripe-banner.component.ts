@@ -15,7 +15,8 @@ interface CountryOption {
 enum OnboardingStatus {
   INCOMPLETE = 'INCOMPLETE',
   PENDING = 'PENDING',
-  COMPLETED = 'COMPLETED'
+  COMPLETED = 'COMPLETED',
+  ERROR = 'ERROR'
 }
 
 @Component({
