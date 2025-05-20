@@ -45,7 +45,10 @@ export class StripeBannerComponent {
       country: ['US', Validators.required]
     });
     this.userService.authUser$.pipe(take(1)).subscribe((user) => {
-      this.stripeForm.get('country')?.setValue(user?.stripeMetadata?.countryCode);
+      const existingUserCountryCode = user?.stripeMetadata?.countryCode;
+      if(existingUserCountryCode) {
+        this.stripeForm.get('country')?.setValue(existingUserCountryCode);
+      }
     });
   }
 
