@@ -139,7 +139,7 @@ export class LandingPageComponent implements OnInit {
     this.handleFormControl.markAsPending();
     this.changeDetectorRef.detectChanges();
 
-    return timer(700).pipe(
+    return timer(400).pipe(
       switchMap(() => this.handleService.checkHandleAvailability(value)),
       take(1),
       map((isAvailable) => {
