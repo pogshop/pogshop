@@ -1,7 +1,7 @@
 // navbar.component.ts
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
 
 const TABS = {
@@ -27,14 +27,23 @@ export class ShopNavbarComponent {
   isOwnShop = true;
   TABS = TABS;
 
-  constructor(private router: Router, private usersService: UsersService) {
+  constructor(private router: Router, private usersService: UsersService, private route: ActivatedRoute) {
     this.currentTab = this.router.url.split('/')[1];
     // Empty current tab is the home page
     if (this.currentTab && !Object.values(TABS).includes(this.currentTab as any)) {
       // If the current tab is not a valid tab, it's a user's shop
-      this.isOwnShop = this.usersService.authUser$.value?.handle === this.router.url.split('/')[1];
+      this.isOwnShop = this.getIsOwnShop();
       this.currentTab = TABS.SHOP;
     }
+  }
+
+  private getIsOwnShop(): boolean {
+    const hasMatchingHandle = this.usersService.authUser$.value?.handle === this.router.url.split('/')[1];
+    const hasMatchingId = this.usersService.authUser$.value?.id === this.route.snapshot.queryParams['userId'];
+    if (hasMatchingHandle || hasMatchingId) {
+      return true;
+    }
+    return false;
   }
   
   setCurrentTab(tab: string): void {

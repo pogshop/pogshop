@@ -92,8 +92,15 @@ export class UsersService {
   }
 
   getUserById(id: string): Observable<any> {
-    const request = this.http.get<any>(`${API_URL}?id=${id}`);
-    return from(request);
+    if (id && this.getUserCache.has(id)) {
+      return of(this.getUserCache.get(id));
+    }
+    return this.http.get<any>(`${API_URL}?id=${id}`).pipe(
+      tap((user) => {
+        this.getUserCache.set(id, user);
+      })
+    );
+    
   }
 
   getUserByHandle(handle: string): Observable<any> {

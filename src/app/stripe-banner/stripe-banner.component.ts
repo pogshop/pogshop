@@ -85,6 +85,11 @@ export class StripeBannerComponent {
     this.showCountrySelector = true;
   }
 
+  onViewPaymentDashboard(): void {
+    const authUser = this.userService.authUser$.value;
+    window.open(authUser?.stripeMetadata?.expressLoginLink, '_blank');
+  }
+
   onConnectStripe(): void {
     if (this.stripeForm.invalid) {
       return;
