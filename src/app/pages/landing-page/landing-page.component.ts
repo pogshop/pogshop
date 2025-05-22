@@ -24,20 +24,19 @@ import {
 } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
-import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
-import { HandleServiceService } from '../services/handle-service.service';
+import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
+import { HandleServiceService } from '../../services/handle-service.service';
 import { FormControl, Validators } from '@angular/forms';
-import { EMPTY, Observable, of, timer } from 'rxjs';
+import {  Observable, of, timer } from 'rxjs';
 import {
-  finalize,
   map,
   switchMap,
   take,
 } from 'rxjs/operators';
-import { IntegrationsPageComponent } from '../integrations-page/integrations-page.component';
+import { IntegrationsPageComponent } from '../../integrations-page/integrations-page.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { UsersService } from '../services/users-service.service';
-import { CdnImagePipe } from '../pipes/cdn-image.pipe';
+import { UsersService } from '../../services/users-service.service';
+import { CdnImagePipe } from '../../pipes/cdn-image.pipe';
 
 @Component({
   selector: 'landing-page',

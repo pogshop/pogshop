@@ -3,7 +3,7 @@ import { magicLinkGuard } from './guards/magic-link.guard';
 import { loggedInGuard } from './guards/logged-in.guard';
 
 import { loggedOutGuard } from './guards/logged-out.guard';
-import { LandingPageComponent } from './landing-page/landing-page.component';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { authUserResolver } from './resolvers/auth-user.resolver';
 
 export const routes: Routes = [
@@ -45,7 +45,7 @@ export const routes: Routes = [
     path: 'orders',
     canActivate: [loggedInGuard],
     loadComponent: () =>
-     import('./orders-page/orders-page.component').then(
+     import('./pages/orders-page/orders-page.component').then(
         (m) => m.OrdersPageComponent
       ),
   },
@@ -62,7 +62,7 @@ export const routes: Routes = [
     // This route is only used to validate the magic link. Component below is a dummy component.
     // Redirecting logic is handled in the guard.
     loadComponent: () =>
-      import('./landing-page/landing-page.component').then(
+      import('./pages/landing-page/landing-page.component').then(
         (m) => m.LandingPageComponent
       ),
   },

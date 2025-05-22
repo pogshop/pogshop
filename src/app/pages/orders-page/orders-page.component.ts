@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ShopNavbarComponent } from "../components/shop-nav-bar/shop-nav-bar.component";
-import { StripeBannerComponent } from "../stripe-banner/stripe-banner.component";
+import { ShopNavbarComponent } from "../../components/shop-nav-bar/shop-nav-bar.component";
+import { StripeBannerComponent } from "../../stripe-banner/stripe-banner.component";
 
 @Component({
   selector: 'app-orders-page',
