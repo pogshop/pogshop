@@ -64,7 +64,5 @@ export class ProductGridComponent {
   @Input() canEdit: boolean = false;
 
   constructor() {}
-  ngOnInit() {
-    console.log('can edit', this.canEdit);
-  }
+  ngOnInit() {}
 }

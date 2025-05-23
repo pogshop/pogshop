@@ -7,13 +7,18 @@ import { ShopNavbarComponent } from '../../components/shop-nav-bar/shop-nav-bar.
 import { CreatorBannerComponent } from '../../creator-banner/creator-banner.component';
 import { TABS } from '../../components/shop-nav-bar/shop-nav-bar.component';
 import { ProductGridComponent } from '../../product-grid/product-grid.component';
-import { ProductService } from '../../services/product.service';
 import { combineLatest, take } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-shop-page',
-  imports: [ShopNavbarComponent, CreatorBannerComponent, ProductGridComponent],
+  imports: [
+    ShopNavbarComponent,
+    CreatorBannerComponent,
+    ProductGridComponent,
+    CommonModule,
+  ],
   templateUrl: './shop-page.component.html',
   styleUrl: './shop-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,14 +30,12 @@ export class ShopPageComponent {
   authUser: any;
 
   constructor(
+    public usersService: UsersService,
     private route: ActivatedRoute,
-    private usersService: UsersService,
     private router: Router,
     private cdRef: ChangeDetectorRef
-  ) {}
-
-  ngOnInit() {
-    this.route.url.subscribe((params) => {
+  ) {
+    this.route.url.pipe(take(1)).subscribe((params) => {
       this.loadUsers();
     });
   }
@@ -47,10 +50,10 @@ export class ShopPageComponent {
       ])
         .pipe(take(1))
         .subscribe(([user, authUser]) => {
-          this.canEdit = user.id === authUser.id;
+          this.canEdit = authUser && user.id === authUser.id;
           this.user = user;
           this.authUser = authUser;
-          this.cdRef.detectChanges();
+          this.cdRef.markForCheck();
         });
     } else {
       combineLatest([
@@ -59,10 +62,10 @@ export class ShopPageComponent {
       ])
         .pipe(take(1))
         .subscribe(([user, authUser]) => {
-          this.canEdit = authUser && user?.id === authUser?.id;
+          this.canEdit = authUser && user && user.id === authUser.id;
           this.user = user;
           this.authUser = authUser;
-          this.cdRef.detectChanges();
+          this.cdRef.markForCheck();
         });
     }
   }

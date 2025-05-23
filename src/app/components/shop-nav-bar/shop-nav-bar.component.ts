@@ -50,21 +50,17 @@ export class ShopNavbarComponent {
     }
   }
 
-  ngOnInit() {
-    this.route.params.subscribe((params) => {});
-  }
-
   private getIsOwnShop(): boolean {
-    const hasMatchingHandle =
-      this.usersService.authUser$.value?.handle ===
-      this.router.url.split('/')[1];
-    const hasMatchingId =
-      this.usersService.authUser$.value?.id ===
-      this.route.snapshot.queryParams['userId'];
-    if (hasMatchingHandle || hasMatchingId) {
-      return true;
+    const authUser = this.usersService.authUser$.value;
+    if (!authUser) {
+      return false;
     }
-    return false;
+    const hasMatchingHandle =
+      authUser?.handle === this.router.url.split('/')[1];
+    const hasMatchingId =
+      authUser?.id === this.route.snapshot.queryParams['userId'];
+
+    return hasMatchingHandle || hasMatchingId;
   }
 
   setCurrentTab(tab: string): void {

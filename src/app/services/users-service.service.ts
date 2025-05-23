@@ -12,7 +12,7 @@ import {
   throwError,
 } from 'rxjs';
 import { AuthService } from './auth-service.service';
-import { Auth, onIdTokenChanged } from '@angular/fire/auth';
+import { Auth, onIdTokenChanged, user } from '@angular/fire/auth';
 import {
   Firestore,
   collection,
@@ -22,6 +22,7 @@ import {
   query,
   where,
   limit,
+  documentId,
 } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -128,7 +129,7 @@ export class UsersService {
         }
         const userData = docSnap.data();
         this.getUserCache.set(id, userData);
-        return userData;
+        return { ...userData, id: docSnap.id };
       }),
       catchError((error) => {
         console.error('Error fetching user from Firestore:', error);
@@ -149,15 +150,16 @@ export class UsersService {
       limit(1)
     );
 
-    return collectionData(getUserQuery).pipe(
+    return collectionData(getUserQuery, { idField: 'id' }).pipe(
       take(1),
       map((users) => {
         if (users.length === 0) {
           throw new Error('User not found');
         }
         const userData = users[0];
+
         this.getUserCache.set(handle, userData);
-        return userData;
+        return { ...userData, id: userData['id'] };
       }),
       catchError((error) => {
         console.error('Error fetching user from Firestore:', error);

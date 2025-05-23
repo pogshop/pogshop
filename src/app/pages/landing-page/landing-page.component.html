@@ -189,7 +189,13 @@
           muted
           loop
         >
-          <source [src]="'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_demo.mp4' | cdnImage" type="video/mp4" />
+          <source
+            [src]="
+              'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_demo.mp4'
+                | cdnImage
+            "
+            type="video/mp4"
+          />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -714,7 +720,9 @@
                   </div>
                   <div
                     class="flex items-center space-x-2"
-                    *ngIf="handleFormControl.valid && !handleFormControl.pending"
+                    *ngIf="
+                      handleFormControl.valid && !handleFormControl.pending
+                    "
                   >
                     <svg
                       class="w-5 h-5 text-green-500"
