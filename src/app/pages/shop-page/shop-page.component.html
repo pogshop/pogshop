@@ -1,1 +1,9 @@
-<p>shop-page works!</p>
+<app-shop-nav-bar [currentTab]="TABS.SHOP"></app-shop-nav-bar>
+<app-creator-banner
+  [canEditProfile]="canEdit"
+  [user]="user"
+  [authUser]="authUser"
+></app-creator-banner>
+<div class="max-w-6xl mx-auto">
+  <app-product-grid [canEdit]="canEdit"></app-product-grid>
+</div>

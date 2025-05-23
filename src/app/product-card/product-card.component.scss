@@ -1,0 +1,38 @@
+.product-card {
+  position: relative;
+  border-radius: 0.5rem;
+  border-width: 2px;
+  background-color: rgb(31, 41, 55);
+  overflow: hidden;
+  transition: all;
+  height: 100%;
+
+  &.product-card--hidden {
+    opacity: 0.6;
+  }
+
+  &.product-card--create {
+    border-style: dashed;
+    border-color: rgb(75, 85, 99);
+    cursor: pointer;
+    &:hover {
+      border-color: rgb(168, 85, 247);
+    }
+  }
+
+  &.product-card--suggest {
+    border-style: dashed;
+    border-color: rgb(75, 85, 99);
+    cursor: pointer;
+    &:hover {
+      border-color: rgb(156, 163, 175);
+    }
+  }
+
+  &.product-card--preset {
+    border-color: rgb(55, 65, 81);
+    &:hover {
+      border-color: rgb(168, 85, 247);
+    }
+  }
+}

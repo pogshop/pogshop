@@ -27,12 +27,8 @@ import { Router } from '@angular/router';
 import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 import { HandleServiceService } from '../../services/handle-service.service';
 import { FormControl, Validators } from '@angular/forms';
-import {  Observable, of, timer } from 'rxjs';
-import {
-  map,
-  switchMap,
-  take,
-} from 'rxjs/operators';
+import { Observable, of, timer } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 import { IntegrationsPageComponent } from '../../integrations-page/integrations-page.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UsersService } from '../../services/users-service.service';
@@ -108,10 +104,6 @@ export class LandingPageComponent implements OnInit {
       ],
       asyncValidators: [this.validateHandleAvailability.bind(this)],
     });
-  
-  }
-
-  ngOnInit() {
     this.usersService
       .getAuthUser()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -120,6 +112,9 @@ export class LandingPageComponent implements OnInit {
         this.changeDetectorRef.detectChanges();
         this.handleVideo();
       });
+  }
+
+  ngOnInit() {
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
     this.handleFormControl.valueChanges.subscribe(() => {

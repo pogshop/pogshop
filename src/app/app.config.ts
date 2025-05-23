@@ -3,15 +3,17 @@ import {
   importProvidersFrom,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { PreloadAllModules, provideRouter, withPreloading, withRouterConfig } from '@angular/router';
 import {
-  provideHttpClient,
-  withInterceptors,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+  PreloadAllModules,
+  provideRouter,
+  withPreloading,
+  withRouterConfig,
+} from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { getAnalytics, provideAnalytics } from '@angular/fire/analytics';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { LucideAngularModule } from 'lucide-angular';
 import {
   DollarSign,
@@ -42,7 +44,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideAnimations(),
-    provideRouter(routes, withPreloading(PreloadAllModules), withRouterConfig({ onSameUrlNavigation: 'reload' })),
+    provideRouter(
+      routes,
+      withPreloading(PreloadAllModules),
+      withRouterConfig({ onSameUrlNavigation: 'reload' })
+    ),
     provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(
       LucideAngularModule.pick({
@@ -62,5 +68,6 @@ export const appConfig: ApplicationConfig = {
       const auth = getAuth();
       return auth;
     }),
+    provideFirestore(() => getFirestore('pogshop-prod')),
   ],
 };

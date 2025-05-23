@@ -6,11 +6,18 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ShopNavbarComponent } from '../components/shop-nav-bar/shop-nav-bar.component';
 import { CommonModule } from '@angular/common';
 import { UsersService } from '../services/users-service.service';
 import { HandleServiceService } from '../services/handle-service.service';
-import { FormControl, ReactiveFormsModule, FormsModule, Validators, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormControl,
+  ReactiveFormsModule,
+  FormsModule,
+  Validators,
+  AsyncValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { combineLatest, take, Observable, timer, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -27,13 +34,7 @@ enum IMAGE_TYPE {
   styleUrls: ['./creator-banner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    ShopNavbarComponent,
-    CommonModule,
-    FormsModule,
-    CdnImagePipe,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, FormsModule, CdnImagePipe, ReactiveFormsModule],
 })
 export class CreatorBannerComponent {
   displayName: string = 'Display Name';
@@ -49,6 +50,9 @@ export class CreatorBannerComponent {
   @ViewChild('displayNameInput')
   displayNameInput!: ElementRef<HTMLInputElement>;
   @ViewChild('bioInput') bioInput!: ElementRef<HTMLTextAreaElement>;
+  @Input() canEditProfile: boolean = false;
+  @Input() user?: any;
+  @Input() authUser?: any;
 
   IMAGE_TYPE = IMAGE_TYPE;
 
@@ -60,96 +64,77 @@ export class CreatorBannerComponent {
   pageLoaded = false;
   isEditingBio = false;
   tempBio = '';
-  canEditProfile = false;
 
   handleFormControl!: FormControl<string | null>;
 
   constructor(
-    private usersService: UsersService,
     private handleService: HandleServiceService,
-    private router: Router,
     private cdRef: ChangeDetectorRef,
-    private route: ActivatedRoute,
-  ) {
+    private usersService: UsersService
+  ) {}
+
+  ngOnChanges() {
+    this.initializeProfile(this.user);
   }
 
-  ngOnInit() {
-    // Query params are used to view a profile if a handle has not been set
-    const userId = this.route.snapshot.queryParams['userId'];
-    if (userId) {
-      combineLatest([
-        this.usersService.getUserById(userId),
-        this.usersService.getAuthUser(),
-      ])
-        .pipe(take(1))
-        .subscribe(([user, authUser]) => {
-          this.initializeProfile(user, authUser);
-        });
-    } else {
-      combineLatest([
-        this.usersService.getUserByHandle(this.router.url.split('/')[1]),
-        this.usersService.getAuthUser(),
-      ])
-        .pipe(take(1))
-        .subscribe(([user, authUser]) => {
-          this.initializeProfile(user, authUser);
-        });
-    }
-  }
-
-  private validateHandleAvailability(control?: AbstractControl): Observable<ValidationErrors | null> {
+  private validateHandleAvailability(
+    control?: AbstractControl
+  ): Observable<ValidationErrors | null> {
     const value = control?.value.toLowerCase();
     if (!value) {
       return of(null);
     }
 
     if (value === this.usersService.authUser$.value?.handle) {
-      return of({isSameAsCurrentHandle: true});
+      return of({ isSameAsCurrentHandle: true });
     }
-    
-    return timer(700)
-      .pipe(switchMap(() => this.handleService.checkHandleAvailability(value)),
-        take(1),
-        map(isAvailable => {
-          this.cdRef.detectChanges();
-          return isAvailable ? null : { handleTaken: true };
-        })
-      );
+
+    return timer(200).pipe(
+      switchMap(() => this.handleService.checkHandleAvailability(value)),
+      take(1),
+      map((isAvailable) => {
+        this.cdRef.detectChanges();
+        return isAvailable ? null : { handleTaken: true };
+      })
+    );
   }
 
-  private initializeProfile(user: any, authUser: any) {
+  private initializeProfile(user: any) {
     this.profilePhotoURL = user?.profilePhotoURL || this.profilePhotoURL;
     this.bannerPhotoURL = user?.bannerPhotoURL || this.bannerPhotoURL;
-    this.displayName = user?.displayName || this.displayName;
+    this.displayName = user?.displayName || 'Display Name';
     this.bio = user?.bio || this.bio;
-    
-    // Check if the current authenticated user is the profile owner
-    this.canEditProfile = !!authUser && authUser.id === user?.id;
+
     this.pageLoaded = true;
-    
-    if(!this.canEditProfile) {
+
+    if (!this.canEditProfile) {
       this.handleFormControl = new FormControl(`${user?.handle}`);
       this.handleFormControl.disable();
       this.cdRef.detectChanges();
       return;
     }
-    
-    this.handleFormControl = new FormControl(`${user?.handle}` || 'Set your handle here', {
-      validators: [
-        Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9]{3,}$/)
-      ],
-      asyncValidators: [
-        this.validateHandleAvailability.bind(this)
-      ]
-    });
-    this.handleFormControl.valueChanges.pipe(
-      tap(value => {
-        if (value && value !== value.toLowerCase()) {
-          this.handleFormControl.setValue(value.toLowerCase(), { emitEvent: false });
-        }
-      })
-    ).subscribe();
+
+    this.handleFormControl = new FormControl(
+      `${user?.handle}` || 'Set your handle here',
+      {
+        validators: [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z0-9]{3,}$/),
+        ],
+        asyncValidators: [this.validateHandleAvailability.bind(this)],
+      }
+    );
+    this.handleFormControl.valueChanges
+      .pipe(
+        tap((value) => {
+          if (value && value !== value.toLowerCase()) {
+            this.handleFormControl.setValue(value.toLowerCase(), {
+              emitEvent: false,
+            });
+          }
+        })
+      )
+      .subscribe();
 
     this.cdRef.detectChanges();
   }
@@ -200,7 +185,7 @@ export class CreatorBannerComponent {
           data = { bannerPhotoFile: base64Image };
         }
         this.cdRef.detectChanges();
-        
+
         this.usersService
           .patchUser(data)
           .pipe(take(1))
@@ -237,8 +222,12 @@ export class CreatorBannerComponent {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.handleFormControl.setErrors(null, {emitEvent: true});
-            window.history.replaceState({}, '', `/${this.handleFormControl.value}`);
+            this.handleFormControl.setErrors(null, { emitEvent: true });
+            window.history.replaceState(
+              {},
+              '',
+              `/${this.handleFormControl.value}`
+            );
             this.cdRef.detectChanges();
           },
           error: (error) => {
@@ -299,12 +288,13 @@ export class CreatorBannerComponent {
   onBioBlur() {
     const newBio = this.tempBio.trim();
     this.isEditingBio = false;
-    this.bio = newBio;
 
     if (newBio === '' || newBio.length > 200 || newBio === this.bio) {
       this.tempBio = this.bio;
       return;
     }
+
+    this.bio = newBio;
     const data = { bio: newBio };
     this.usersService
       .patchUser(data)

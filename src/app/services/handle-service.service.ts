@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+} from '@angular/fire/firestore';
 
 const RESERVED_PATHS = [
   'settings',
@@ -23,6 +28,7 @@ const RESERVED_PATHS = [
   'contact',
   'terms',
   'privacy',
+  'conditions',
   'blog',
   'shop',
   'store',
@@ -81,17 +87,12 @@ const RESERVED_PATHS = [
   'cart',
   'shop',
   'store',
-  
 ];
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class HandleServiceService {
-  private readonly API_URL = `${environment.apiUrl}/v1/handles/available`;
-  
-
-  constructor(private http: HttpClient) { }
+  constructor(private firestore: Firestore) {}
 
   /**
    * Check if a handle is available
@@ -104,12 +105,15 @@ export class HandleServiceService {
     if (RESERVED_PATHS.includes(handle)) {
       return of(false);
     }
-    return this.http.get<{ available: boolean }>(`${this.API_URL}`, {
-      params: { handle }
-    }).pipe(
-      map(response => response.available),
+    const usersRef = collection(this.firestore, 'users');
+    const handleQuery = query(
+      usersRef,
+      where('handle', '==', handle.toLowerCase()),
+      limit(1)
+    );
+
+    return from(getDocs(handleQuery)).pipe(
+      map((querySnapshot) => querySnapshot.empty)
     );
   }
-
-  // TODO: Add update handle endpoint
 }

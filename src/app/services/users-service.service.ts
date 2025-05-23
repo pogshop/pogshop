@@ -1,11 +1,32 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, filter, from, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  filter,
+  from,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { AuthService } from './auth-service.service';
-import { Auth, onIdTokenChanged,  } from '@angular/fire/auth';
+import { Auth, onIdTokenChanged } from '@angular/fire/auth';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  getDoc,
+  query,
+  where,
+  limit,
+} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../environments/environment';
+import { map, take } from 'rxjs/operators';
 
 const API_URL = `${environment.apiUrl}/v1/users`;
 
@@ -20,6 +41,7 @@ export class UsersService {
 
   public getAuthUserInProgress$ = new BehaviorSubject<boolean>(false);
   private getUserCache: Map<string, any> = new Map();
+  private firestore = inject(Firestore);
 
   constructor(
     private auth: Auth,
@@ -41,7 +63,6 @@ export class UsersService {
         this.getUserCache.set(user.handle, user);
       }
     });
-
   }
 
   getAuthUser(): Observable<any> {
@@ -49,8 +70,8 @@ export class UsersService {
       this.getAuthUserInProgress$.next(false);
       return this.authUser$;
     }
-    
-    return new Observable(subscriber => {
+
+    return new Observable((subscriber) => {
       const unsubscribe = onIdTokenChanged(this.auth, (user) => {
         subscriber.next(user);
       });
@@ -66,7 +87,7 @@ export class UsersService {
       filter((inProgress) => !inProgress),
       switchMap(() => {
         return this.authUser$;
-      }),
+      })
     );
   }
 
@@ -79,15 +100,19 @@ export class UsersService {
     this.getAuthUserInProgress$.next(true);
     const request = this.getUserById(id);
 
-    request.pipe(catchError((error) => {
-      this.authUser$.next(null);
+    request
+      .pipe(
+        catchError((error) => {
+          this.authUser$.next(null);
 
-      this.getAuthUserInProgress$.next(false);
-      return throwError(() => error);
-    })).subscribe((user) => {
-      this.authUser$.next(user);
-      this.getAuthUserInProgress$.next(false);
-    });
+          this.getAuthUserInProgress$.next(false);
+          return throwError(() => error);
+        })
+      )
+      .subscribe((user) => {
+        this.authUser$.next(user);
+        this.getAuthUserInProgress$.next(false);
+      });
     return;
   }
 
@@ -95,21 +120,48 @@ export class UsersService {
     if (id && this.getUserCache.has(id)) {
       return of(this.getUserCache.get(id));
     }
-    return this.http.get<any>(`${API_URL}?id=${id}`).pipe(
-      tap((user) => {
-        this.getUserCache.set(id, user);
+
+    return from(getDoc(doc(this.firestore, 'users', id))).pipe(
+      map((docSnap) => {
+        if (!docSnap.exists()) {
+          throw new Error('User not found');
+        }
+        const userData = docSnap.data();
+        this.getUserCache.set(id, userData);
+        return userData;
+      }),
+      catchError((error) => {
+        console.error('Error fetching user from Firestore:', error);
+        return throwError(() => error);
       })
     );
-    
   }
 
   getUserByHandle(handle: string): Observable<any> {
     if (handle && this.getUserCache.has(handle)) {
       return of(this.getUserCache.get(handle));
     }
-    return this.http.get<any>(`${API_URL}?handle=${handle}`).pipe(
-      tap((user) => {
-        this.getUserCache.set(handle, user);
+
+    const usersRef = collection(this.firestore, 'users');
+    const getUserQuery = query(
+      usersRef,
+      where('handle', '==', handle.toLowerCase()),
+      limit(1)
+    );
+
+    return collectionData(getUserQuery).pipe(
+      take(1),
+      map((users) => {
+        if (users.length === 0) {
+          throw new Error('User not found');
+        }
+        const userData = users[0];
+        this.getUserCache.set(handle, userData);
+        return userData;
+      }),
+      catchError((error) => {
+        console.error('Error fetching user from Firestore:', error);
+        return throwError(() => error);
       })
     );
   }
@@ -122,24 +174,28 @@ export class UsersService {
     if (userData.handle) {
       userData.handle = userData.handle.toLowerCase();
     }
-    
-    return this.http.patch<any>(`${API_URL}/${this.auth.currentUser.uid}`, userData, { headers: { 'Content-Type': 'application/json' } }).pipe(
-      tap((updatedUser) => {
-        // Update the auth user in the BehaviorSubject if successful
-        if (userData.profilePhotoFile) {
-          updatedUser.profilePhotoURL = userData.profilePhotoFile;
-        }
-        if (userData.bannerPhotoFile) {
-          updatedUser.bannerPhotoURL = userData.bannerPhotoFile;
-        }
-       
-        this.authUser$.next(updatedUser);
-      }),
-      catchError((error) => {
-        console.error('Error updating user:', error);
-        return throwError(() => error);
+
+    return this.http
+      .patch<any>(`${API_URL}/${this.auth.currentUser.uid}`, userData, {
+        headers: { 'Content-Type': 'application/json' },
       })
-    );
+      .pipe(
+        tap((updatedUser) => {
+          // Update the auth user in the BehaviorSubject if successful
+          if (userData.profilePhotoFile) {
+            updatedUser.profilePhotoURL = userData.profilePhotoFile;
+          }
+          if (userData.bannerPhotoFile) {
+            updatedUser.bannerPhotoURL = userData.bannerPhotoFile;
+          }
+
+          this.authUser$.next(updatedUser);
+        }),
+        catchError((error) => {
+          console.error('Error updating user:', error);
+          return throwError(() => error);
+        })
+      );
   }
 
   deleteAccount(): Observable<any> {

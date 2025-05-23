@@ -4,14 +4,13 @@ import { loggedInGuard } from './guards/logged-in.guard';
 
 import { loggedOutGuard } from './guards/logged-out.guard';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
-import { authUserResolver } from './resolvers/auth-user.resolver';
+import { ShopPageComponent } from './pages/shop-page/shop-page.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
     title: 'Pogshop - Home',
-
   },
   {
     path: 'signup',
@@ -45,7 +44,7 @@ export const routes: Routes = [
     path: 'orders',
     canActivate: [loggedInGuard],
     loadComponent: () =>
-     import('./pages/orders-page/orders-page.component').then(
+      import('./pages/orders-page/orders-page.component').then(
         (m) => m.OrdersPageComponent
       ),
   },
@@ -69,8 +68,8 @@ export const routes: Routes = [
   {
     path: 'shop',
     loadComponent: () =>
-      import('./creator-banner/creator-banner.component').then(
-        (m) => m.CreatorBannerComponent
+      import('./pages/shop-page/shop-page.component').then(
+        (m) => m.ShopPageComponent
       ),
   },
   {
@@ -83,8 +82,8 @@ export const routes: Routes = [
   {
     path: '**',
     loadComponent: () =>
-      import('./creator-banner/creator-banner.component').then(
-        (m) => m.CreatorBannerComponent
+      import('./pages/shop-page/shop-page.component').then(
+        (m) => m.ShopPageComponent
       ),
   },
 ];
