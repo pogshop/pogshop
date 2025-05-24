@@ -34,6 +34,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UsersService } from '../../services/users-service.service';
 import { CdnImagePipe } from '../../pipes/cdn-image.pipe';
 
+enum LOGIN_STATUS {
+  LOADING = 'LOADING',
+  LOGGED_IN = 'LOGGED_IN',
+  LOGGED_OUT = 'LOGGED_OUT',
+}
+
 @Component({
   selector: 'landing-page',
   standalone: true,
@@ -73,7 +79,8 @@ import { CdnImagePipe } from '../../pipes/cdn-image.pipe';
 })
 export class LandingPageComponent implements OnInit {
   showFloatingEmotes = false;
-  isLoggedIn: 'loading' | 'loggedIn' | 'loggedOut' = 'loading';
+  isLoggedIn: LOGIN_STATUS = LOGIN_STATUS.LOADING;
+  LOGIN_STATUS = LOGIN_STATUS;
   visibleCards = {
     features: false,
     products: false,
@@ -108,13 +115,18 @@ export class LandingPageComponent implements OnInit {
       .getAuthUser()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((user) => {
-        this.isLoggedIn = user ? 'loggedIn' : 'loggedOut';
-        this.changeDetectorRef.detectChanges();
+        this.isLoggedIn = user
+          ? LOGIN_STATUS.LOGGED_IN
+          : LOGIN_STATUS.LOGGED_OUT;
+        this.changeDetectorRef.markForCheck();
         this.handleVideo();
       });
   }
 
   ngOnInit() {
+    if (this.isLoggedIn === LOGIN_STATUS.LOGGED_IN) {
+      return;
+    }
     // Initialize floating emotes if needed
     this.generateFloatingEmotes();
     this.handleFormControl.valueChanges.subscribe(() => {
@@ -154,15 +166,21 @@ export class LandingPageComponent implements OnInit {
   }
 
   private handleVideo() {
-    if (this.isLoggedIn === 'loggedOut') {
-      const video = this.videoPlayer.nativeElement;
-      video.muted = true; // Must be muted for autoplay to work
-      video.play();
-      video.play().catch((err: any) => {
+    if (this.isLoggedIn === LOGIN_STATUS.LOGGED_IN) {
+      return;
+    }
+    const video = this.videoPlayer?.nativeElement;
+    if (!video) {
+      return;
+    }
+    video.muted = true; // Must be muted for autoplay to work
+    video
+      .play()
+      .then()
+      .catch((err: any) => {
         console.error('Autoplay failed:', err);
         // Handle the error - perhaps show a play button
       });
-    }
   }
 
   @HostListener('window:scroll', ['$event'])

@@ -12,7 +12,7 @@ import {
   throwError,
 } from 'rxjs';
 import { AuthService } from './auth-service.service';
-import { Auth, onIdTokenChanged, user } from '@angular/fire/auth';
+import { Auth, onIdTokenChanged } from '@angular/fire/auth';
 import {
   Firestore,
   collection,
@@ -22,7 +22,6 @@ import {
   query,
   where,
   limit,
-  documentId,
 } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -43,9 +42,9 @@ export class UsersService {
   public getAuthUserInProgress$ = new BehaviorSubject<boolean>(false);
   private getUserCache: Map<string, any> = new Map();
   private firestore = inject(Firestore);
+  private auth = inject(Auth);
 
   constructor(
-    private auth: Auth,
     private http: HttpClient,
     private authService: AuthService,
     private router: Router
@@ -127,9 +126,10 @@ export class UsersService {
         if (!docSnap.exists()) {
           throw new Error('User not found');
         }
-        const userData = docSnap.data();
-        this.getUserCache.set(id, userData);
-        return { ...userData, id: docSnap.id };
+        const firestoreUser = docSnap.data();
+        const user = { ...firestoreUser, id: docSnap.id };
+        this.getUserCache.set(id, user);
+        return user;
       }),
       catchError((error) => {
         console.error('Error fetching user from Firestore:', error);
@@ -156,10 +156,10 @@ export class UsersService {
         if (users.length === 0) {
           throw new Error('User not found');
         }
-        const userData = users[0];
-
-        this.getUserCache.set(handle, userData);
-        return { ...userData, id: userData['id'] };
+        const firestoreUser = users[0];
+        const user = { ...firestoreUser, id: firestoreUser['id'] };
+        this.getUserCache.set(handle, user);
+        return user;
       }),
       catchError((error) => {
         console.error('Error fetching user from Firestore:', error);

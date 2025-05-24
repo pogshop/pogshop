@@ -1,6 +1,6 @@
-@if(isLoggedIn === 'loggedIn') {
+@if(isLoggedIn === LOGIN_STATUS.LOGGED_IN) {
 <app-integrations-page></app-integrations-page>
-} @else if(isLoggedIn === 'loggedOut') {
+} @else if(isLoggedIn === LOGIN_STATUS.LOGGED_OUT) {
 <div
   class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative overflow-hidden"
 >
