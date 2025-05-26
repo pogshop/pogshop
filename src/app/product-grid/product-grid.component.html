@@ -2,14 +2,14 @@
   <div>
     <!-- Product Grid -->
     <div
-      *ngIf="canEdit || allProducts.length"
+      *ngIf="canEdit || productList.length"
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"
     >
       <app-create-product-card
         (click)="openProductCreationOverlay.emit()"
         *ngIf="canEdit"
       ></app-create-product-card>
-      @for (product of allProducts; track product.id) {
+      @for (product of productList; track product.id) {
       <app-product-card
         *ngIf="canEdit || !product.isHidden"
         [canEdit]="canEdit"

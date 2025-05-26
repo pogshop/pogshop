@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MODAL_DATA, ModalRef } from '../../services/modal-service.service';
+import { ProductService } from '../../services/product.service';
 
 export interface DeleteProductDialogData {
   productId: string;
@@ -15,10 +16,12 @@ export interface DeleteProductDialogData {
 export class DeleteProductDialogComponent {
   constructor(
     @Inject(MODAL_DATA) public data: DeleteProductDialogData,
+    private productService: ProductService,
     private modalRef: ModalRef<DeleteProductDialogComponent, boolean>
   ) {}
 
   onConfirm(): void {
+    this.productService.deleteProduct(this.data.productId);
     this.close(true);
   }
 

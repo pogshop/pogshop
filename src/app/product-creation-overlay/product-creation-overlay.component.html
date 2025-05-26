@@ -58,6 +58,7 @@
       <app-product-creation-form
         [product]="product"
         (onBack)="setScreen(ProductCreationScreen.SELECTOR)"
+        (onProductCreated)="closeModal()"
       ></app-product-creation-form>
       } }
     </div>

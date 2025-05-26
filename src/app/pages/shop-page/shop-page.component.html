@@ -39,6 +39,7 @@
 ></app-creator-banner>
 <div class="max-w-6xl mx-auto">
   <app-product-grid
+    [productList]="products"
     [canEdit]="canEdit"
     (openProductCreationOverlay)="openCreateProductDialog()"
   ></app-product-grid>

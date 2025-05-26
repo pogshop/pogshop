@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Product } from '../services/product.service';
+import { Product, ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product-creation-form',
@@ -18,6 +18,7 @@ import { Product } from '../services/product.service';
 export class ProductCreationFormComponent {
   @Input() product?: Product;
   @Output() onBack = new EventEmitter<void>();
+  @Output() onProductCreated = new EventEmitter<void>();
   productForm!: FormGroup;
   isPlaying = false;
 
@@ -43,7 +44,10 @@ export class ProductCreationFormComponent {
     },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService
+  ) {}
 
   ngOnInit() {
     this.productForm = this.fb.group({
@@ -87,10 +91,14 @@ export class ProductCreationFormComponent {
 
   onSubmit() {
     if (this.productForm.valid) {
-      console.log('Form submitted:', this.productForm.value);
       // Handle form submission here
+      console.log('Form submitted:', this.productForm.value);
+      this.productService.createProduct(this.productForm.value).subscribe({
+        next: () => {
+          this.onProductCreated.emit();
+        },
+      });
     } else {
-      console.log('Form is invalid');
       this.productForm.markAllAsTouched();
     }
   }

@@ -17,7 +17,7 @@ import { SuggestProductCardComponent } from '../suggest-product-card/suggest-pro
   styleUrl: './product-grid.component.scss',
 })
 export class ProductGridComponent {
-  allProducts: Product[] = [
+  @Input() productList: Product[] = [
     {
       id: 'dance-request',
       name: 'Dance Request',
@@ -25,6 +25,7 @@ export class ProductGridComponent {
       description: 'Request a specific dance move or song',
       image: 'dance',
       isHidden: false,
+      userId: '123',
     },
   ];
 
