@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 export type Product = {
   id: string;
-  type: string;
   name: string;
   price: string | null;
   description: string;

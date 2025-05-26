@@ -19,7 +19,6 @@ export class DeleteProductDialogComponent {
   ) {}
 
   onConfirm(): void {
-    console.log(this.data);
     this.close(true);
   }
 

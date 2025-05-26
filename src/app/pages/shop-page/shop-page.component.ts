@@ -11,6 +11,8 @@ import { combineLatest, take } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
 import { CommonModule } from '@angular/common';
+import { ProductCreationOverlayComponent } from '../../product-creation-overlay/product-creation-overlay.component';
+import { ModalService } from '../../services/modal-service.service';
 @Component({
   selector: 'app-shop-page',
   imports: [
@@ -28,15 +30,24 @@ export class ShopPageComponent {
   canEdit: boolean = false;
   user: any;
   authUser: any;
+  isProductCreationOverlayOpen = false;
 
   constructor(
     public usersService: UsersService,
     private route: ActivatedRoute,
     private router: Router,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private modalService: ModalService
   ) {
     this.route.url.pipe(take(1)).subscribe((params) => {
       this.loadUsers();
+    });
+  }
+
+  openCreateProductDialog(): void {
+    this.modalService.open(ProductCreationOverlayComponent, {
+      closeOnBackdropClick: true,
+      width: 'fit-content',
     });
   }
 

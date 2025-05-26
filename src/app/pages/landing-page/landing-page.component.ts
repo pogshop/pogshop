@@ -29,7 +29,7 @@ import { HandleServiceService } from '../../services/handle-service.service';
 import { FormControl, Validators } from '@angular/forms';
 import { Observable, of, timer } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
-import { IntegrationsPageComponent } from '../../integrations-page/integrations-page.component';
+import { ShopPageComponent } from '../shop-page/shop-page.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UsersService } from '../../services/users-service.service';
 import { CdnImagePipe } from '../../pipes/cdn-image.pipe';
@@ -49,7 +49,7 @@ enum LOGIN_STATUS {
     ReactiveFormsModule,
     LucideAngularModule,
     NavBarComponent,
-    IntegrationsPageComponent,
+    ShopPageComponent,
     CdnImagePipe,
   ],
   templateUrl: './landing-page.component.html',

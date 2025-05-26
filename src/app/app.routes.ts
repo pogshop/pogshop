@@ -25,7 +25,7 @@ export const routes: Routes = [
     path: 'integrations',
     canActivate: [loggedInGuard],
     loadComponent: () =>
-      import('./integrations-page/integrations-page.component').then(
+      import('./pages/integrations-page/integrations-page.component').then(
         (m) => m.IntegrationsPageComponent
       ),
   },

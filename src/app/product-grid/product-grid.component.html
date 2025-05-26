@@ -1,12 +1,14 @@
-<div class="min-h-screen bg-gray-900 text-gray-100 font-sans p-6">
+<div class="min-h-full bg-gray-900 text-gray-100 font-sans p-6">
   <div>
-    <h2 class="text-xl font-bold mb-6">Products</h2>
-
     <!-- Product Grid -->
     <div
       *ngIf="canEdit || allProducts.length"
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"
     >
+      <app-create-product-card
+        (click)="openProductCreationOverlay.emit()"
+        *ngIf="canEdit"
+      ></app-create-product-card>
       @for (product of allProducts; track product.id) {
       <app-product-card
         *ngIf="canEdit || !product.isHidden"
@@ -14,6 +16,10 @@
         [product]="product"
       ></app-product-card>
       }
+      <app-suggest-product-card
+        *ngIf="canEdit"
+        [canEdit]="canEdit"
+      ></app-suggest-product-card>
     </div>
   </div>
 </div>

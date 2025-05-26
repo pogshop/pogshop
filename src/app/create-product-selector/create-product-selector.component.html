@@ -1,0 +1,67 @@
+<div class="space-y-6">
+  <div class="text-center mb-8">
+    <h3 class="text-xl font-bold text-gray-100 mb-2">
+      Choose a starting point
+    </h3>
+    <p class="text-gray-400">
+      Pick a preset to get started quickly, or create from scratch
+    </p>
+  </div>
+
+  <!-- Start from scratch option at top -->
+  <div class="mb-6">
+    <button
+      (click)="onProductSelected(null)"
+      class="w-full p-4 border-2 border-dashed border-gray-700 rounded-lg text-gray-400 hover:border-purple-500 hover:text-gray-100 transition-colors"
+    >
+      <svg
+        class="w-6 h-6 mx-auto mb-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        />
+      </svg>
+      Start from scratch
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div
+      (click)="onProductSelected(preset)"
+      *ngFor="let preset of presets"
+      class="bg-gray-800 border border-gray-700 rounded-lg p-3 cursor-pointer hover:border-purple-500 transition-all group"
+    >
+      <!-- Type badge in upper right -->
+      <div class="pb-3">
+        <span
+          class="text-xs bg-purple-600 bg-opacity-20 text-purple-400 px-2 py-0.5 rounded-full"
+        >
+          {{ preset.type }}
+        </span>
+      </div>
+      <div class="flex items-start">
+        <div
+          [class]="
+            'w-10 h-10 rounded-lg bg-gradient-to-br ' +
+            preset.color +
+            ' flex items-center justify-center mr-3 text-lg group-hover:scale-110 transition-transform flex-shrink-0'
+          "
+        >
+          {{ preset.icon }}
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="font-bold text-gray-100 mb-1 text-sm word-wrap">
+            {{ preset.name }}
+          </h4>
+          <p class="text-gray-400 text-xs mb-2">{{ preset.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

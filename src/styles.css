@@ -5,7 +5,6 @@ body {
 }
 
 .modal-backdrop-dark {
-  background-color: rgba(0, 0, 0, 0.8); /* Even darker option */
+  background-color: rgba(0, 0, 0, 0.6); /* Even darker option */
   backdrop-filter: blur(0.6px); /* Optional: adds slight blur effect */
-
 }

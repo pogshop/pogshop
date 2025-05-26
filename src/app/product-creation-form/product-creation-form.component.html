@@ -1,0 +1,316 @@
+<form [formGroup]="productForm" class="space-y-6">
+  <div class="flex items-center mb-6">
+    <button
+      type="button"
+      class="text-gray-400 hover:text-gray-100 mr-4"
+      (click)="onBack.emit()"
+    >
+      ← Back
+    </button>
+  </div>
+
+  <!-- Product Type Toggle -->
+  <div>
+    <label class="block font-medium text-gray-100 mb-3">Product Type</label>
+    <div class="flex space-x-4">
+      <button
+        type="button"
+        *ngFor="let type of productTypes"
+        [ngClass]="{
+          'px-4 py-2 rounded-full font-medium transition-colors': true,
+          'bg-purple-600 text-white':
+            productForm.get('type')?.value === type.value,
+          'bg-gray-800 text-gray-400 hover:text-gray-100':
+            productForm.get('type')?.value !== type.value
+        }"
+        (click)="selectProductType(type.value)"
+      >
+        <svg
+          class="inline mr-1 w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            [attr.d]="type.iconPath"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          />
+        </svg>
+        {{ type.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Product Name -->
+  <div>
+    <label class="block font-medium text-gray-100 mb-2">Product Name</label>
+    <input
+      type="text"
+      formControlName="name"
+      placeholder="Enter product name"
+      class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    />
+    <div
+      *ngIf="
+        productForm.get('name')?.invalid && productForm.get('name')?.touched
+      "
+      class="text-red-400 text-xs mt-1"
+    >
+      Product name is required
+    </div>
+  </div>
+
+  <!-- Price -->
+  <div>
+    <label class="block font-medium text-gray-100 mb-2">Price ($)</label>
+    <input
+      type="text"
+      formControlName="price"
+      placeholder="0.00"
+      class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    />
+    <div
+      *ngIf="
+        productForm.get('price')?.invalid && productForm.get('price')?.touched
+      "
+      class="text-red-400 text-xs mt-1"
+    >
+      Price is required
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div>
+    <label class="block font-medium text-gray-100 mb-2">Description</label>
+    <textarea
+      formControlName="description"
+      placeholder="Describe your product here..."
+      rows="3"
+      class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    ></textarea>
+  </div>
+
+  <!-- Image Upload -->
+  <div>
+    <label class="block font-medium text-gray-100 mb-2"
+      >Product Image or GIF</label
+    >
+    <div
+      class="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-purple-500 transition-colors cursor-pointer"
+    >
+      <svg
+        class="mx-auto mb-2 text-gray-400 w-8 h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+        />
+      </svg>
+      <p class="text-gray-400">Click to upload or drag and drop</p>
+      <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+    </div>
+  </div>
+
+  <!-- Sound Effect -->
+  <div>
+    <label class="block font-medium text-gray-100 mb-2">Sound Effect</label>
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        (click)="toggleSoundPlayback()"
+        class="w-12 h-12 bg-purple-600 hover:bg-purple-700 rounded-full flex items-center justify-center"
+      >
+        <svg
+          *ngIf="!isPlaying"
+          class="w-5 h-5 text-white ml-0.5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15a2 2 0 002-2V9a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293L9.293 4.293A1 1 0 008.586 4H7a2 2 0 00-2 2v8a2 2 0 002 2h1.586a1 1 0 01.707.293l2.414 2.414A1 1 0 0013.414 18H15a2 2 0 002-2v-1"
+          />
+        </svg>
+        <svg
+          *ngIf="isPlaying"
+          class="w-5 h-5 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 9v6m4-6v6"
+          />
+        </svg>
+      </button>
+      <div class="flex-1">
+        <div class="text-gray-100 font-medium">{{ soundEffect.name }}</div>
+        <div *ngIf="soundEffect.isDefault" class="text-xs text-purple-400">
+          Default sound
+        </div>
+      </div>
+      <button
+        type="button"
+        class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-100 rounded-lg"
+      >
+        Change
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Type Settings -->
+  <div
+    *ngIf="productForm.get('type')?.value === 'interactive'"
+    class="space-y-4"
+  >
+    <div class="flex items-center justify-between">
+      <label class="font-medium text-gray-100">Limit daily purchases</label>
+      <button
+        type="button"
+        (click)="toggleLimitDaily()"
+        [ngClass]="{
+          'w-12 h-6 rounded-full transition-colors': true,
+          'bg-purple-600': productForm.get('limitDaily')?.value,
+          'bg-gray-600': !productForm.get('limitDaily')?.value
+        }"
+      >
+        <div
+          [ngClass]="{
+            'w-5 h-5 bg-white rounded-full transition-transform': true,
+            'translate-x-6': productForm.get('limitDaily')?.value,
+            'translate-x-0.5': !productForm.get('limitDaily')?.value
+          }"
+        ></div>
+      </button>
+    </div>
+    <div *ngIf="productForm.get('limitDaily')?.value">
+      <label class="block font-medium text-gray-100 mb-2"
+        >How many per day?</label
+      >
+      <input
+        type="number"
+        formControlName="dailyLimit"
+        placeholder="Enter daily limit"
+        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+      />
+    </div>
+  </div>
+
+  <!-- Digital Type Settings -->
+  <div *ngIf="productForm.get('type')?.value === 'digital'">
+    <label class="block font-medium text-gray-100 mb-2"
+      >Digital File Link</label
+    >
+    <div class="relative">
+      <svg
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+        />
+      </svg>
+      <input
+        type="text"
+        formControlName="digitalLink"
+        placeholder="https://drive.google.com/..."
+        class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+      />
+    </div>
+  </div>
+
+  <!-- Physical Type Settings -->
+  <div *ngIf="productForm.get('type')?.value === 'physical'" class="space-y-4">
+    <div class="flex items-center justify-between">
+      <label class="font-medium text-gray-100">Collect shipping info</label>
+      <button
+        type="button"
+        (click)="toggleCollectShipping()"
+        [ngClass]="{
+          'w-12 h-6 rounded-full transition-colors': true,
+          'bg-purple-600': productForm.get('collectShipping')?.value,
+          'bg-gray-600': !productForm.get('collectShipping')?.value
+        }"
+      >
+        <div
+          [ngClass]="{
+            'w-5 h-5 bg-white rounded-full transition-transform': true,
+            'translate-x-6': productForm.get('collectShipping')?.value,
+            'translate-x-0.5': !productForm.get('collectShipping')?.value
+          }"
+        ></div>
+      </button>
+    </div>
+    <div class="flex items-center justify-between">
+      <label class="font-medium text-gray-100">Limit inventory</label>
+      <button
+        type="button"
+        (click)="toggleLimitedInventory()"
+        [ngClass]="{
+          'w-12 h-6 rounded-full transition-colors': true,
+          'bg-purple-600': productForm.get('limitedInventory')?.value,
+          'bg-gray-600': !productForm.get('limitedInventory')?.value
+        }"
+      >
+        <div
+          [ngClass]="{
+            'w-5 h-5 bg-white rounded-full transition-transform': true,
+            'translate-x-6': productForm.get('limitedInventory')?.value,
+            'translate-x-0.5': !productForm.get('limitedInventory')?.value
+          }"
+        ></div>
+      </button>
+    </div>
+    <div *ngIf="productForm.get('limitedInventory')?.value">
+      <label class="block font-medium text-gray-100 mb-2"
+        >How much inventory do you have?</label
+      >
+      <input
+        type="number"
+        formControlName="inventory"
+        placeholder="Enter quantity"
+        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+      />
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-end space-x-4 pt-6 border-t border-gray-700">
+    <button
+      type="button"
+      class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-100 rounded-lg"
+    >
+      Save Draft
+    </button>
+    <button
+      type="submit"
+      [disabled]="productForm.invalid"
+      [ngClass]="{
+        'px-6 py-3 rounded-lg font-medium transition-colors': true,
+        'bg-purple-600 hover:bg-purple-700 text-white': productForm.valid,
+        'bg-gray-600 text-gray-400 cursor-not-allowed': productForm.invalid
+      }"
+      (click)="onSubmit()"
+    >
+      Create Product
+    </button>
+  </div>
+</form>

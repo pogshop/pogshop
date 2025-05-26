@@ -38,6 +38,7 @@ export class ModalRef<T = any, R = any> {
     this._beforeClosed.complete();
 
     this._overlayRef.dispose();
+    document.body.style.overflow = '';
 
     this._afterClosed.next(result);
     this._afterClosed.complete();
@@ -76,8 +77,8 @@ export class ModalService {
     // Default configuration
     const defaultConfig: ModalConfig = {
       width: '500px',
-      maxWidth: '90vw',
-      maxHeight: '90vh',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
       closeOnBackdropClick: true,
       closeOnEscapeKey: true,
       showCloseButton: true,
@@ -102,6 +103,9 @@ export class ModalService {
     const componentRef = overlayRef.attach(portal);
     modalRef.componentInstance = componentRef;
 
+    // Disable body scroll
+    document.body.style.overflow = 'hidden';
+
     // Handle backdrop click
     if (modalConfig.closeOnBackdropClick) {
       overlayRef.backdropClick().subscribe(() => modalRef.close());
@@ -122,7 +126,7 @@ export class ModalService {
   private createOverlay(config: ModalConfig): OverlayRef {
     const overlayConfig = new OverlayConfig({
       hasBackdrop: true,
-      backdropClass: config.backdropClass || ['modal-backdrop-dark'],
+      backdropClass: ['modal-backdrop-dark'],
       panelClass: config.panelClass,
       width: config.width,
       height: config.height,
@@ -134,6 +138,7 @@ export class ModalService {
         .centerHorizontally()
         .centerVertically(),
       scrollStrategy: this.overlay.scrollStrategies.block(),
+      disposeOnNavigation: true,
     });
 
     return this.overlay.create(overlayConfig);

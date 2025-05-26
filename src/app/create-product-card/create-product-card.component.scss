@@ -1,0 +1,13 @@
+.create-product-card {
+  border-width: 2px;
+  border-radius: 0.5rem;
+  border-style: dashed;
+  border-color: transparent;
+  cursor: pointer;
+  background-color: rgb(31, 41, 55);
+  border-color: rgb(75, 85, 99);
+  
+  &:hover {
+    border-color: rgb(168, 85, 247);
+  }
+} 

@@ -1,0 +1,11 @@
+.suggest-product-card {
+  border-width: 2px;
+  border-radius: 0.5rem;
+  border-style: dashed;
+  border-color: rgb(75, 85, 99);
+  cursor: pointer;
+  
+  &:hover {
+    border-color: rgb(156, 163, 175);
+  }
+} 
