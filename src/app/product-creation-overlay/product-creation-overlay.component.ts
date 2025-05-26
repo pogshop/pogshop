@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+} from '@angular/core';
 import { ProductCreationFormComponent } from '../product-creation-form/product-creation-form.component';
 import { CommonModule } from '@angular/common';
 import { ProductEditPreviewComponent } from '../product-edit-preview/product-edit-preview.component';
@@ -34,7 +39,8 @@ export class ProductCreationOverlayComponent {
 
   constructor(
     @Inject(MODAL_DATA) public data: ProductCreationOverlayData,
-    private modalRef: ModalRef<ProductCreationFormComponent, boolean>
+    private modalRef: ModalRef<ProductCreationFormComponent, boolean>,
+    private cdRef: ChangeDetectorRef
   ) {
     this.product = data?.product;
     if (this.product) {
@@ -45,6 +51,11 @@ export class ProductCreationOverlayComponent {
   onProductSelected(product?: Product) {
     this.product = product;
     this.currentScreen = ProductCreationScreen.FORM;
+  }
+
+  onProductUpdated(product?: Product) {
+    this.product = product;
+    this.cdRef.detectChanges();
   }
 
   setScreen(screen: ProductCreationScreen) {

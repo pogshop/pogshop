@@ -36,6 +36,12 @@ export type Product = {
 const PRODUCTS_COLLECTION = 'products';
 const API_URL = `${environment.apiUrl}/v1/products`;
 
+export enum PRODUCT_TYPE {
+  INTERACTIVE = 'INTERACTIVE',
+  DIGITAL = 'DIGITAL',
+  PHYSICAL = 'PHYSICAL',
+}
+
 @Injectable({
   providedIn: 'root',
 })

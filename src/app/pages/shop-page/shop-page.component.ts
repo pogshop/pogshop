@@ -59,7 +59,6 @@ export class ShopPageComponent {
   private loadAllProducts(userId: string) {
     this.productService.getAllProductsByUserId(userId).subscribe((products) => {
       this.products = products;
-      console.log('All products', this.products);
       this.cdRef.markForCheck();
     });
   }
@@ -67,7 +66,6 @@ export class ShopPageComponent {
   private loadPublicProducts(handle: string) {
     this.productService.getPublicProducts(handle).subscribe((products) => {
       this.products = products;
-      console.log('Public products', this.products);
       this.cdRef.markForCheck();
     });
   }
