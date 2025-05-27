@@ -7,6 +7,7 @@ import { Product } from '../services/product.service';
   imports: [CommonModule],
   templateUrl: './create-product-selector.component.html',
   styleUrl: './create-product-selector.component.scss',
+  standalone: true,
 })
 export class CreateProductSelectorComponent {
   @Output() productSelected = new EventEmitter<Product>();

@@ -7,13 +7,14 @@ import { ShopNavbarComponent } from '../../components/shop-nav-bar/shop-nav-bar.
 import { CreatorBannerComponent } from '../../creator-banner/creator-banner.component';
 import { TABS } from '../../components/shop-nav-bar/shop-nav-bar.component';
 import { ProductGridComponent } from '../../product-grid/product-grid.component';
-import { combineLatest, Observable, Subscription, take } from 'rxjs';
+import { combineLatest, Observable, take } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
 import { CommonModule } from '@angular/common';
+import { Product, ProductService } from '../../services/product.service';
 import { ProductCreationOverlayComponent } from '../../product-creation-overlay/product-creation-overlay.component';
 import { ModalService } from '../../services/modal-service.service';
-import { Product, ProductService } from '../../services/product.service';
+
 @Component({
   selector: 'app-shop-page',
   imports: [
@@ -41,18 +42,10 @@ export class ShopPageComponent {
     private route: ActivatedRoute,
     private router: Router,
     private cdRef: ChangeDetectorRef,
-    private modalService: ModalService,
     private productService: ProductService
   ) {
     this.route.url.pipe(take(1)).subscribe((params) => {
       this.initializeProducts();
-    });
-  }
-
-  openCreateProductDialog(): void {
-    this.modalService.open(ProductCreationOverlayComponent, {
-      closeOnBackdropClick: true,
-      width: 'fit-content',
     });
   }
 
@@ -71,19 +64,26 @@ export class ShopPageComponent {
   }
 
   private initializeProducts() {
-    // Query params are used to view a profile if a handle has not been set
     const userId = this.route.snapshot.queryParams['userId'];
+    const handle = this.router.url.split('/')[1];
+
+    // Always get the auth user first
+    const authUser$ = this.usersService.getAuthUser();
+
+    // Then get the regular user based on route params
+    let regularUser$: Observable<any>;
+
     if (userId) {
-      this.usersObservable = combineLatest([
-        this.usersService.getUserById(userId),
-        this.usersService.getAuthUser(),
-      ]).pipe(take(1));
+      regularUser$ = this.usersService.getUserById(userId);
+    } else if (handle) {
+      regularUser$ = this.usersService.getUserByHandle(handle);
     } else {
-      this.usersObservable = combineLatest([
-        this.usersService.getUserByHandle(this.router.url.split('/')[1]),
-        this.usersService.getAuthUser(),
-      ]).pipe(take(1));
+      regularUser$ = authUser$;
     }
+
+    this.usersObservable = combineLatest([regularUser$, authUser$]).pipe(
+      take(1)
+    );
 
     this.usersObservable.subscribe(([user, authUser]) => {
       this.canEdit = authUser && user.id === authUser.id;
@@ -94,6 +94,9 @@ export class ShopPageComponent {
         this.loadAllProducts(this.authUser.id);
       } else {
         this.loadPublicProducts(this.router.url.split('/')[1]);
+      }
+      if (this.user.handle) {
+        window.history.replaceState({}, '', `/${this.user.handle}`);
       }
       this.cdRef.markForCheck();
     });

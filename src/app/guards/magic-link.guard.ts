@@ -11,7 +11,7 @@ export const magicLinkGuard: CanActivateFn = async (route, state) => {
     try {
       // Get the email from localStorage
       const email = window.localStorage.getItem('emailForSignIn');
-      
+
       if (!email) {
         // If no email is found, redirect to login
 
@@ -21,20 +21,19 @@ export const magicLinkGuard: CanActivateFn = async (route, state) => {
 
       // Sign in with the email link
       await signInWithEmailLink(auth, email, window.location.href);
-      
+
       // Clear the email from localStorage
       window.localStorage.removeItem('emailForSignIn');
       router.navigate(['/']);
-      
+
       return true;
     } catch (error) {
       console.error('Error signing in with email link:', error);
       router.navigate(['/login']);
       return false;
     }
-  }
-  else {
+  } else {
     router.navigate(['/login']);
     return false;
   }
-}; 
+};

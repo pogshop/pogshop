@@ -14,8 +14,6 @@ import {
   collectionData,
   doc,
   docData,
-  addDoc,
-  updateDoc,
   deleteDoc,
   query,
   where,
@@ -25,12 +23,21 @@ import { environment } from '../../environments/environment';
 
 export type Product = {
   id: string;
+  userId: string;
   name: string;
   price: string | null;
   description: string;
-  image: string | null;
+  imageURLs: string[];
+  audioURL: string | null;
   isHidden: boolean;
-  userId: string;
+  status: PRODUCT_STATUS;
+  type: PRODUCT_TYPE;
+  digitalLink: string | null;
+  inventorySettings: {
+    requiresShipping: boolean;
+    remainingInventory: number | null;
+    dailyLimit: number | null;
+  };
 };
 
 const PRODUCTS_COLLECTION = 'products';
@@ -42,6 +49,11 @@ export enum PRODUCT_TYPE {
   PHYSICAL = 'PHYSICAL',
 }
 
+export enum PRODUCT_STATUS {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -50,6 +62,7 @@ export class ProductService {
   private userProductCache = new Map<string, Product[]>();
   private firestore = inject(Firestore);
   private http = inject(HttpClient);
+  saveInProgress$ = new BehaviorSubject<boolean>(false);
 
   constructor() {}
 
@@ -76,6 +89,14 @@ export class ProductService {
         ]);
       })
     );
+  }
+
+  upsertProduct(product: Product): Observable<Product> {
+    if (product.id) {
+      return this.updateProduct(product.id, product);
+    } else {
+      return this.createProduct(product);
+    }
   }
 
   updateProduct(id: string, product: Partial<Product>): Observable<Product> {

@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Product } from '../services/product.service';
 import { CreateProductCardComponent } from '../create-product-card/create-product-card.component';
 import { SuggestProductCardComponent } from '../suggest-product-card/suggest-product-card.component';
+import { ProductCardActionsComponent } from '../product-card-actions/product-card-actions.component';
 
 @Component({
   selector: 'app-product-grid',
@@ -12,25 +13,13 @@ import { SuggestProductCardComponent } from '../suggest-product-card/suggest-pro
     ProductCardComponent,
     CreateProductCardComponent,
     SuggestProductCardComponent,
+    ProductCardActionsComponent,
   ],
   templateUrl: './product-grid.component.html',
   styleUrl: './product-grid.component.scss',
+  standalone: true,
 })
 export class ProductGridComponent {
-  @Input() productList: Product[] = [
-    {
-      id: 'dance-request',
-      name: 'Dance Request',
-      price: '7.99',
-      description: 'Request a specific dance move or song',
-      image: 'dance',
-      isHidden: false,
-      userId: '123',
-    },
-  ];
-
+  @Input() productList: Product[] = [];
   @Input() canEdit: boolean = false;
-  @Output() openProductCreationOverlay = new EventEmitter<void>();
-
-  constructor() {}
 }

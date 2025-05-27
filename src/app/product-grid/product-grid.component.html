@@ -5,16 +5,17 @@
       *ngIf="canEdit || productList.length"
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"
     >
-      <app-create-product-card
-        (click)="openProductCreationOverlay.emit()"
-        *ngIf="canEdit"
-      ></app-create-product-card>
+      <app-create-product-card *ngIf="canEdit"></app-create-product-card>
       @for (product of productList; track product.id) {
       <app-product-card
         *ngIf="canEdit || !product.isHidden"
         [canEdit]="canEdit"
         [product]="product"
-      ></app-product-card>
+      >
+        <app-product-card-actions
+          [product]="product"
+        ></app-product-card-actions>
+      </app-product-card>
       }
       <app-suggest-product-card
         *ngIf="canEdit"

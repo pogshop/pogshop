@@ -17,6 +17,7 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   Product,
+  PRODUCT_STATUS,
   PRODUCT_TYPE,
   ProductService,
 } from '../services/product.service';
@@ -24,20 +25,25 @@ import {
 @Component({
   selector: 'app-product-creation-form',
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  providers: [FormBuilder, ProductService],
   templateUrl: './product-creation-form.component.html',
   styleUrl: './product-creation-form.component.scss',
+  standalone: true,
 })
 export class ProductCreationFormComponent {
   @Input() product?: Product;
   @Output() onBack = new EventEmitter<void>();
   @Output() onProductCreated = new EventEmitter<void>();
-  @Output() onProductUpdated = new EventEmitter<Product>();
+  @Output() onProductFormUpdated = new EventEmitter<Product>();
+  @Output() productFormStatus = new EventEmitter<boolean>();
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   productForm!: FormGroup;
   isPlaying = false;
   isDragging = false;
-  selectedImage: string | null = null;
+  isLimitedInventory = false;
+  isLimitedDaily = false;
+  requiresShipping = false;
   readonly PRODUCT_TYPE = PRODUCT_TYPE;
 
   soundEffect = { name: 'default-alert.mp3', isDefault: true };
@@ -70,37 +76,39 @@ export class ProductCreationFormComponent {
 
   ngOnInit() {
     this.productForm = this.fb.group({
-      type: [PRODUCT_TYPE.INTERACTIVE],
-      name: ['', [Validators.required]],
+      type: [this.product?.type || PRODUCT_TYPE.INTERACTIVE],
+      name: [this.product?.name || '', [Validators.required]],
       price: [
-        '4.99',
+        this.product?.price || 4.99,
         [
           Validators.required,
           Validators.min(1),
           Validators.pattern(/^\d+(\.\d{1,2})?$/),
         ],
       ],
-      description: [''],
-      image: [null],
-      digitalLink: [''],
-      collectShipping: [true],
-      limitedInventory: [false],
-      inventory: [''],
-      limitDaily: [false],
-      dailyLimit: [''],
+      description: [this.product?.description || null],
+      imageURLs: [this.product?.imageURLs || null],
+      digitalLink: [this.product?.digitalLink || null],
+      inventorySettings: this.fb.group({
+        requiresShipping: [
+          this.product?.inventorySettings?.requiresShipping || false,
+        ],
+        remainingInventory: [
+          this.product?.inventorySettings?.remainingInventory || null,
+        ],
+        dailyLimit: [this.product?.inventorySettings?.dailyLimit || null],
+      }),
     });
 
     this.productForm.valueChanges.subscribe((value) => {
-      this.onProductUpdated.emit(value);
+      this.onProductFormUpdated.emit(value);
+      this.productFormStatus.emit(this.productForm.valid);
     });
 
     this.productForm.updateValueAndValidity();
 
     if (this.product) {
       this.productForm.patchValue(this.product);
-      if (this.product.image) {
-        this.selectedImage = this.product.image;
-      }
     }
   }
 
@@ -114,32 +122,29 @@ export class ProductCreationFormComponent {
     console.log(this.isPlaying ? 'Playing sound' : 'Stopping sound');
   }
 
-  toggleLimitDaily() {
-    const currentValue = this.productForm.get('limitDaily')?.value;
-    this.productForm.patchValue({ limitDaily: !currentValue });
-  }
-
   toggleCollectShipping() {
-    const currentValue = this.productForm.get('collectShipping')?.value;
-    this.productForm.patchValue({ collectShipping: !currentValue });
+    this.requiresShipping = !this.requiresShipping;
+    const inventorySettings = this.productForm.get('inventorySettings');
+    inventorySettings?.patchValue({
+      requiresShipping: this.requiresShipping,
+    });
+    this.cdRef.detectChanges();
   }
 
   toggleLimitedInventory() {
-    const currentValue = this.productForm.get('limitedInventory')?.value;
-    this.productForm.patchValue({ limitedInventory: !currentValue });
+    this.isLimitedInventory = !this.isLimitedInventory;
+    const inventorySettings = this.productForm.get('inventorySettings');
+    inventorySettings?.patchValue({
+      remainingInventory: this.isLimitedInventory ? 1 : null,
+    });
   }
 
-  onSubmit() {
-    if (this.productForm.valid) {
-      // Handle form submission here
-      this.productService.createProduct(this.productForm.value).subscribe({
-        next: () => {
-          this.onProductCreated.emit();
-        },
-      });
-    } else {
-      this.productForm.markAllAsTouched();
-    }
+  toggleLimitDaily() {
+    this.isLimitedDaily = !this.isLimitedDaily;
+    const inventorySettings = this.productForm.get('inventorySettings');
+    inventorySettings?.patchValue({
+      dailyLimit: this.isLimitedDaily ? 1 : null,
+    });
   }
 
   onDragOver(event: DragEvent) {
@@ -188,30 +193,18 @@ export class ProductCreationFormComponent {
     // Create preview
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
-      this.selectedImage = e.target?.result as string;
-      this.productForm.patchValue({ image: this.selectedImage });
-      this.cdRef.markForCheck();
+      const selectedImage = e.target?.result as string;
+      this.productForm.patchValue({ imageURLs: [selectedImage] });
+      this.cdRef.detectChanges();
     };
     reader.readAsDataURL(file);
   }
 
   removeImage(event: Event) {
     event.stopPropagation();
-    this.selectedImage = null;
-    this.productForm.patchValue({ image: null });
+    this.productForm.patchValue({ imageURLs: [] });
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
-    }
-  }
-
-  limitDecimals(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const regex = /^\d+(\.\d{0,2})?$/;
-    if (!regex.test(input.value)) {
-      // Remove extra decimals
-      const valid = input.value.match(/^\d+(\.\d{0,2})?/);
-      input.value = valid ? valid[0] : '';
-      this.productForm.get('price')?.setValue(input.value);
     }
   }
 }

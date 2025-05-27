@@ -19,11 +19,11 @@
             class="w-12 h-12 rounded-lg bg-purple-600 flex items-center justify-center"
           >
             <img
-              *ngIf="product?.image"
-              [src]="product?.image"
+              *ngIf="product?.imageURLs?.length"
+              [src]="product!.imageURLs[0]"
               class="w-full h-full object-cover rounded-lg"
             />
-            <div *ngIf="!product?.image" class="text-lg">🎁</div>
+            <div *ngIf="!product?.imageURLs?.length" class="text-lg">🎁</div>
           </div>
         </div>
         <div
