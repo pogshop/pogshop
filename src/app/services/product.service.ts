@@ -168,17 +168,18 @@ export class ProductService {
   }
 
   // This should be used for customers to publically available products
-  getPublicProducts(handle: string): Observable<Product[]> {
+  getPublicProducts(userId: string): Observable<Product[]> {
     const productsRef = collection(this.firestore, PRODUCTS_COLLECTION);
     const getProductsQuery = query(
       productsRef,
       where('isHidden', '==', false),
-      where('handle', '==', handle)
+      where('userId', '==', userId)
     );
     return collectionData(getProductsQuery, { idField: 'id' }).pipe(
-      switchMap((products) => {
-        this.currentLoadedProducts$.next(products as Product[]);
-        return this.currentLoadedProducts$;
+      map((products) => products as Product[]),
+      tap((products) => {
+        this.userProductCache.set(userId, products);
+        this.currentLoadedProducts$.next(products);
       })
     );
   }

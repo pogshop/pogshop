@@ -93,7 +93,7 @@ export class ShopPageComponent {
       if (this.canEdit) {
         this.loadAllProducts(this.authUser.id);
       } else {
-        this.loadPublicProducts(this.router.url.split('/')[1]);
+        this.loadPublicProducts(this.user.id);
       }
       if (this.user.handle) {
         window.history.replaceState({}, '', `/${this.user.handle}`);

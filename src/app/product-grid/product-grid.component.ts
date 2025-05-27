@@ -22,4 +22,8 @@ import { ProductCardActionsComponent } from '../product-card-actions/product-car
 export class ProductGridComponent {
   @Input() productList: Product[] = [];
   @Input() canEdit: boolean = false;
+
+  constructor() {
+    console.log('productList', this.productList);
+  }
 }
