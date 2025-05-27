@@ -1,5 +1,5 @@
 <div
-  class="p-4 lg:w-5xl w-xl sm:w-2xl md:w-3xl xl:w-7xl h-full flex items-center justify-center overflow-y-auto"
+  class="p-4 max-w-[100vw] lg:w-5xl w-xl sm:w-2xl md:w-3xl xl:w-7xl h-full flex items-center justify-center overflow-y-auto"
 >
   <div
     class="bg-gray-800 rounded-lg overflow-y-auto shadow-xl border border-gray-700 flex flex-col w-full max-w-7xl h-[90vh]"
@@ -65,7 +65,7 @@
         <app-product-creation-form
           [product]="product"
           (onProductFormUpdated)="onProductFormUpdated($event)"
-          (onBack)="setScreen(ProductCreationScreen.SELECTOR)"
+          (onBack)="resetProductCreation(ProductCreationScreen.SELECTOR)"
           (onProductCreated)="closeModal()"
           (productFormStatus)="onProductFormStatus($event)"
         ></app-product-creation-form>

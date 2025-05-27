@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Product } from '../services/product.service';
+import { Product, PRODUCT_TYPE } from '../services/product.service';
 
 @Component({
   selector: 'app-create-product-selector',
@@ -14,9 +14,8 @@ export class CreateProductSelectorComponent {
 
   presets: any[] = [
     {
-      id: 'dance-request',
       name: 'Dance Request',
-      type: 'interactive',
+      type: PRODUCT_TYPE.INTERACTIVE,
       icon: '💃',
       color: 'from-pink-500 to-purple-600',
       description: 'Let viewers request dance moves',
@@ -25,9 +24,8 @@ export class CreateProductSelectorComponent {
         'Request a specific dance move or song during my stream!',
     },
     {
-      id: 'song-request',
       name: 'Song Request',
-      type: 'interactive',
+      type: PRODUCT_TYPE.INTERACTIVE,
       icon: '🎵',
       color: 'from-blue-500 to-cyan-500',
       description: 'Viewers can request songs',
@@ -35,19 +33,20 @@ export class CreateProductSelectorComponent {
       defaultDescription: 'Request a song for me to play on stream!',
     },
     {
-      id: 'game-challenge',
       name: 'Game Challenge',
-      type: 'interactive',
+      type: PRODUCT_TYPE.INTERACTIVE,
       icon: '🎮',
       color: 'from-green-500 to-emerald-600',
       description: 'Challenge the streamer',
       price: '8.99',
       defaultDescription: 'Challenge me to complete something in-game!',
+      imageURLs: [
+        'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/game_icon.png',
+      ],
     },
     {
-      id: 'shoutout',
       name: 'Channel Shoutout',
-      type: 'interactive',
+      type: PRODUCT_TYPE.INTERACTIVE,
       icon: '📢',
       color: 'from-orange-500 to-red-500',
       description: 'Get your channel promoted',
@@ -55,9 +54,8 @@ export class CreateProductSelectorComponent {
       defaultDescription: "I'll give your channel a shoutout on my stream!",
     },
     {
-      id: 'discord-invite',
       name: 'Discord VIP Access',
-      type: 'digital',
+      type: PRODUCT_TYPE.DIGITAL,
       icon: '🎫',
       color: 'from-indigo-500 to-purple-600',
       description: 'VIP Discord server access',
@@ -65,14 +63,13 @@ export class CreateProductSelectorComponent {
       defaultDescription: 'Get exclusive access to my VIP Discord channels!',
     },
     {
-      id: 'art-commission',
       name: 'Custom Art',
-      type: 'digital',
+      type: PRODUCT_TYPE.PHYSICAL,
       icon: '🎨',
       color: 'from-purple-500 to-pink-500',
       description: 'Commission custom artwork',
       price: '24.99',
-      defaultDescription: 'Get a custom digital artwork made just for you!',
+      defaultDescription: 'Get a custom artwork made just for you!',
     },
   ];
 

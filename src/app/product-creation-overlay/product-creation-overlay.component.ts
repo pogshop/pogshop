@@ -71,7 +71,8 @@ export class ProductCreationOverlayComponent {
     this.cdRef.detectChanges();
   }
 
-  setScreen(screen: ProductCreationScreen) {
+  resetProductCreation(screen: ProductCreationScreen) {
+    this.product = undefined;
     this.currentScreen = screen;
   }
 
