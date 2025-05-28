@@ -13,6 +13,7 @@ import {
 } from '../components/modals/delete-product-dialog';
 import { ProductCreationOverlayComponent } from '../product-creation-overlay/product-creation-overlay.component';
 import { ProductCardActionsComponent } from '../product-card-actions/product-card-actions.component';
+import { ProductCheckoutFormComponent } from '../product-checkout-form/product-checkout-form.component';
 
 export enum ProductEventType {
   CREATE = 'CREATE',
@@ -46,11 +47,19 @@ export class ProductCardComponent {
 
   constructor(
     private productService: ProductService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private modalService: ModalService
   ) {}
 
-  buyProduct(productId?: string): void {
-    console.log(`Buying product: ${productId}`);
+  buyProduct(): void {
+    this.modalService.open(ProductCheckoutFormComponent, {
+      data: {
+        product: this.product,
+      },
+      closeOnBackdropClick: true,
+      width: 'fit-content',
+    });
+
     // buy product logic
   }
 

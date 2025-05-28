@@ -1,0 +1,273 @@
+<div
+  class="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto md:h-auto"
+>
+  <div
+    class="bg-gray-800 rounded-lg w-4xl max-w-6xl p-6 border border-gray-700 max-h-[95vh] overflow-y-auto relative"
+  >
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-200 transition-colors"
+    >
+      <svg
+        class="w-8 h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+    <form
+      [formGroup]="checkoutForm"
+      (ngSubmit)="onSubmit()"
+      class="md:flex md:gap-8 md:items-center"
+    >
+      <!-- Left Column -->
+      <div class="md:flex-1">
+        <!-- Product Header -->
+        <div class="flex items-center mb-6">
+          <div
+            class="w-16 h-16 mr-4 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
+          >
+            <img
+              [src]="product.imageURLs[0]"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-white">{{ product.name }}</h3>
+            <!-- <p
+              class="text-purple-400 font-semibold mt-1"
+              *ngIf="!product.payWhatYouWant"
+            >
+              ${{ product.price }} each
+            </p> -->
+          </div>
+        </div>
+
+        <!-- Quantity Selection -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-300 mb-2">
+            Quantity
+          </label>
+          <div class="flex items-center space-x-3">
+            <button
+              type="button"
+              (click)="decreaseQuantity()"
+              class="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 flex items-center justify-center text-white font-bold transition-colors"
+            >
+              -
+            </button>
+            <span
+              class="text-xl font-semibold text-white min-w-[3rem] text-center"
+            >
+              {{ checkoutForm.get("quantity")?.value }}
+            </span>
+            <button
+              type="button"
+              (click)="increaseQuantity()"
+              class="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 flex items-center justify-center text-white font-bold transition-colors"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <!-- Pay What You Want -->
+        <div class="mb-6" *ngIf="true">
+          <label class="block text-sm font-medium text-gray-300 mb-2">
+            Pay What You Want
+          </label>
+          <div class="relative">
+            <span
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >$</span
+            >
+            <input
+              type="number"
+              [min]="product.price"
+              step="0.01"
+              formControlName="customAmount"
+              [placeholder]="'Minimum $' + product.price"
+              class="w-full pl-7 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+              [class.border-red-500]="
+                checkoutForm.get('customAmount')?.invalid &&
+                checkoutForm.get('customAmount')?.touched
+              "
+            />
+          </div>
+          <p class="text-xs text-gray-400 mt-1">
+            Minimum price: ${{ product.price }} per unit
+          </p>
+          <div
+            *ngIf="
+              checkoutForm.get('customAmount')?.invalid &&
+              checkoutForm.get('customAmount')?.touched
+            "
+            class="text-red-400 text-xs mt-1"
+          >
+            Amount must be at least ${{ product.price }}
+          </div>
+        </div>
+
+        <!-- Twitch Username -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-300 mb-2">
+            Twitch Username (optional)
+          </label>
+          <input
+            type="text"
+            formControlName="twitchUsername"
+            placeholder="Your Twitch username"
+            class="w-fit px-4 py-3 bg-gray-700 w-full border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+          />
+          <p class="text-xs text-gray-400 mt-1">
+            This will be shown in the stream alert notification
+          </p>
+        </div>
+
+        <!-- Tip/Donation -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-300 mb-3">
+            Tip the Streamer (optional)
+          </label>
+
+          <!-- Quick Tip Dollar Amounts -->
+          <div class="grid grid-cols-4 gap-2 mb-3">
+            <button
+              *ngFor="let amount of tipAmounts"
+              type="button"
+              (click)="selectTipAmount(amount)"
+              [class]="getTipButtonClass(amount)"
+            >
+              ${{ amount }}
+            </button>
+            <button
+              type="button"
+              (click)="selectCustomTip()"
+              [class]="getTipButtonClass('other')"
+            >
+              Other
+            </button>
+          </div>
+
+          <!-- Custom Tip Amount -->
+          <div class="relative" *ngIf="showCustomTipInput">
+            <span
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >$</span
+            >
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              formControlName="tipAmount"
+              placeholder="Enter tip amount"
+              class="w-full pl-7 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+            />
+          </div>
+          <p class="text-xs text-gray-400 mt-1">
+            Tips go directly to the streamer
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="md:w-fit h-full flex flex-col justify-between">
+        <div>
+          <!-- User Avatar -->
+          <div class="flex items-center mb-6 justify-center hidden md:flex">
+            <div
+              class="w-32 h-32 rounded-full overflow-hidden bg-purple-600 flex items-center justify-center flex"
+            >
+              <img [src]="userImageURL" class="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="bg-gray-700 rounded-lg p-4 mb-6">
+            <h4 class="font-semibold text-white mb-3">Order Summary</h4>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-300"
+                  >{{ product.name }} ×
+                  {{ checkoutForm.get("quantity")?.value }}</span
+                >
+                <span class="text-white"
+                  >${{ (getPricePerUnit() * getQuantity()).toFixed(2) }}</span
+                >
+              </div>
+
+              <!-- Subtotal -->
+              <div class="flex justify-between pt-1 border-t border-gray-600">
+                <span class="text-gray-300">Subtotal</span>
+                <span class="text-white">${{ getSubtotal().toFixed(2) }}</span>
+              </div>
+
+              <!-- Discount -->
+              <div class="flex justify-between">
+                <span class="text-green-400">Discount (10%)</span>
+                <span class="text-green-400"
+                  >-${{ getDiscount().toFixed(2) }}</span
+                >
+              </div>
+
+              <!-- Tip -->
+              <div class="flex justify-between" *ngIf="getTip() > 0">
+                <span class="text-purple-300">Tip</span>
+                <span class="text-purple-300">${{ getTip().toFixed(2) }}</span>
+              </div>
+
+              <!-- Final Total -->
+              <div
+                class="border-t border-gray-600 pt-2 flex justify-between font-semibold"
+              >
+                <span class="text-white">Total</span>
+                <span class="text-white">${{ getTotalPrice() }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- What Happens Next -->
+          <div
+            class="bg-purple-900 bg-opacity-30 border border-purple-500 border-opacity-30 rounded-lg p-3 mb-6"
+          >
+            <p class="text-sm text-purple-200 text-center">
+              🎉 Your order will trigger an alert on stream!
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-center w-full">
+          <button
+            type="submit"
+            [disabled]="checkoutForm.invalid"
+            class="px-6 py-3 w-full bg-purple-600 hover:bg-purple-700 rounded-lg text-white transition-colors font-semibold flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l1.5-6m0 0h10m-10 0L5.4 5M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6"
+              ></path>
+            </svg>
+            Checkout
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
