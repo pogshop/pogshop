@@ -1,4 +1,7 @@
-<div class="product-card" [class.product-card--hidden]="product?.isHidden">
+<div
+  class="product-card max-h-full"
+  [class.product-card--hidden]="product?.isHidden"
+>
   <!-- Move button - Only for actual products -->
   <button
     class="absolute top-2 left-2 z-20 w-8 h-8 bg-gray-800 bg-opacity-80 rounded-full flex items-center justify-center hover:bg-gray-700 transform hover:scale-110 transition-all"
@@ -62,10 +65,10 @@
   </button>
 
   <!-- Product Content -->
-  <div class="h-full flex flex-col">
+  <div class="h-full flex flex-col flex-1">
     <!-- Preset Product Type -->
-    <div>
-      <div class="h-40 bg-gray-700 relative overflow-y-auto">
+    <div class="flex flex-col flex-1 justify-between">
+      <div class="h-60 bg-gray-700 relative">
         <!-- Product Image -->
         <div
           *ngIf="product?.imageURLs?.length"
@@ -95,14 +98,16 @@
         </div>
       </div>
 
-      <div class="p-4">
+      <div class="p-4 flex flex-col justify-between flex-1">
+        <ng-content></ng-content>
         <h3 class="font-bold text-lg text-white">{{ product?.name }}</h3>
-        <p class="text-gray-400 text-sm mt-1">
+        <p
+          class="text-gray-400 text-sm mt-1 max-h-20 text-ellipsis line-clamp-3"
+        >
           {{ product?.description }}
         </p>
-        <ng-content></ng-content>
         <!-- Buy Button -->
-        <div class="mt-2">
+        <div class="mt-auto pt-4">
           <button
             [class]="
               'w-full py-2 rounded-full flex items-center justify-center transition-colors ' +
