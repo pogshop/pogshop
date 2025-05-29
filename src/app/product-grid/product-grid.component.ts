@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Product } from '../services/product.service';
@@ -24,4 +24,11 @@ export class ProductGridComponent {
   @Input() canEdit: boolean = false;
 
   constructor() {}
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['productList']) {
+      this.productList.sort((a, b) => {
+        return parseFloat(a.price || '0') - parseFloat(b.price || '0');
+      });
+    }
+  }
 }

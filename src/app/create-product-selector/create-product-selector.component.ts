@@ -80,7 +80,9 @@ export class CreateProductSelectorComponent {
       name: selectedProduct?.name,
       price: selectedProduct?.price,
       description: selectedProduct?.description,
-      imageURLs: selectedProduct?.imageURLs || [],
+      imageURLs: selectedProduct?.imageURLs || [
+        'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_pog.png',
+      ],
     } as Product;
     this.productSelected.emit(product);
   }

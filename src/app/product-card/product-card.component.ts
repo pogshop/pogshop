@@ -6,13 +6,12 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalService } from '../services/modal-service.service';
-import { Product, ProductService } from '../services/product.service';
 import {
-  DeleteProductDialogComponent,
-  DeleteProductDialogData,
-} from '../components/modals/delete-product-dialog';
-import { ProductCreationOverlayComponent } from '../product-creation-overlay/product-creation-overlay.component';
-import { ProductCardActionsComponent } from '../product-card-actions/product-card-actions.component';
+  Product,
+  PRODUCT_STATUS,
+  ProductService,
+} from '../services/product.service';
+
 import { ProductCheckoutFormComponent } from '../product-checkout-form/product-checkout-form.component';
 
 export enum ProductEventType {
@@ -43,6 +42,7 @@ export class ProductCardComponent {
   @Input() product?: Product;
   @Input() canEdit: boolean = false;
   ProductEventType = ProductEventType;
+  PRODUCT_STATUS = PRODUCT_STATUS;
   copiedProductId?: string | null = null;
 
   constructor(

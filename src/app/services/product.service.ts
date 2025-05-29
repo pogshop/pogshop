@@ -86,14 +86,10 @@ export class ProductService {
         // Update local cache
         const existingProducts =
           this.userProductCache.get(newProduct.userId) || [];
-        this.userProductCache.set(newProduct.userId, [
-          ...existingProducts,
-          newProduct,
-        ]);
-        this.currentLoadedProducts$.next([
-          ...this.currentLoadedProducts$.value,
-          newProduct,
-        ]);
+        const updatedProducts = [...existingProducts, newProduct];
+
+        this.userProductCache.set(newProduct.userId, updatedProducts);
+        this.currentLoadedProducts$.next(updatedProducts);
       })
     );
   }
