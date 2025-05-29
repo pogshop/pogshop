@@ -65,10 +65,21 @@
               -
             </button>
             <span
-              class="text-xl font-semibold text-white min-w-[3rem] text-center"
+              class="text-xl font-semibold text-white w-14 text-center cursor-text"
+              (click)="enableQuantityInput()"
+              *ngIf="!isQuantityInputEnabled"
             >
               {{ checkoutForm.get("quantity")?.value }}
             </span>
+            <input
+              type="number"
+              maxlength="4"
+              class="text-xl font-semibold text-white w-14 text-center bg-transparent border-none focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              [formControl]="quantityControl"
+              (blur)="disableQuantityInput()"
+              (keyup.enter)="disableQuantityInput()"
+              *ngIf="isQuantityInputEnabled"
+            />
             <button
               type="button"
               (click)="increaseQuantity()"

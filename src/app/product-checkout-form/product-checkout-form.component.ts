@@ -12,6 +12,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormControl,
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Product } from '../services/product.service';
@@ -49,6 +50,7 @@ export class ProductCheckoutFormComponent {
   product!: Product;
   userImageURL = '';
   userHandle = '';
+  isQuantityInputEnabled = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -86,10 +88,13 @@ export class ProductCheckoutFormComponent {
       : [];
 
     this.checkoutForm = this.fb.group({
-      quantity: [1, [Validators.required, Validators.min(1)]],
-      customAmount: [this.product.price, validators],
+      quantity: [
+        1,
+        [Validators.required, Validators.min(1), Validators.max(10000)],
+      ],
+      customAmount: [this.product.price ? '' : null, validators],
       twitchUsername: [''],
-      tipAmount: ['', [Validators.min(0)]],
+      tipAmount: [0, [Validators.min(0)]],
     });
 
     this.checkoutForm.valueChanges.subscribe((value) => {
@@ -105,15 +110,29 @@ export class ProductCheckoutFormComponent {
       .subscribe((value) => {
         if (!this.tipAmounts.includes(parseFloat(value)) && value !== '') {
           this.selectedTipType = 'other';
-          console.log('New tip amount?', value);
           this.showCustomTipInput = true;
+        }
+      });
+
+    // Enforce quantity limit
+    this.checkoutForm
+      .get('quantity')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (value > 1000) {
+          this.checkoutForm.patchValue(
+            { quantity: 1000 },
+            { emitEvent: false }
+          );
         }
       });
   }
 
   increaseQuantity(): void {
     const currentQuantity = this.checkoutForm.get('quantity')?.value || 1;
-    this.checkoutForm.patchValue({ quantity: currentQuantity + 1 });
+    if (currentQuantity < 10000) {
+      this.checkoutForm.patchValue({ quantity: currentQuantity + 1 });
+    }
     this.cdRef.markForCheck();
   }
 
@@ -148,7 +167,6 @@ export class ProductCheckoutFormComponent {
 
   getPricePerUnit(): number {
     if (this.product.purchaseSettings.payWhatYouWant) {
-      console.log(this.checkoutForm.get('customAmount')?.value);
       const customAmount = parseFloat(
         this.checkoutForm.get('customAmount')?.value || '0'
       );
@@ -212,5 +230,19 @@ export class ProductCheckoutFormComponent {
           },
         });
     }
+  }
+
+  enableQuantityInput(): void {
+    this.isQuantityInputEnabled = true;
+    this.cdRef.markForCheck();
+  }
+
+  disableQuantityInput(): void {
+    this.isQuantityInputEnabled = false;
+    this.cdRef.markForCheck();
+  }
+
+  get quantityControl() {
+    return this.checkoutForm.get('quantity') as FormControl;
   }
 }
