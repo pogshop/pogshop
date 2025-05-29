@@ -94,7 +94,7 @@ export class ProductCheckoutFormComponent {
       ],
       purchasePrice: [this.product.price, validators],
       twitchUsername: [''],
-      tipAmount: [0, [Validators.min(0)]],
+      tipAmount: ['', [Validators.min(0)]],
     });
 
     this.checkoutForm.valueChanges.subscribe((value) => {
