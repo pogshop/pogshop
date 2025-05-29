@@ -17,6 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Product } from '../services/product.service';
 import { MODAL_DATA, ModalRef } from '../services/modal-service.service';
 import { UsersService } from '../services/users-service.service';
+import { OrdersService } from '../services/orders-service.service';
 
 export interface ProductCheckoutFormDialogData {
   product: Product;
@@ -47,6 +48,7 @@ export class ProductCheckoutFormComponent {
   showCustomTipInput = false;
   product!: Product;
   userImageURL = '';
+  userHandle = '';
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -54,7 +56,8 @@ export class ProductCheckoutFormComponent {
     @Inject(MODAL_DATA) public data: ProductCheckoutFormDialogData,
     private modalRef: ModalRef<ProductCheckoutFormComponent, boolean>,
     private cdRef: ChangeDetectorRef,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private ordersService: OrdersService
   ) {
     this.product = this.data.product;
   }
@@ -63,6 +66,7 @@ export class ProductCheckoutFormComponent {
     this.initializeForm();
     this.usersService.getUserById(this.product.userId).subscribe((user) => {
       this.userImageURL = user.profilePhotoURL;
+      this.userHandle = user.handle;
       this.cdRef.markForCheck();
     });
     this.setupFormSubscriptions();
@@ -74,7 +78,6 @@ export class ProductCheckoutFormComponent {
   }
 
   private initializeForm(): void {
-    console.log(this.product);
     const validators = this.product.price
       ? [
           Validators.required,
@@ -84,9 +87,13 @@ export class ProductCheckoutFormComponent {
 
     this.checkoutForm = this.fb.group({
       quantity: [1, [Validators.required, Validators.min(1)]],
-      customAmount: [this.product.price ? '' : null, validators],
+      customAmount: [this.product.price, validators],
       twitchUsername: [''],
-      tipAmount: [0, [Validators.min(0)]],
+      tipAmount: ['', [Validators.min(0)]],
+    });
+
+    this.checkoutForm.valueChanges.subscribe((value) => {
+      this.cdRef.detectChanges();
     });
   }
 
@@ -98,6 +105,7 @@ export class ProductCheckoutFormComponent {
       .subscribe((value) => {
         if (!this.tipAmounts.includes(parseFloat(value)) && value !== '') {
           this.selectedTipType = 'other';
+          console.log('New tip amount?', value);
           this.showCustomTipInput = true;
         }
       });
@@ -139,7 +147,8 @@ export class ProductCheckoutFormComponent {
   }
 
   getPricePerUnit(): number {
-    if (false) {
+    if (this.product.purchaseSettings.payWhatYouWant) {
+      console.log(this.checkoutForm.get('customAmount')?.value);
       const customAmount = parseFloat(
         this.checkoutForm.get('customAmount')?.value || '0'
       );
@@ -156,18 +165,16 @@ export class ProductCheckoutFormComponent {
   getSubtotal(): number {
     return this.getPricePerUnit() * this.getQuantity();
   }
-
-  getDiscount(): number {
-    return this.getSubtotal() * 0.1; // 10% discount
-  }
-
   getTip(): number {
     return parseFloat(this.checkoutForm.get('tipAmount')?.value || '0');
   }
 
+  getServiceFee(): number {
+    return this.getSubtotal() * 0.2; // 20% service fee
+  }
+
   getTotalPrice(): string {
-    const subtotalAfterDiscount = this.getSubtotal() - this.getDiscount();
-    const total = subtotalAfterDiscount + this.getTip();
+    const total = this.getSubtotal() + this.getTip() + this.getServiceFee();
     return total.toFixed(2);
   }
 
@@ -177,21 +184,33 @@ export class ProductCheckoutFormComponent {
 
   onSubmit(): void {
     if (this.checkoutForm.valid) {
+      this.checkoutForm.disable();
       const formValue = this.checkoutForm.value;
-      const orderDetails: OrderDetails = {
-        product: this.product,
-        quantity: formValue.quantity,
-        pricePerUnit: this.getPricePerUnit(),
-        subtotal: this.getSubtotal(),
-        discount: this.getDiscount(),
-        tip: this.getTip(),
-        totalPrice: this.getTotalPrice(),
-        username: formValue.twitchUsername || 'Anonymous',
-        orderId: `PGS-${Date.now()}-${Math.random()
-          .toString(36)
-          .substr(2, 5)
-          .toUpperCase()}`,
-      };
+
+      this.ordersService
+        .createCheckoutSession({
+          items: [
+            {
+              productId: this.product.id,
+              quantity: formValue.quantity,
+              purchasePrice:
+                this.checkoutForm.get('customAmount')?.value ||
+                this.product.price,
+            },
+          ],
+          tip: this.getTip() || 0,
+          username: formValue?.twitchUsername,
+          sellerUserId: this.product.userId,
+        })
+        .subscribe({
+          next: (response) => {
+            window.location.href = response.url;
+          },
+          error: (error) => {
+            this.checkoutForm.enable();
+            console.error('Error creating checkout session:', error);
+          },
+        });
     }
   }
 }

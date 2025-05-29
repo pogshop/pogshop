@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import {
-  Product,
-  PRODUCT_TYPE,
-  PRODUCT_STATUS,
-} from '../services/product.service';
-import { AuthService } from '../services/auth-service.service';
+import { Product, PRODUCT_TYPE } from '../services/product.service';
 
 @Component({
   selector: 'app-create-product-selector',
@@ -15,7 +10,7 @@ import { AuthService } from '../services/auth-service.service';
   standalone: true,
 })
 export class CreateProductSelectorComponent {
-  constructor(private authService: AuthService) {}
+  constructor() {}
   @Output() productSelected = new EventEmitter<Product>();
 
   presets: any[] = [

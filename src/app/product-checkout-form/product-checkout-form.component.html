@@ -42,12 +42,12 @@
           </div>
           <div class="flex-1">
             <h3 class="text-xl font-bold text-white">{{ product.name }}</h3>
-            <!-- <p
+            <p
               class="text-purple-400 font-semibold mt-1"
-              *ngIf="!product.payWhatYouWant"
+              *ngIf="!product.purchaseSettings.payWhatYouWant"
             >
               ${{ product.price }} each
-            </p> -->
+            </p>
           </div>
         </div>
 
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Pay What You Want -->
-        <div class="mb-6" *ngIf="true">
+        <div class="mb-6" *ngIf="product.purchaseSettings.payWhatYouWant">
           <label class="block text-sm font-medium text-gray-300 mb-2">
             Pay What You Want
           </label>
@@ -210,18 +210,23 @@
                 <span class="text-white">${{ getSubtotal().toFixed(2) }}</span>
               </div>
 
-              <!-- Discount -->
-              <div class="flex justify-between">
-                <span class="text-green-400">Discount (10%)</span>
-                <span class="text-green-400"
-                  >-${{ getDiscount().toFixed(2) }}</span
-                >
-              </div>
-
               <!-- Tip -->
               <div class="flex justify-between" *ngIf="getTip() > 0">
-                <span class="text-purple-300">Tip</span>
+                <span class="text-purple-300">{{
+                  userHandle
+                    ? "Support for " + userHandle
+                    : "Support for the streamer"
+                }}</span>
                 <span class="text-purple-300">${{ getTip().toFixed(2) }}</span>
+              </div>
+
+              <!-- Service Fee -->
+
+              <div class="flex justify-between" *ngIf="getServiceFee() > 0">
+                <span class="text-gray-300">Service Fee</span>
+                <span class="text-white"
+                  >${{ getServiceFee().toFixed(2) }}</span
+                >
               </div>
 
               <!-- Final Total -->
@@ -248,7 +253,7 @@
             <div class="flex justify-center w-full">
               <button
                 type="submit"
-                [disabled]="checkoutForm.invalid"
+                [disabled]="checkoutForm.invalid || checkoutForm.disabled"
                 class="px-6 py-3 w-full bg-purple-600 hover:bg-purple-700 rounded-lg text-white transition-colors font-semibold flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg

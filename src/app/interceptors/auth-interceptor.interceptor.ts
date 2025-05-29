@@ -8,7 +8,14 @@ import {
 } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, throwError, BehaviorSubject, of, from } from 'rxjs';
-import { catchError, switchMap, filter, take, finalize, map } from 'rxjs/operators';
+import {
+  catchError,
+  switchMap,
+  filter,
+  take,
+  finalize,
+  map,
+} from 'rxjs/operators';
 import { AuthService } from '../services/auth-service.service';
 
 // Interceptor state (needed since the function is stateless)
@@ -24,8 +31,13 @@ export const authInterceptor: HttpInterceptorFn = (
   const authService = inject(AuthService);
   const state = inject(InterceptorState);
 
+  // Skip auth for order creation endpoint
+  if (req.url.includes('/v1/orders/create-checkout')) {
+    return next(req);
+  }
+
   return authService.getIdToken$().pipe(
-    switchMap(token => {
+    switchMap((token) => {
       if (token) {
         const tokenizedReq = addToken(req, token);
         return next(tokenizedReq);
