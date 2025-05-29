@@ -104,12 +104,12 @@
               type="number"
               [min]="product.price"
               step="0.01"
-              formControlName="customAmount"
+              formControlName="purchasePrice"
               [placeholder]="'Minimum $' + product.price"
               class="w-full pl-7 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
               [class.border-red-500]="
-                checkoutForm.get('customAmount')?.invalid &&
-                checkoutForm.get('customAmount')?.touched
+                checkoutForm.get('purchasePrice')?.invalid &&
+                checkoutForm.get('purchasePrice')?.touched
               "
             />
           </div>
@@ -118,8 +118,8 @@
           </p>
           <div
             *ngIf="
-              checkoutForm.get('customAmount')?.invalid &&
-              checkoutForm.get('customAmount')?.touched
+              checkoutForm.get('purchasePrice')?.invalid &&
+              checkoutForm.get('purchasePrice')?.touched
             "
             class="text-red-400 text-xs mt-1"
           >

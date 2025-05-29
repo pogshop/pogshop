@@ -92,7 +92,7 @@ export class ProductCheckoutFormComponent {
         1,
         [Validators.required, Validators.min(1), Validators.max(10000)],
       ],
-      customAmount: [this.product.price ? '' : null, validators],
+      purchasePrice: [this.product.price, validators],
       twitchUsername: [''],
       tipAmount: [0, [Validators.min(0)]],
     });
@@ -167,11 +167,11 @@ export class ProductCheckoutFormComponent {
 
   getPricePerUnit(): number {
     if (this.product.purchaseSettings.payWhatYouWant) {
-      const customAmount = parseFloat(
-        this.checkoutForm.get('customAmount')?.value || '0'
+      const purchasePrice = parseFloat(
+        this.checkoutForm.get('purchasePrice')?.value || '0'
       );
       const minimumPrice = parseFloat(this.product.price || '0');
-      return Math.max(customAmount, minimumPrice);
+      return Math.max(purchasePrice, minimumPrice);
     }
     return parseFloat(this.product.price!);
   }
@@ -212,7 +212,7 @@ export class ProductCheckoutFormComponent {
               productId: this.product.id,
               quantity: formValue.quantity,
               purchasePrice:
-                this.checkoutForm.get('customAmount')?.value ||
+                this.checkoutForm.get('purchasePrice')?.value ||
                 this.product.price,
             },
           ],
