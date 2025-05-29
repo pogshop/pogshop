@@ -76,11 +76,11 @@ export class CreateProductSelectorComponent {
 
   onProductSelected(selectedProduct: any) {
     const product = {
-      type: selectedProduct.type,
-      name: selectedProduct.name,
-      price: selectedProduct.price,
-      description: selectedProduct.description,
-      imageURLs: selectedProduct.imageURLs || [],
+      type: selectedProduct?.type,
+      name: selectedProduct?.name,
+      price: selectedProduct?.price,
+      description: selectedProduct?.description,
+      imageURLs: selectedProduct?.imageURLs || [],
     } as Product;
     this.productSelected.emit(product);
   }
