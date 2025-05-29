@@ -87,6 +87,7 @@ export class ProductCreationFormComponent {
       description: [this.product?.description || null],
       imageURLs: [this.product?.imageURLs || null],
       digitalLink: [this.product?.digitalLink || null],
+      isHidden: [this.product?.isHidden || false],
       purchaseSettings: this.fb.group({
         payWhatYouWant: [
           this.product?.purchaseSettings?.payWhatYouWant || false,
