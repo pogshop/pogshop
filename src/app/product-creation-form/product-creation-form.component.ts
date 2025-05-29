@@ -46,7 +46,9 @@ export class ProductCreationFormComponent {
   hasDailyLimit = false;
 
   readonly PRODUCT_TYPE = PRODUCT_TYPE;
-  private audioPlayer = new Audio();
+  private audioPlayer = new Audio(
+    'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3'
+  );
 
   productTypes = [
     {
@@ -115,7 +117,9 @@ export class ProductCreationFormComponent {
 
     if (this.product) {
       this.productForm.patchValue(this.product);
-      this.audioPlayer.src = this.product.soundEffect?.audioURL || '';
+      this.audioPlayer.src =
+        this.product.soundEffect?.audioURL ||
+        'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3';
     }
   }
 
@@ -268,7 +272,8 @@ export class ProductCreationFormComponent {
         audioDisplayName: '',
       },
     });
-    this.audioPlayer.src = 'assets/sounds/default-alert.mp3';
+    this.audioPlayer.src =
+      'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3';
     if (this.soundFileInput) {
       this.soundFileInput.nativeElement.value = '';
     }

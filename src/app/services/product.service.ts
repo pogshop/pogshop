@@ -107,7 +107,6 @@ export class ProductService {
   }
 
   updateProduct(id: string, product: Partial<Product>): Observable<Product> {
-    console.log(product);
     return this.http.patch<Product>(`${API_URL}/${id}`, product).pipe(
       tap((updatedProduct) => {
         // Update local cache
