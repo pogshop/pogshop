@@ -158,7 +158,14 @@
 
   <!-- Price -->
   <div>
-    <label class="block font-medium text-gray-100 mb-2">*Price ($)</label>
+    <label class="block font-medium text-gray-100 mb-2"
+      >*{{
+        productForm.get("purchaseSettings.payWhatYouWant")?.value
+          ? "Minimum Price"
+          : "Price"
+      }}
+      ($)</label
+    >
     <input
       type="text"
       formControlName="price"
@@ -183,6 +190,35 @@
     </div>
   </div>
 
+  <!-- Pay What You Want Toggle -->
+  <div
+    class="flex items-center justify-between"
+    formGroupName="purchaseSettings"
+  >
+    <label class="font-medium text-gray-100">Let fans pay what they want</label>
+    <button
+      type="button"
+      (click)="togglePayWhatYouWant()"
+      [ngClass]="{
+        'w-12 h-6 rounded-full transition-colors': true,
+        'bg-purple-600': productForm.get('purchaseSettings.payWhatYouWant')
+          ?.value,
+        'bg-gray-600': !productForm.get('purchaseSettings.payWhatYouWant')
+          ?.value
+      }"
+    >
+      <div
+        [ngClass]="{
+          'w-5 h-5 bg-white rounded-full transition-transform': true,
+          'translate-x-6': productForm.get('purchaseSettings.payWhatYouWant')
+            ?.value,
+          'translate-x-0.5': !productForm.get('purchaseSettings.payWhatYouWant')
+            ?.value
+        }"
+      ></div>
+    </button>
+  </div>
+
   <!-- Description -->
   <div>
     <label class="block font-medium text-gray-100 mb-2">Description</label>
@@ -196,6 +232,7 @@
 
   <!-- Interactive Type Settings -->
   <div
+    formGroupName="inventorySettings"
     *ngIf="productForm.get('type')?.value === PRODUCT_TYPE.INTERACTIVE"
     class="space-y-4"
   >
@@ -203,23 +240,23 @@
       <label class="font-medium text-gray-100">Limit daily purchases</label>
       <button
         type="button"
-        (click)="toggleLimitDaily()"
+        (click)="toggleDailyLimit()"
         [ngClass]="{
           'w-12 h-6 rounded-full transition-colors': true,
-          'bg-purple-600': isLimitedDaily,
-          'bg-gray-600': !isLimitedDaily
+          'bg-purple-600': hasDailyLimit,
+          'bg-gray-600': !hasDailyLimit
         }"
       >
         <div
           [ngClass]="{
             'w-5 h-5 bg-white rounded-full transition-transform': true,
-            'translate-x-6': isLimitedDaily,
-            'translate-x-0.5': !isLimitedDaily
+            'translate-x-6': hasDailyLimit,
+            'translate-x-0.5': !hasDailyLimit
           }"
         ></div>
       </button>
     </div>
-    <div *ngIf="isLimitedDaily" formGroupName="inventorySettings">
+    <div *ngIf="hasDailyLimit">
       <label class="block font-medium text-gray-100 mb-2"
         >How many per day?</label
       >
@@ -262,7 +299,7 @@
       <input
         type="text"
         formControlName="digitalLink"
-        placeholder="https://drive.google.com/..."
+        placeholder="Discord, Google Drive, Instagram, etc."
         class="w-full bg-gray-800 border border-gray-700 placeholder-gray-500 rounded-lg pl-10 pr-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
       />
     </div>
@@ -280,15 +317,21 @@
         (click)="toggleCollectShipping()"
         [ngClass]="{
           'w-12 h-6 rounded-full transition-colors': true,
-          'bg-purple-600': requiresShipping,
-          'bg-gray-600': !requiresShipping
+          'bg-purple-600': productForm.get('inventorySettings.requiresShipping')
+            ?.value,
+          'bg-gray-600': !productForm.get('inventorySettings.requiresShipping')
+            ?.value
         }"
       >
         <div
           [ngClass]="{
             'w-5 h-5 bg-white rounded-full transition-transform': true,
-            'translate-x-6': requiresShipping,
-            'translate-x-0.5': !requiresShipping
+            'translate-x-6': productForm.get(
+              'inventorySettings.requiresShipping'
+            )?.value,
+            'translate-x-0.5': !productForm.get(
+              'inventorySettings.requiresShipping'
+            )?.value
           }"
         ></div>
       </button>
@@ -430,17 +473,43 @@
         </svg>
       </button>
       <div class="flex-1">
-        <div class="text-gray-100 font-medium">{{ soundEffect.name }}</div>
-        <div *ngIf="soundEffect.isDefault" class="text-xs text-purple-400">
+        <div class="text-gray-100 font-medium">
+          {{
+            productForm.get("soundEffect.audioDisplayName")?.value ||
+              "Default Sound"
+          }}
+        </div>
+        <div
+          *ngIf="!productForm.get('soundEffect.audioURL')?.value"
+          class="text-xs text-purple-400"
+        >
           Default sound
         </div>
       </div>
-      <button
-        type="button"
-        class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-100 rounded-lg"
-      >
-        Change
-      </button>
+      <div class="flex gap-2">
+        <button
+          type="button"
+          class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-100 rounded-lg"
+          (click)="soundFileInput.click()"
+        >
+          Upload
+        </button>
+        <input
+          #soundFileInput
+          type="file"
+          accept="audio/mp3,audio/wav,audio/ogg"
+          class="hidden"
+          (change)="onSoundFileSelected($event)"
+        />
+        <button
+          *ngIf="productForm.get('soundEffect.audioURL')?.value"
+          type="button"
+          class="px-4 py-2 bg-red-900/50 hover:bg-red-900/70 text-red-400 rounded-lg"
+          (click)="resetSoundEffect()"
+        >
+          Reset
+        </button>
+      </div>
     </div>
   </div>
 

@@ -37,16 +37,16 @@ export class ProductCreationFormComponent {
   @Output() onProductFormUpdated = new EventEmitter<Product>();
   @Output() productFormStatus = new EventEmitter<boolean>();
   @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild('soundFileInput') soundFileInput!: ElementRef;
 
   productForm!: FormGroup;
   isPlaying = false;
   isDragging = false;
   isLimitedInventory = false;
-  isLimitedDaily = false;
-  requiresShipping = false;
-  readonly PRODUCT_TYPE = PRODUCT_TYPE;
+  hasDailyLimit = false;
 
-  soundEffect = { name: 'default-alert.mp3', isDefault: true };
+  readonly PRODUCT_TYPE = PRODUCT_TYPE;
+  private audioPlayer = new Audio();
 
   productTypes = [
     {
@@ -68,11 +68,7 @@ export class ProductCreationFormComponent {
     },
   ];
 
-  constructor(
-    private fb: FormBuilder,
-    private productService: ProductService,
-    private cdRef: ChangeDetectorRef
-  ) {}
+  constructor(private fb: FormBuilder, private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.productForm = this.fb.group({
@@ -89,6 +85,12 @@ export class ProductCreationFormComponent {
       description: [this.product?.description || null],
       imageURLs: [this.product?.imageURLs || null],
       digitalLink: [this.product?.digitalLink || null],
+      purchaseSettings: this.fb.group({
+        payWhatYouWant: [
+          this.product?.purchaseSettings?.payWhatYouWant || false,
+        ],
+        acceptTips: [this.product?.purchaseSettings?.acceptTips || false],
+      }),
       inventorySettings: this.fb.group({
         requiresShipping: [
           this.product?.inventorySettings?.requiresShipping || false,
@@ -97,6 +99,10 @@ export class ProductCreationFormComponent {
           this.product?.inventorySettings?.remainingInventory || null,
         ],
         dailyLimit: [this.product?.inventorySettings?.dailyLimit || null],
+      }),
+      soundEffect: this.fb.group({
+        audioURL: [this.product?.soundEffect?.audioURL || null],
+        audioDisplayName: [this.product?.soundEffect?.audioDisplayName || null],
       }),
     });
 
@@ -109,6 +115,7 @@ export class ProductCreationFormComponent {
 
     if (this.product) {
       this.productForm.patchValue(this.product);
+      this.audioPlayer.src = this.product.soundEffect?.audioURL || '';
     }
   }
 
@@ -119,15 +126,19 @@ export class ProductCreationFormComponent {
 
   toggleSoundPlayback() {
     this.isPlaying = !this.isPlaying;
-    console.log(this.isPlaying ? 'Playing sound' : 'Stopping sound');
+    if (this.isPlaying) {
+      this.audioPlayer.play();
+    } else {
+      this.audioPlayer.pause();
+      this.audioPlayer.currentTime = 0;
+    }
   }
 
   toggleCollectShipping() {
-    this.requiresShipping = !this.requiresShipping;
-    const inventorySettings = this.productForm.get('inventorySettings');
-    inventorySettings?.patchValue({
-      requiresShipping: this.requiresShipping,
-    });
+    const requiresShipping = this.productForm.get(
+      'inventorySettings.requiresShipping'
+    );
+    requiresShipping?.setValue(!requiresShipping?.value);
     this.cdRef.detectChanges();
   }
 
@@ -139,12 +150,19 @@ export class ProductCreationFormComponent {
     });
   }
 
-  toggleLimitDaily() {
-    this.isLimitedDaily = !this.isLimitedDaily;
-    const inventorySettings = this.productForm.get('inventorySettings');
-    inventorySettings?.patchValue({
-      dailyLimit: this.isLimitedDaily ? 1 : null,
-    });
+  toggleDailyLimit() {
+    this.hasDailyLimit = !this.hasDailyLimit;
+    const dailyLimit = this.productForm.get('inventorySettings.dailyLimit');
+    dailyLimit?.setValue(dailyLimit?.value ? null : 1);
+    this.cdRef.detectChanges();
+  }
+
+  togglePayWhatYouWant() {
+    const payWhatYouWant = this.productForm.get(
+      'purchaseSettings.payWhatYouWant'
+    );
+    payWhatYouWant?.setValue(!payWhatYouWant?.value);
+    this.cdRef.detectChanges();
   }
 
   onDragOver(event: DragEvent) {
@@ -206,5 +224,54 @@ export class ProductCreationFormComponent {
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
+  }
+
+  onSoundFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      // Check file type
+      if (!file.type.startsWith('audio/')) {
+        alert('Please upload an audio file (MP3, WAV, or OGG)');
+        return;
+      }
+
+      // Check file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+
+      // Create object URL for preview
+      const objectUrl = URL.createObjectURL(file);
+      this.audioPlayer.src = objectUrl;
+
+      // Convert to base64
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64 = e.target?.result as string;
+        this.productForm.patchValue({
+          soundEffect: {
+            audioURL: base64,
+            audioDisplayName: file.name,
+          },
+        });
+        this.cdRef.detectChanges();
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  resetSoundEffect() {
+    this.productForm.patchValue({
+      soundEffect: {
+        audioURL: null,
+        audioDisplayName: '',
+      },
+    });
+    this.audioPlayer.src = 'assets/sounds/default-alert.mp3';
+    if (this.soundFileInput) {
+      this.soundFileInput.nativeElement.value = '';
+    }
+    this.cdRef.detectChanges();
   }
 }

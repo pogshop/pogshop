@@ -28,15 +28,22 @@ export type Product = {
   price: string | null;
   description: string;
   imageURLs: string[];
-  audioURL: string | null;
   isHidden: boolean;
   status: PRODUCT_STATUS;
   type: PRODUCT_TYPE;
   digitalLink: string | null;
+  purchaseSettings: {
+    payWhatYouWant: boolean;
+    acceptTips: boolean;
+  };
   inventorySettings: {
     requiresShipping: boolean;
     remainingInventory: number | null;
     dailyLimit: number | null;
+  };
+  soundEffect: {
+    audioURL: string | null;
+    audioDisplayName: string;
   };
 };
 
@@ -100,6 +107,7 @@ export class ProductService {
   }
 
   updateProduct(id: string, product: Partial<Product>): Observable<Product> {
+    console.log(product);
     return this.http.patch<Product>(`${API_URL}/${id}`, product).pipe(
       tap((updatedProduct) => {
         // Update local cache
