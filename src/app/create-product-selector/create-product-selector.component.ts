@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Product, PRODUCT_TYPE } from '../services/product.service';
+import {
+  Product,
+  PRODUCT_TYPE,
+  PRODUCT_STATUS,
+} from '../services/product.service';
+import { AuthService } from '../services/auth-service.service';
 
 @Component({
   selector: 'app-create-product-selector',
@@ -10,6 +15,7 @@ import { Product, PRODUCT_TYPE } from '../services/product.service';
   standalone: true,
 })
 export class CreateProductSelectorComponent {
+  constructor(private authService: AuthService) {}
   @Output() productSelected = new EventEmitter<Product>();
 
   presets: any[] = [
@@ -73,7 +79,14 @@ export class CreateProductSelectorComponent {
     },
   ];
 
-  onProductSelected(product: any) {
+  onProductSelected(selectedProduct: any) {
+    const product = {
+      type: selectedProduct.type,
+      name: selectedProduct.name,
+      price: selectedProduct.price,
+      description: selectedProduct.description,
+      imageURLs: selectedProduct.imageURLs || [],
+    } as Product;
     this.productSelected.emit(product);
   }
 }
