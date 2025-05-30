@@ -124,7 +124,9 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
 
     const alert: Alert = {
       id: Math.random().toString(36).substring(2, 15),
-      imageURL: this.usersService.authUser$.value?.profilePhotoURL,
+      imageURL:
+        this.usersService.authUser$.value?.profilePhotoURL ||
+        'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_pog.png',
       displayUsername: 'TestUser',
       productName: 'Test Product',
       handle: 'testhandle',
