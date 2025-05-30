@@ -155,7 +155,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
           const alert = alerts[0] as Alert;
           // Immediately mark as COMPLETED to prevent double processing
           const alertRef = doc(this.firestore, 'alerts', alert.id);
-          updateDoc(alertRef, { status: 'COMPLETED' });
+          await updateDoc(alertRef, { status: 'COMPLETED' });
 
           for (let i = 0; i < (alert.quantity || 1); i++) {
             await this.showNewAlert(alert);
