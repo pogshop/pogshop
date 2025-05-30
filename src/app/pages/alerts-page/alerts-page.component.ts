@@ -128,16 +128,15 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       displayUsername: 'TestUser',
       productName: 'Test Product',
       handle: 'testhandle',
-      audioURL: 'https://cdn.pogshop.gg/assets/default_sale_alert.mp3',
+      audioURL:
+        'https://cdn.pogshop.gg/user_audio/ROe6nwvUy1ZwGNRSoWTnikHEr223-1748622298849',
       status: 'NEW',
       userId: userId || '',
-      quantity: 20,
+      quantity: 5,
     };
 
     for (let i = 0; i < (alert.quantity || 1); i++) {
-      setTimeout(() => {
-        this.showNewAlert(alert);
-      }, i * 1000);
+      await this.showNewAlert(alert);
     }
   }
 
@@ -159,17 +158,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
           updateDoc(alertRef, { status: 'COMPLETED' });
 
           for (let i = 0; i < (alert.quantity || 1); i++) {
-            if (alert.imageURL) {
-              await new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = resolve;
-                img.onerror = reject;
-                img.src = alert.imageURL;
-              });
-            }
-            setTimeout(() => {
-              this.showNewAlert(alert);
-            }, i * 1000);
+            await this.showNewAlert(alert);
           }
         }
       }
@@ -187,6 +176,16 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       });
     }
 
+    // Wait for current audio to finish before showing new alert
+    if (this.audio) {
+      await new Promise<void>((resolve) => {
+        this.audio!.onended = () => {
+          resolve();
+        };
+        this.audio!.play();
+      });
+    }
+
     // Add new alert to the beginning of the array
     this.activeAlerts.unshift(alert);
     this.cdRef.markForCheck();
@@ -194,20 +193,22 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
     // Play sound if available
     const audioURL =
       alert.audioURL || 'https://cdn.pogshop.gg/assets/default_sale_alert.mp3';
-    this.audio = new Audio(audioURL);
-    this.audio.play();
+    const audio = new Audio(audioURL);
 
-    // If this is the last alert in the sequence, set a timeout to clear all alerts
+    // If this is the last alert in the sequence, wait for audio to finish before clearing
     if (
       alert.quantity &&
       this.activeAlerts.filter((a) => a.id === alert.id).length ===
         alert.quantity
     ) {
-      setTimeout(() => {
+      audio.onended = () => {
         this.activeAlerts = this.activeAlerts.filter((a) => a.id !== alert.id);
         this.cdRef.markForCheck();
         this.stopAudio();
-      }, 3000);
+      };
     }
+
+    this.audio = audio;
+    await audio.play();
   }
 }
