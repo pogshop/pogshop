@@ -39,6 +39,7 @@ interface Alert {
   status: string;
   userId: string;
   quantity?: number;
+  createdAt: Date;
 }
 
 @Component({
@@ -134,6 +135,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       status: 'NEW',
       userId: userId || '',
       quantity: 5,
+      createdAt: new Date(),
     };
 
     const alertsRef = collection(this.firestore, 'alerts');
@@ -146,7 +148,8 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
     const q = query(
       alertsRef,
       where('status', '==', 'NEW'),
-      where('userId', '==', userId)
+      where('userId', '==', userId),
+      where('createdAt', '>', new Date(Date.now() - 1000 * 60 * 60 * 1))
     );
 
     this.alertsSubscription = collectionData(q, { idField: 'id' }).subscribe(
