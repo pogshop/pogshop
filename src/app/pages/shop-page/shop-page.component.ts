@@ -65,7 +65,7 @@ export class ShopPageComponent {
 
   private initializeProducts() {
     const userId = this.route.snapshot.queryParams['userId'];
-    const handle = this.router.url.split('/')[1];
+    const handle = this.route.snapshot.url.at(-1)?.path;
 
     // Always get the auth user first
     const authUser$ = this.usersService.getAuthUser();
@@ -75,7 +75,7 @@ export class ShopPageComponent {
 
     if (userId) {
       regularUser$ = this.usersService.getUserById(userId);
-    } else if (handle) {
+    } else if (handle && handle !== 'shop') {
       regularUser$ = this.usersService.getUserByHandle(handle);
     } else {
       regularUser$ = authUser$;
@@ -95,8 +95,12 @@ export class ShopPageComponent {
       } else {
         this.loadPublicProducts(this.user.id);
       }
-      if (this.user.handle) {
-        window.history.replaceState({}, '', `/${this.user.handle}`);
+      if (
+        this.user.handle &&
+        (this.route.snapshot.url.at(-1)?.path === 'shop' ||
+          this.route.snapshot.url.length === 0)
+      ) {
+        this.router.navigate(['/', this.user.handle]);
       }
       this.cdRef.markForCheck();
     });

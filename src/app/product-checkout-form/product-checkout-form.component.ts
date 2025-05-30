@@ -32,7 +32,7 @@ export interface OrderDetails {
   discount: number;
   tip: number;
   totalPrice: string;
-  username: string;
+  buyerUsername: string;
   orderId: string;
 }
 
@@ -93,7 +93,7 @@ export class ProductCheckoutFormComponent {
         [Validators.required, Validators.min(1), Validators.max(10000)],
       ],
       purchasePrice: [this.product.price, validators],
-      twitchUsername: [''],
+      buyerUsername: [''],
       tipAmount: ['', [Validators.min(0)]],
     });
 
@@ -217,7 +217,7 @@ export class ProductCheckoutFormComponent {
             },
           ],
           tip: this.getTip() || 0,
-          username: formValue?.twitchUsername,
+          buyerUsername: formValue?.buyerUsername,
           sellerUserId: this.product.userId,
         })
         .subscribe({

@@ -12,7 +12,7 @@ interface Item {
 export interface CheckoutSessionRequest {
   items: Item[];
   tip?: number;
-  username?: string;
+  buyerUsername?: string;
   sellerUserId?: string;
 }
 
@@ -27,6 +27,12 @@ export class OrdersService {
   createCheckoutSession(
     request: CheckoutSessionRequest
   ): Observable<{ url: string }> {
+    if (!environment.production) {
+      return this.http.post<{ url: string }>(
+        `${this.apiUrl}/v1/test/orders/create-checkout`,
+        request
+      );
+    }
     return this.http.post<{ url: string }>(
       `${this.apiUrl}/v1/orders/create-checkout`,
       request

@@ -270,6 +270,11 @@ export class CreatorBannerComponent {
         complete: () => {
           this.displayName = newName;
           this.tempDisplayName = this.displayName;
+          window.history.replaceState(
+            {},
+            '',
+            `/${this.handleFormControl.value}`
+          );
         },
       });
   }

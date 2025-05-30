@@ -4,18 +4,23 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StripeService {
-  private apiUrl = `${environment.apiUrl}`;
+  private apiUrl = `${environment.stripeApiUrl}`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   createOnboardingLink(countryCode: string): Observable<{ url: string }> {
-    return this.http.post<{ url: string }>(`${this.apiUrl}/v1/stripe/onboard`, { countryCode });
+    return this.http.post<{ url: string }>(`${this.apiUrl}/onboard`, {
+      countryCode,
+    });
   }
 
   getAccountLink(stripeAccountId: string): Observable<{ url: string }> {
-    return this.http.get<{ url: string }>(`${this.apiUrl}/v1/stripe/onboard/accountLinks`, { params: { stripeAccountId } });
+    return this.http.get<{ url: string }>(
+      `${this.apiUrl}/onboard/accountLinks`,
+      { params: { stripeAccountId } }
+    );
   }
 }

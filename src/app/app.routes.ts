@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
 import { magicLinkGuard } from './guards/magic-link.guard';
 import { loggedInGuard } from './guards/logged-in.guard';
-
 import { loggedOutGuard } from './guards/logged-out.guard';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
-import { ShopPageComponent } from './pages/shop-page/shop-page.component';
 
 export const routes: Routes = [
   {
