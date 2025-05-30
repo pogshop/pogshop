@@ -3,8 +3,13 @@ import { magicLinkGuard } from './guards/magic-link.guard';
 import { loggedInGuard } from './guards/logged-in.guard';
 import { loggedOutGuard } from './guards/logged-out.guard';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { AlertsPageComponent } from './pages/alerts-page/alerts-page.component';
 
 export const routes: Routes = [
+  {
+    path: 'alerts/:userId',
+    component: AlertsPageComponent,
+  },
   {
     path: '',
     component: LandingPageComponent,
@@ -75,14 +80,6 @@ export const routes: Routes = [
     path: 'logout',
     component: LandingPageComponent,
     title: 'Pogshop - Home',
-  },
-
-  {
-    path: 'alerts/:userId',
-    loadComponent: () =>
-      import('./pages/alerts-page/alerts-page.component').then(
-        (m) => m.AlertsPageComponent
-      ),
   },
 
   {
