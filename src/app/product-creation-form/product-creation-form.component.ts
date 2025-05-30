@@ -125,7 +125,7 @@ export class ProductCreationFormComponent {
   }
 
   selectProductType(type: PRODUCT_TYPE) {
-    this.productForm.patchValue({ type });
+    this.productForm.patchValue({ type, digitalLink: '' });
     this.cdRef.markForCheck();
   }
 
