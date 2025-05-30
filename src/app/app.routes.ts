@@ -78,6 +78,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'alerts/:userId',
+    loadComponent: () =>
+      import('./pages/alerts-page/alerts-page.component').then(
+        (m) => m.AlertsPageComponent
+      ),
+  },
+
+  {
     path: '**',
     loadComponent: () =>
       import('./pages/shop-page/shop-page.component').then(

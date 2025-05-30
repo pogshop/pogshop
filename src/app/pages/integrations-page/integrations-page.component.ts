@@ -2,6 +2,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShopNavbarComponent } from '../../components/shop-nav-bar/shop-nav-bar.component';
+import { UsersService } from '../../services/users-service.service';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-integrations-page',
   standalone: true,
@@ -17,9 +19,14 @@ export class IntegrationsPageComponent {
   copiedDiscord: boolean = false;
 
   // Sample keys - in a real app, these would be generated on the server
-  obsBrowserUrl: string = 'https://pogshop.com/alert/joannemilktea';
+  obsBrowserUrl: string = '';
   discordBotInvite: string =
     'https://discord.com/oauth2/authorize?client_id=123456789&scope=bot&permissions=0';
+
+  constructor(private usersService: UsersService) {
+    this.obsBrowserUrl =
+      environment.baseUrl + `/alerts/${this.usersService.authUser$.value?.id}`;
+  }
 
   toggleShowOBSKey(): void {
     this.showOBSKey = !this.showOBSKey;

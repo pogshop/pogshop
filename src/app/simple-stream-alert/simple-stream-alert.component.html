@@ -1,0 +1,28 @@
+<div class="flex flex-col items-center">
+  <div class="flex justify-center mb-2">
+    <div class="w-42 h-42 rounded-lg flex items-center justify-center">
+      <img
+        *ngIf="displayImage"
+        [src]="displayImage"
+        class="w-full h-full object-cover rounded-lg"
+      />
+      <div *ngIf="!displayImage" class="text-lg">🎁</div>
+    </div>
+  </div>
+  <div
+    class="bg-gray-800 rounded-full px-2 py-3 border-2 border-purple-600 w-full lg:w-3/4"
+  >
+    <div class="text-center">
+      <div class="text-gray-100 text-xs mb-1">
+        <span class="font-bold">{{ displayUsername || "SuperPog420" }}</span>
+        just ordered
+      </div>
+      <div class="text-gray-100 text-sm font-bold mb-1">
+        {{ displayProductName || "Your Product" }}
+      </div>
+      <div class="text-gray-400 text-xs">
+        pogshop.gg/{{ displayHandle || "poggers" }}
+      </div>
+    </div>
+  </div>
+</div>

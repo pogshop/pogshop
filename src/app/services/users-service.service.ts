@@ -60,6 +60,7 @@ export class UsersService {
 
     this.authUser$.pipe(takeUntilDestroyed()).subscribe((user) => {
       if (user) {
+        console.log('user', user.id);
         this.getUserCache.set(user.handle, user);
       }
     });

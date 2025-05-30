@@ -80,6 +80,11 @@ export class CreateProductSelectorComponent {
       name: selectedProduct?.name,
       price: selectedProduct?.price,
       description: selectedProduct?.description,
+      soundEffect: {
+        audioURL:
+          'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3',
+        audioDisplayName: 'default_sale_alert.mp3',
+      },
       imageURLs: selectedProduct?.imageURLs || [
         'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_pog.png',
       ],
