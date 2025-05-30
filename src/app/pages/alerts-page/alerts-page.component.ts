@@ -134,9 +134,8 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       quantity: 5,
     };
 
-    for (let i = 0; i < (alert.quantity || 1); i++) {
-      await this.showNewAlert(alert);
-    }
+    const alertsRef = collection(this.firestore, 'alerts');
+    await addDoc(alertsRef, alert);
   }
 
   private listenToAlerts() {
