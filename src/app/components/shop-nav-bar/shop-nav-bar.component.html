@@ -20,17 +20,20 @@
     <span class="text-xl font-bold text-white">Pog Shop</span>
   </div>
 
+  @if(false) {
+
   <!-- Desktop Menu -->
   <div class="hidden md:flex space-x-8">
     <button
       (click)="setCurrentTab(TABS.SHOP)"
       [ngClass]="{
-        'text-purple-400 border-b-2 border-purple-400': currentTab === TABS.SHOP,
+        'text-purple-400 border-b-2 border-purple-400':
+          currentTab === TABS.SHOP,
         'text-gray-300 hover:text-white': currentTab !== TABS.SHOP
       }"
       class="px-4 py-2 font-medium"
     >
-      {{ isOwnShop ? 'Your Shop' : 'Back to Your Shop' }}
+      {{ isOwnShop ? "Your Shop" : "Back to Your Shop" }}
     </button>
     <button
       (click)="setCurrentTab(TABS.LIBRARY)"
@@ -46,7 +49,8 @@
     <button
       (click)="setCurrentTab(TABS.ORDERS)"
       [ngClass]="{
-        'text-purple-400 border-b-2 border-purple-400': currentTab === TABS.ORDERS,
+        'text-purple-400 border-b-2 border-purple-400':
+          currentTab === TABS.ORDERS,
         'text-gray-300 hover:text-white': currentTab !== TABS.ORDERS
       }"
       class="px-4 py-2 font-medium"
@@ -68,18 +72,18 @@
 
   <!-- Desktop Sign Out and Balance -->
   <div class="hidden md:flex items-center space-x-4">
-      <button
-        (click)="signOut()"
-        class="px-4 py-2 font-medium text-gray-300 hover:text-white"
-      >
-        Sign Out
-      </button>
-      <button
-        (click)="deleteAccount()"
-        class="px-4 py-2 font-medium text-gray-300 hover:text-white bg-red-500 rounded-md"
-      >
-        Delete Account
-      </button>
+    <button
+      (click)="signOut()"
+      class="px-4 py-2 font-medium text-gray-300 hover:text-white"
+    >
+      Sign Out
+    </button>
+    <button
+      (click)="deleteAccount()"
+      class="px-4 py-2 font-medium text-gray-300 hover:text-white bg-red-500 rounded-md"
+    >
+      Delete Account
+    </button>
     <div
       class="flex items-center bg-gray-700 px-3 py-1 rounded-full text-white"
     >
@@ -169,7 +173,7 @@
           }"
           class="px-4 py-2 font-medium text-left"
         >
-          {{ isOwnShop ? 'Shop' : 'Back to Your Shop' }}
+          {{ isOwnShop ? "Shop" : "Back to Your Shop" }}
         </button>
         <button
           (click)="setCurrentTab('library')"
@@ -229,18 +233,19 @@
           </div>
         </div>
         <button
-        (click)="deleteAccount()"
+          (click)="deleteAccount()"
           class="w-full px-4 py-2 font-medium text-gray-300 hover:text-white bg-gray-700 rounded-lg bg-red-500 mb-4"
         >
-        Delete Account
-      </button>
-          <button
-            (click)="signOut()"
-            class="w-full px-4 py-2 font-medium text-gray-300 hover:text-white bg-gray-700 rounded-lg"
-          >
-            Sign Out
-          </button>
+          Delete Account
+        </button>
+        <button
+          (click)="signOut()"
+          class="w-full px-4 py-2 font-medium text-gray-300 hover:text-white bg-gray-700 rounded-lg"
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   </div>
+  }
 </nav>
