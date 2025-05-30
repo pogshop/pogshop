@@ -155,14 +155,10 @@ export class LandingPageComponent implements OnInit {
     );
   }
 
-  navigateToSignUp() {
-    this.router.navigate(['/signup']);
-  }
-
   navigateToLogin() {
-    this.router.navigate(['/login'], {
-      state: { handle: this.handleFormControl.value || '', isNewUser: true },
-    });
+    // this.router.navigate(['/login'], {
+    //   state: { handle: this.handleFormControl.value || '', isNewUser: true },
+    // });
   }
 
   private handleVideo() {
