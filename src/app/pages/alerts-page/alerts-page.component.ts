@@ -148,8 +148,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
     const q = query(
       alertsRef,
       where('status', '==', 'NEW'),
-      where('userId', '==', userId),
-      where('createdAt', '>', new Date(Date.now() - 1000 * 60 * 60 * 1))
+      where('userId', '==', userId)
     );
 
     this.alertsSubscription = collectionData(q, { idField: 'id' }).subscribe(

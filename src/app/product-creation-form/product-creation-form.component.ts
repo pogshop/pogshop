@@ -125,7 +125,23 @@ export class ProductCreationFormComponent {
   }
 
   selectProductType(type: PRODUCT_TYPE) {
-    this.productForm.patchValue({ type, digitalLink: '' });
+    if (type === PRODUCT_TYPE.PHYSICAL) {
+      this.productForm.patchValue({
+        type,
+        digitalLink: '',
+        inventorySettings: {
+          requiresShipping: true,
+        },
+      });
+    } else {
+      this.productForm.patchValue({
+        type,
+        digitalLink: '',
+        inventorySettings: {
+          requiresShipping: false,
+        },
+      });
+    }
     this.cdRef.markForCheck();
   }
 
