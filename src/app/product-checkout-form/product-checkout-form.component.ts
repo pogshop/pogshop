@@ -72,6 +72,13 @@ export class ProductCheckoutFormComponent {
       this.cdRef.markForCheck();
     });
     this.setupFormSubscriptions();
+    this.checkIfSoldOut();
+  }
+
+  private checkIfSoldOut(): void {
+    if (this.product.inventorySettings?.remainingInventory === 0) {
+      this.checkoutForm.disable();
+    }
   }
 
   ngOnDestroy(): void {
@@ -129,8 +136,13 @@ export class ProductCheckoutFormComponent {
   }
 
   increaseQuantity(): void {
-    const currentQuantity = this.checkoutForm.get('quantity')?.value || 1;
-    if (currentQuantity < 10000) {
+    const currentQuantity = this.checkoutForm.get('quantity')?.value;
+    const maxQuantity =
+      this.product.inventorySettings?.remainingInventory ?? 10000;
+    if (currentQuantity >= maxQuantity) {
+      return;
+    }
+    if (currentQuantity <= maxQuantity) {
       this.checkoutForm.patchValue({ quantity: currentQuantity + 1 });
     }
     this.cdRef.markForCheck();
@@ -138,6 +150,9 @@ export class ProductCheckoutFormComponent {
 
   decreaseQuantity(): void {
     const currentQuantity = this.checkoutForm.get('quantity')?.value || 1;
+    if (currentQuantity == 1) {
+      return;
+    }
     if (currentQuantity > 1) {
       this.checkoutForm.patchValue({ quantity: currentQuantity - 1 });
     }

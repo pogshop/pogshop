@@ -99,7 +99,7 @@ export class ProductCreationFormComponent {
           this.product?.inventorySettings?.requiresShipping || false,
         ],
         remainingInventory: [
-          this.product?.inventorySettings?.remainingInventory || null,
+          this.product?.inventorySettings?.remainingInventory ?? null,
         ],
         dailyLimit: [this.product?.inventorySettings?.dailyLimit || null],
       }),
@@ -118,6 +118,9 @@ export class ProductCreationFormComponent {
 
     if (this.product) {
       this.productForm.patchValue(this.product);
+      this.isLimitedInventory =
+        this.product.inventorySettings?.remainingInventory !== null;
+
       this.audioPlayer.src =
         this.product.soundEffect?.audioURL ||
         'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3';

@@ -44,12 +44,27 @@ export class ProductCardComponent {
   ProductEventType = ProductEventType;
   PRODUCT_STATUS = PRODUCT_STATUS;
   copiedProductId?: string | null = null;
+  disableProduct: boolean = false;
+  isSoldOut: boolean = false;
 
   constructor(
     private productService: ProductService,
     private cdRef: ChangeDetectorRef,
     private modalService: ModalService
   ) {}
+
+  private displayIfSoldOut(): void {
+    if (this.canEdit) {
+      return;
+    }
+    this.isSoldOut = this.product?.inventorySettings?.remainingInventory == 0;
+    this.disableProduct = this.isSoldOut;
+  }
+
+  ngOnInit(): void {
+    this.displayIfSoldOut();
+    this.cdRef.detectChanges();
+  }
 
   buyProduct(): void {
     this.modalService.open(ProductCheckoutFormComponent, {
@@ -72,6 +87,7 @@ export class ProductCardComponent {
         })
         .subscribe({
           next: () => {
+            this.disableProduct = !!this.product?.isHidden;
             this.cdRef.detectChanges();
           },
         });
