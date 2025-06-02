@@ -256,7 +256,10 @@
         ></div>
       </button>
     </div>
-    <div *ngIf="hasDailyLimit" class="flex space-between grow w-full">
+    <div
+      *ngIf="hasDailyLimit"
+      class="lg:flex-row flex space-between grow w-full flex-col lg:space-y-0 space-y-4"
+    >
       <div>
         <label class="block font-medium text-gray-100 mb-2"
           >How many per day?</label
@@ -268,7 +271,7 @@
           class="w-full bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
       </div>
-      <div class="ml-4 flex flex-col justify-center items-end grow">
+      <div class="ml-4 flex flex-col lg:items-end grow items-center">
         <label class="block font-medium text-gray-100 mb-2"
           >Total purchased today:
           {{

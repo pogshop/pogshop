@@ -238,7 +238,7 @@ export class ProductCheckoutFormComponent {
   }
 
   getServiceFee(): number {
-    return this.getSubtotal() * 0.2; // 20% service fee
+    return this.getSubtotal() * 0.2;
   }
 
   getTotalPrice(): string {

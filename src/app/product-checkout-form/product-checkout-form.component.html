@@ -32,24 +32,26 @@
       <div class="md:flex-1">
         <!-- Product Header -->
         <div class="flex items-center mb-6">
-          <div
-            class="w-16 h-16 mr-4 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
-          >
-            <img
-              [src]="product.imageURLs[0]"
-              class="w-full h-full object-cover"
-            />
+          <div class="flex flex-col items-center gap-4">
+            <div
+              class="w-16 h-16 mr-4 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
+            >
+              <img
+                [src]="product.imageURLs[0]"
+                class="w-full h-full object-cover"
+              />
+            </div>
           </div>
           <div class="flex-1">
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-800 text-purple-100"
+              *ngIf="remainingQuantity && remainingQuantity > 0"
+            >
+              {{ remainingQuantity }} left
+              {{ product.inventorySettings.dailyLimit ? "today" : "" }}
+            </span>
             <div class="flex items-center gap-2">
               <h3 class="text-xl font-bold text-white">{{ product.name }}</h3>
-              <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-800 text-purple-100"
-                *ngIf="remainingQuantity && remainingQuantity > 0"
-              >
-                {{ remainingQuantity }} left
-                {{ product.inventorySettings.dailyLimit ? "today" : "" }}!
-              </span>
             </div>
             <p
               class="text-purple-400 font-semibold mt-1"
@@ -211,13 +213,15 @@
           </div>
 
           <!-- Order Summary -->
-          <div class="bg-gray-700 rounded-lg p-4 mb-6">
+          <div class="bg-gray-700 rounded-lg p-4 mb-6 w-full">
             <h4 class="font-semibold text-white mb-3">Order Summary</h4>
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-300"
-                  >{{ product.name }} ×
-                  {{ checkoutForm.get("quantity")?.value }}</span
+                <span class="text-gray-300 truncate max-w-64"
+                  >{{ product.name }}
+                </span>
+                <span class="text-gray-300 mx-2 w-16 text-right">
+                  x {{ checkoutForm.get("quantity")?.value }}</span
                 >
                 <span class="text-white"
                   >${{ (getPricePerUnit() * getQuantity()).toFixed(2) }}</span
