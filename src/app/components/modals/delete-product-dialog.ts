@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  Output,
+  HostListener,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MODAL_DATA, ModalRef } from '../../services/modal-service.service';
 import { ProductService } from '../../services/product.service';
@@ -19,6 +26,11 @@ export class DeleteProductDialogComponent {
     private productService: ProductService,
     private modalRef: ModalRef<DeleteProductDialogComponent, boolean>
   ) {}
+
+  @HostListener('document:keydown.enter')
+  onEnterKey(): void {
+    this.onConfirm();
+  }
 
   onConfirm(): void {
     this.productService.deleteProduct(this.data.productId);

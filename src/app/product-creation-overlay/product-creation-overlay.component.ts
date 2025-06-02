@@ -67,7 +67,30 @@ export class ProductCreationOverlayComponent {
   }
 
   onProductFormUpdated(updatedProduct?: Product) {
-    this.product = { ...this.product, ...updatedProduct } as Product;
+    this.product = {
+      ...this.product,
+      ...updatedProduct,
+      inventorySettings: {
+        ...this.product?.inventorySettings,
+        ...updatedProduct?.inventorySettings,
+      },
+      purchaseSettings: {
+        ...this.product?.purchaseSettings,
+        ...updatedProduct?.purchaseSettings,
+      },
+      soundEffect: {
+        ...this.product?.soundEffect,
+        ...updatedProduct?.soundEffect,
+      },
+    } as Product;
+
+    if (!this.product.inventorySettings?.dailyLimit) {
+      this.product.inventorySettings = {
+        ...this.product.inventorySettings,
+        purchasedToday: 0,
+        firstPurchaseTodayAt: null,
+      };
+    }
     this.cdRef.detectChanges();
   }
 

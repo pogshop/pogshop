@@ -121,6 +121,8 @@ export class ProductCreationFormComponent {
       this.isLimitedInventory =
         this.product.inventorySettings?.remainingInventory !== null;
 
+      this.hasDailyLimit = this.product.inventorySettings?.dailyLimit !== null;
+
       this.audioPlayer.src =
         this.product.soundEffect?.audioURL ||
         'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3';

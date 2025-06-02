@@ -51,6 +51,7 @@ export class ProductCheckoutFormComponent {
   userImageURL = '';
   userHandle = '';
   isQuantityInputEnabled = false;
+  remainingQuantity: number | null = null;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -72,11 +73,49 @@ export class ProductCheckoutFormComponent {
       this.cdRef.markForCheck();
     });
     this.setupFormSubscriptions();
+    this.getRemainingQuantity();
     this.checkIfSoldOut();
+  }
+
+  private getRemainingQuantity(): void {
+    if (this.product.inventorySettings?.remainingInventory) {
+      this.remainingQuantity =
+        this.product.inventorySettings.remainingInventory;
+    }
+    if (this.canResetDailyPurchaseLimit()) {
+      this.remainingQuantity =
+        this.product?.inventorySettings?.dailyLimit ?? null;
+    } else if (this.product.inventorySettings?.dailyLimit) {
+      this.remainingQuantity =
+        this.product.inventorySettings.dailyLimit -
+        (this.product.inventorySettings.purchasedToday || 0);
+    }
+  }
+
+  private canResetDailyPurchaseLimit(): boolean {
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+    const firstPurchaseTodayAt =
+      this.product?.inventorySettings?.firstPurchaseTodayAt;
+
+    if (!firstPurchaseTodayAt) {
+      return false;
+    }
+    return (
+      Date.now() - new Date(firstPurchaseTodayAt).getTime() >= twentyFourHours
+    );
   }
 
   private checkIfSoldOut(): void {
     if (this.product.inventorySettings?.remainingInventory === 0) {
+      this.checkoutForm.disable();
+    }
+    if (this.canResetDailyPurchaseLimit()) {
+      this.checkoutForm.enable();
+    } else if (
+      this.product?.inventorySettings?.dailyLimit &&
+      this.product?.inventorySettings?.dailyLimit <=
+        this.product?.inventorySettings?.purchasedToday
+    ) {
       this.checkoutForm.disable();
     }
   }
@@ -126,9 +165,10 @@ export class ProductCheckoutFormComponent {
       .get('quantity')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        if (value > 1000) {
+        const purchaseLimit = this.remainingQuantity ?? 999;
+        if (value > purchaseLimit) {
           this.checkoutForm.patchValue(
-            { quantity: 1000 },
+            { quantity: purchaseLimit },
             { emitEvent: false }
           );
         }
@@ -137,8 +177,7 @@ export class ProductCheckoutFormComponent {
 
   increaseQuantity(): void {
     const currentQuantity = this.checkoutForm.get('quantity')?.value;
-    const maxQuantity =
-      this.product.inventorySettings?.remainingInventory ?? 10000;
+    const maxQuantity = this.remainingQuantity ?? 10000;
     if (currentQuantity >= maxQuantity) {
       return;
     }
@@ -150,13 +189,9 @@ export class ProductCheckoutFormComponent {
 
   decreaseQuantity(): void {
     const currentQuantity = this.checkoutForm.get('quantity')?.value || 1;
-    if (currentQuantity == 1) {
-      return;
-    }
     if (currentQuantity > 1) {
       this.checkoutForm.patchValue({ quantity: currentQuantity - 1 });
     }
-    this.cdRef.markForCheck();
   }
 
   selectTipAmount(amount: number): void {

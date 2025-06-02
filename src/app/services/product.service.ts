@@ -40,6 +40,8 @@ export type Product = {
     requiresShipping: boolean;
     remainingInventory: number | null;
     dailyLimit: number | null;
+    purchasedToday: number;
+    firstPurchaseTodayAt: number | null;
   };
   soundEffect: {
     audioURL: string | null;

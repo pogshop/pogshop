@@ -29,7 +29,8 @@ export class ProductCardActionsComponent {
     private cdRef: ChangeDetectorRef
   ) {}
 
-  onEditProduct(): void {
+  onEditProduct(event: MouseEvent): void {
+    (event.target as HTMLButtonElement).blur();
     this.modalService.open(ProductCreationOverlayComponent, {
       closeOnBackdropClick: true,
       width: 'fit-content',
@@ -39,7 +40,8 @@ export class ProductCardActionsComponent {
     });
   }
 
-  copyProductLink(): void {
+  copyProductLink(event: MouseEvent): void {
+    (event.target as HTMLButtonElement).blur();
     navigator.clipboard.writeText(`${window.location.href}`);
     this.copied = true;
     setTimeout(() => {
@@ -48,11 +50,14 @@ export class ProductCardActionsComponent {
     }, 1000);
   }
 
-  testAlert(): void {
+  testAlert(event: MouseEvent): void {
+    (event.target as HTMLButtonElement).blur();
     // this.productService.testAlert(this.product.id);
   }
 
-  deleteProduct(): void {
+  deleteProduct(event: MouseEvent): void {
+    (event.target as HTMLButtonElement).blur();
+
     this.modalService.open(DeleteProductDialogComponent, {
       closeOnBackdropClick: true,
       width: 'fit-content',
