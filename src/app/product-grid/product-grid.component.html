@@ -11,6 +11,7 @@
         *ngIf="canEdit || !product.isHidden"
         [canEdit]="canEdit"
         [product]="product"
+        [timeUntilAvailable]="timeUntilAvailableMap.get(product.id) || ''"
       >
         <app-product-card-actions
           *ngIf="canEdit"
