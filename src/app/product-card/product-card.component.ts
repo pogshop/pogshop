@@ -92,8 +92,6 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log('remainingInventory', this.remainingInventory);
-    console.log(this.product);
     // Update disabled state based on remaining inventory
     this.disableProduct = !this.canEdit && this.remainingInventory === 0;
     this.cdRef.markForCheck();
