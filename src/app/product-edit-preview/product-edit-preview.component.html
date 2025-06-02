@@ -5,7 +5,10 @@
     <div class="mb-6">
       <h4 class="text-sm font-medium text-gray-400 mb-3">Shop Preview</h4>
       <div class="max-w-[300px] mx-auto">
-        <app-product-card [product]="product"></app-product-card>
+        <app-product-card
+          [product]="product"
+          [timeUntilAvailable]="timeUntilAvailable"
+        ></app-product-card>
       </div>
     </div>
 

@@ -256,16 +256,32 @@
         ></div>
       </button>
     </div>
-    <div *ngIf="hasDailyLimit">
-      <label class="block font-medium text-gray-100 mb-2"
-        >How many per day?</label
-      >
-      <input
-        type="number"
-        formControlName="dailyLimit"
-        placeholder="Enter daily limit"
-        class="w-full bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
-      />
+    <div *ngIf="hasDailyLimit" class="flex space-between grow w-full">
+      <div>
+        <label class="block font-medium text-gray-100 mb-2"
+          >How many per day?</label
+        >
+        <input
+          type="number"
+          formControlName="dailyLimit"
+          placeholder="Enter daily limit"
+          class="w-full bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+      </div>
+      <div class="ml-4 flex flex-col justify-center items-end grow">
+        <label class="block font-medium text-gray-100 mb-2"
+          >Total purchased today:
+          {{
+            productForm.get("inventorySettings.purchasedToday")?.value || 0
+          }}</label
+        >
+        <button
+          class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-500"
+          (click)="resetPurchaseCount()"
+        >
+          Reset today's purchase count
+        </button>
+      </div>
     </div>
   </div>
 

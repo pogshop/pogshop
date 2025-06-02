@@ -148,7 +148,7 @@
               ></path>
             </svg>
             @if(canEdit) {
-            <span>Buy Now</span>
+            <span>Preview Purchase</span>
             } @else if(remainingInventory === 0 &&
             product?.inventorySettings?.dailyLimit ) {
             <span>Available in {{ timeUntilAvailable }}</span>

@@ -101,6 +101,7 @@ export class ProductCreationFormComponent {
         remainingInventory: [
           this.product?.inventorySettings?.remainingInventory ?? null,
         ],
+        purchasedToday: [this.product?.inventorySettings?.purchasedToday || 0],
         dailyLimit: [this.product?.inventorySettings?.dailyLimit || null],
       }),
       soundEffect: this.fb.group({
@@ -158,6 +159,11 @@ export class ProductCreationFormComponent {
       this.audioPlayer.pause();
       this.audioPlayer.currentTime = 0;
     }
+  }
+
+  resetPurchaseCount() {
+    this.productForm.get('inventorySettings.purchasedToday')?.setValue(0);
+    this.cdRef.detectChanges();
   }
 
   toggleCollectShipping() {

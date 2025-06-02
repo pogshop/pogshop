@@ -93,6 +93,14 @@ export class ProductGridComponent implements OnInit, OnDestroy {
         return;
       }
 
+      const purchasedCount = product.inventorySettings.purchasedToday || 0;
+      const dailyLimit = product.inventorySettings.dailyLimit;
+
+      if (purchasedCount < dailyLimit) {
+        this.timeUntilAvailableMap.set(product.id, '');
+        return;
+      }
+
       const remainingMs = twentyFourHours - timeDiff;
       const hours = Math.floor(remainingMs / (1000 * 60 * 60));
       const minutes = Math.floor(
