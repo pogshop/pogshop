@@ -15,6 +15,8 @@ import {
 } from '../services/product.service';
 import { Subject } from 'rxjs';
 import { ProductCheckoutFormComponent } from '../product-checkout-form/product-checkout-form.component';
+import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-stream-alert-dialog';
+import { UsersService } from '../services/users-service.service';
 
 export enum ProductEventType {
   CREATE = 'CREATE',
@@ -50,15 +52,22 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   copiedProductId?: string | null = null;
   disableProduct: boolean = false;
   remainingInventory: number | null = null;
+  showSoundModal: boolean = false;
+  user: any;
   private destroy$ = new Subject<void>();
-
   constructor(
     private productService: ProductService,
     private cdRef: ChangeDetectorRef,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private usersService: UsersService
   ) {}
 
   ngOnInit(): void {
+    this.usersService
+      .getUserById(this.product?.userId || '')
+      .subscribe((user) => {
+        this.user = user;
+      });
     this.updateInventoryState();
     this.cdRef.markForCheck();
   }
@@ -88,6 +97,18 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     // Update disabled state based on remaining inventory
     this.disableProduct = !this.canEdit && this.remainingInventory === 0;
     this.cdRef.markForCheck();
+  }
+
+  testAlert(): void {
+    this.modalService.open(SimpleStreamAlertDialogComponent, {
+      data: {
+        displayImage: this.product?.imageURLs?.[0],
+        displayUsername: 'SuperPog420',
+        displayProductName: this.product?.name,
+        displayHandle: this.user?.handle || 'poggers',
+        audioURL: this.product?.soundEffect.audioURL,
+      },
+    });
   }
 
   ngOnDestroy(): void {

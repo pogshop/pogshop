@@ -2,15 +2,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
-  Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product, ProductService } from '../services/product.service';
+import { Product } from '../services/product.service';
 import { ModalService } from '../services/modal-service.service';
 import { ProductCreationOverlayComponent } from '../product-creation-overlay/product-creation-overlay.component';
 import { DeleteProductDialogComponent } from '../components/modals/delete-product-dialog';
+import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-stream-alert-dialog';
+import { UsersService } from '../services/users-service.service';
 
 @Component({
   selector: 'app-product-card-actions',
@@ -22,12 +22,22 @@ import { DeleteProductDialogComponent } from '../components/modals/delete-produc
 })
 export class ProductCardActionsComponent {
   @Input() product?: Product;
+  playAlert = false;
   copied = false;
+  user: any;
   constructor(
+    private usersService: UsersService,
     private modalService: ModalService,
-    private productService: ProductService,
     private cdRef: ChangeDetectorRef
   ) {}
+
+  ngOnInit() {
+    this.usersService
+      .getUserById(this.product?.userId || '')
+      .subscribe((user) => {
+        this.user = user;
+      });
+  }
 
   onEditProduct(event: MouseEvent): void {
     (event.target as HTMLButtonElement).blur();
@@ -52,7 +62,18 @@ export class ProductCardActionsComponent {
 
   testAlert(event: MouseEvent): void {
     (event.target as HTMLButtonElement).blur();
-    // this.productService.testAlert(this.product.id);
+
+    this.modalService.open(SimpleStreamAlertDialogComponent, {
+      closeOnBackdropClick: true,
+      width: 'fit-content',
+      data: {
+        displayImage: this.product?.imageURLs?.[0],
+        displayUsername: 'SuperPog420',
+        displayProductName: this.product?.name,
+        displayHandle: this.user?.handle || 'poggers',
+        audioURL: this.product?.soundEffect.audioURL,
+      },
+    });
   }
 
   deleteProduct(event: MouseEvent): void {

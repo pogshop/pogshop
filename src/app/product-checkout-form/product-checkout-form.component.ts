@@ -16,9 +16,14 @@ import {
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Product } from '../services/product.service';
-import { MODAL_DATA, ModalRef } from '../services/modal-service.service';
+import {
+  MODAL_DATA,
+  ModalRef,
+  ModalService,
+} from '../services/modal-service.service';
 import { UsersService } from '../services/users-service.service';
 import { OrdersService } from '../services/orders-service.service';
+import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-stream-alert-dialog';
 
 export interface ProductCheckoutFormDialogData {
   product: Product;
@@ -60,7 +65,8 @@ export class ProductCheckoutFormComponent {
     private modalRef: ModalRef<ProductCheckoutFormComponent, boolean>,
     private cdRef: ChangeDetectorRef,
     private usersService: UsersService,
-    private ordersService: OrdersService
+    private ordersService: OrdersService,
+    private modalService: ModalService
   ) {
     this.product = this.data.product;
   }
@@ -294,5 +300,21 @@ export class ProductCheckoutFormComponent {
 
   get quantityControl() {
     return this.checkoutForm.get('quantity') as FormControl;
+  }
+
+  testAlert(event: MouseEvent): void {
+    event.stopPropagation();
+    this.modalService.open(SimpleStreamAlertDialogComponent, {
+      data: {
+        displayImage: this.product?.imageURLs?.[0],
+        displayUsername:
+          this.checkoutForm.get('buyerUsername')?.value || 'SuperPog420',
+        displayProductName: this.product?.name,
+        displayHandle: this.userHandle,
+        audioURL: this.product?.soundEffect.audioURL,
+      },
+      closeOnBackdropClick: true,
+      width: 'fit-content',
+    });
   }
 }
