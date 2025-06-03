@@ -220,11 +220,12 @@
                 <span class="text-gray-300 truncate max-w-64"
                   >{{ product.name }}
                 </span>
-                <span class="text-gray-300 mx-2 w-16 text-right">
-                  x {{ checkoutForm.get("quantity")?.value }}</span
-                >
-                <span class="text-white"
-                  >${{ (getPricePerUnit() * getQuantity()).toFixed(2) }}</span
+
+                <span class="text-white">
+                  <span class="text-gray-300 mx-2 w-16 text-right">
+                    x {{ checkoutForm.get("quantity")?.value }}</span
+                  >
+                  ${{ (getPricePerUnit() * getQuantity()).toFixed(2) }}</span
                 >
               </div>
 
