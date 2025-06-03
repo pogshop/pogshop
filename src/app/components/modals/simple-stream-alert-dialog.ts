@@ -27,15 +27,18 @@ export class SimpleStreamAlertDialogComponent {
     this.audio = new Audio();
   }
 
+  close() {
+    this.audio.pause();
+    this.modalRef.close();
+  }
+
   ngOnInit() {
     this.audio = new Audio(
       this.data.audioURL ||
         'https://cdn.pogshop.gg/assets/default_sale_alert.mp3'
     );
     this.audio.onended = () => {
-      this.modalRef.close(() => {
-        this.audio.pause();
-      });
+      this.close();
     };
     this.audio.play();
   }

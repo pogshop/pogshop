@@ -1,5 +1,11 @@
-<div class="fixed inset-0 flex items-center justify-center p-4">
-  <div class="max-w-full transition-all ease-in-out duration-300 w-xl mx-auto">
+<div
+  class="fixed inset-0 flex items-center justify-center p-4 opacity-90 backdrop-blur-xs transition-opacity duration-300"
+  (click)="close()"
+>
+  <div
+    class="max-w-full transition-all ease-in-out duration-300 w-xl mx-auto"
+    (click)="$event.stopPropagation()"
+  >
     <app-simple-stream-alert
       [displayImage]="data.displayImage"
       [displayUsername]="data.displayUsername"
