@@ -20,11 +20,15 @@ export interface SimpleStreamAlertDialogData {
 })
 export class SimpleStreamAlertDialogComponent {
   audio: HTMLAudioElement;
+  private minimumDisplayTime = 1500; // 3 seconds in milliseconds
+  private startTime: number;
+
   constructor(
     @Inject(MODAL_DATA) public data: SimpleStreamAlertDialogData,
     private modalRef: ModalRef<SimpleStreamAlertDialogComponent>
   ) {
     this.audio = new Audio();
+    this.startTime = Date.now();
   }
 
   close() {
@@ -38,7 +42,16 @@ export class SimpleStreamAlertDialogComponent {
         'https://cdn.pogshop.gg/assets/default_sale_alert.mp3'
     );
     this.audio.onended = () => {
-      this.close();
+      const elapsedTime = Date.now() - this.startTime;
+      const remainingTime = Math.max(0, this.minimumDisplayTime - elapsedTime);
+
+      if (remainingTime > 0) {
+        setTimeout(() => {
+          this.close();
+        }, remainingTime);
+      } else {
+        this.close();
+      }
     };
     this.audio.play();
   }

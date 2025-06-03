@@ -96,6 +96,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
       const purchasedCount = product.inventorySettings.purchasedToday || 0;
       const dailyLimit = product.inventorySettings.dailyLimit;
 
+      // Time until available is not set if the product can still be purchased today
       if (purchasedCount < dailyLimit) {
         this.timeUntilAvailableMap.set(product.id, '');
         return;
