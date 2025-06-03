@@ -108,6 +108,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
         displayHandle: this.user?.handle || 'poggers',
         audioURL: this.product?.soundEffect.audioURL,
       },
+      closeOnBackdropClick: true,
     });
   }
 
