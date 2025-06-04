@@ -212,7 +212,10 @@
             <div
               class="w-32 h-32 rounded-full overflow-hidden bg-purple-600 flex items-center justify-center flex"
             >
-              <img [src]="userImageURL" class="w-full h-full object-cover" />
+              <img
+                [src]="userImageURL || 'assets/profile_placeholder.jpg'"
+                class="w-full h-full object-cover"
+              />
             </div>
           </div>
 
