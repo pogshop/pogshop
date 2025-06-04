@@ -27,10 +27,9 @@ export class OrdersService {
   createCheckoutSession(
     request: CheckoutSessionRequest
   ): Observable<{ url: string }> {
-    return of({ url: 'https://www.twitch.tv/joannemilktea' });
-    // return this.http.post<{ url: string }>(
-    //   `${this.apiUrl}/v1/orders/create-checkout`,
-    //   request
-    // );
+    return this.http.post<{ url: string }>(
+      `${this.apiUrl}/v1/orders/create-checkout`,
+      request
+    );
   }
 }
