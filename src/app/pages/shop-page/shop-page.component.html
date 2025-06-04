@@ -29,8 +29,9 @@
     ></span>
   </div>
 </div>
-} @else {
+} @else { @if(showNavBar) {
 <app-shop-nav-bar [currentTab]="TABS.SHOP"></app-shop-nav-bar>
+}
 
 <app-creator-banner
   [canEditProfile]="canEdit"

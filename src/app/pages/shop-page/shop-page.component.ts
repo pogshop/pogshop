@@ -12,8 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
 import { CommonModule } from '@angular/common';
 import { Product, ProductService } from '../../services/product.service';
-import { ProductCreationOverlayComponent } from '../../product-creation-overlay/product-creation-overlay.component';
-import { ModalService } from '../../services/modal-service.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-shop-page',
@@ -34,6 +33,7 @@ export class ShopPageComponent {
   authUser: any;
   isProductCreationOverlayOpen = false;
   products: Product[] = [];
+  showNavBar = true;
 
   private usersObservable?: Observable<[any, any]>;
 
@@ -47,6 +47,10 @@ export class ShopPageComponent {
     this.route.url.pipe(take(1)).subscribe((params) => {
       this.initializeProducts();
     });
+
+    if (environment.production) {
+      this.showNavBar = false;
+    }
   }
 
   private loadAllProducts(userId: string) {
