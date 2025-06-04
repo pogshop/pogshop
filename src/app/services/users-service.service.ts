@@ -121,6 +121,10 @@ export class UsersService {
       return of(this.getUserCache.get(id));
     }
 
+    if (!id) {
+      return of(null);
+    }
+
     return from(getDoc(doc(this.firestore, 'users', id))).pipe(
       map((docSnap) => {
         if (!docSnap.exists()) {

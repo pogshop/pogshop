@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class StripeService {
-  private apiUrl = `${environment.stripeApiUrl}`;
+  private apiUrl = `${environment.apiUrl}/v1/stripe`;
 
   constructor(private http: HttpClient) {}
 

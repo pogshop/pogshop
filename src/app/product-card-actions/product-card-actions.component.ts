@@ -32,6 +32,10 @@ export class ProductCardActionsComponent {
   ) {}
 
   ngOnInit() {
+    if (!this.product?.userId) {
+      return;
+    }
+
     this.usersService
       .getUserById(this.product?.userId || '')
       .subscribe((user) => {

@@ -29,6 +29,8 @@ import {
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { authInterceptor } from './interceptors/auth-interceptor.interceptor';
+import { localHostInterceptor } from './interceptors/localhost-interceptor.interceptor';
+import { environment } from '../environments/environment';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAPo4fJ30Lf0E7NntJ3lIbCyaNJ5UY_gdI',
@@ -40,6 +42,13 @@ const firebaseConfig = {
   measurementId: 'G-TT552FSCR9',
 };
 
+const DEVELOPMENT_FIRESTORE_NAME = 'pogshop-test';
+const PRODUCTION_FIRESTORE_NAME = 'pogshop-prod';
+
+const firestoreName = environment.production
+  ? PRODUCTION_FIRESTORE_NAME
+  : DEVELOPMENT_FIRESTORE_NAME;
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -49,7 +58,9 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules),
       withRouterConfig({ onSameUrlNavigation: 'reload' })
     ),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withInterceptors([authInterceptor, localHostInterceptor])
+    ),
     importProvidersFrom(
       LucideAngularModule.pick({
         DollarSign,
@@ -68,6 +79,6 @@ export const appConfig: ApplicationConfig = {
       const auth = getAuth();
       return auth;
     }),
-    provideFirestore(() => getFirestore('pogshop-prod')),
+    provideFirestore(() => getFirestore(firestoreName)),
   ],
 };

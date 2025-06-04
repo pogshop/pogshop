@@ -63,11 +63,13 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.usersService
-      .getUserById(this.product?.userId || '')
-      .subscribe((user) => {
-        this.user = user;
-      });
+    if (!this.product?.userId) {
+      return;
+    }
+
+    this.usersService.getUserById(this.product?.userId).subscribe((user) => {
+      this.user = user;
+    });
     this.updateInventoryState();
     this.cdRef.markForCheck();
   }
