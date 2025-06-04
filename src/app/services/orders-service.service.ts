@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 interface Item {
@@ -27,15 +27,10 @@ export class OrdersService {
   createCheckoutSession(
     request: CheckoutSessionRequest
   ): Observable<{ url: string }> {
-    if (!environment.production) {
-      return this.http.post<{ url: string }>(
-        `${this.apiUrl}/v1/test/orders/create-checkout`,
-        request
-      );
-    }
-    return this.http.post<{ url: string }>(
-      `${this.apiUrl}/v1/orders/create-checkout`,
-      request
-    );
+    return of({ url: 'https://www.twitch.tv/joannemilktea' });
+    // return this.http.post<{ url: string }>(
+    //   `${this.apiUrl}/v1/orders/create-checkout`,
+    //   request
+    // );
   }
 }
