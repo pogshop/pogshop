@@ -134,7 +134,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       audioURL: 'https://cdn.pogshop.gg/assets/default_sale_alert.mp3',
       status: 'NEW',
       userId: userId || '',
-      quantity: 5,
+      quantity: 1,
       createdAt: new Date(),
     };
 
@@ -203,10 +203,27 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       this.activeAlerts.filter((a) => a.id === alert.id).length ===
         alert.quantity
     ) {
+      const startTime = Date.now();
+      const minDuration = 5000; // 5 seconds
+
       audio.onended = () => {
-        this.activeAlerts = this.activeAlerts.filter((a) => a.id !== alert.id);
-        this.cdRef.markForCheck();
-        this.stopAudio();
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime < minDuration) {
+          // Display the alert for at least 5 seconds
+          setTimeout(() => {
+            this.activeAlerts = this.activeAlerts.filter(
+              (a) => a.id !== alert.id
+            );
+            this.cdRef.markForCheck();
+            this.stopAudio();
+          }, minDuration - elapsedTime);
+        } else {
+          this.activeAlerts = this.activeAlerts.filter(
+            (a) => a.id !== alert.id
+          );
+          this.cdRef.markForCheck();
+          this.stopAudio();
+        }
       };
     }
 
