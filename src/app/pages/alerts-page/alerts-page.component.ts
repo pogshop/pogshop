@@ -204,12 +204,12 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
         alert.quantity
     ) {
       const startTime = Date.now();
-      const minDuration = 5000; // 5 seconds
+      const minDuration = 7000; // 7 seconds
 
       audio.onended = () => {
         const elapsedTime = Date.now() - startTime;
         if (elapsedTime < minDuration) {
-          // Display the alert for at least 5 seconds
+          // Display the alert for at least 7 seconds
           setTimeout(() => {
             this.activeAlerts = this.activeAlerts.filter(
               (a) => a.id !== alert.id
