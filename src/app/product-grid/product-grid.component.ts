@@ -6,6 +6,8 @@ import {
   OnDestroy,
   OnInit,
   ChangeDetectorRef,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../product-card/product-card.component';
@@ -31,6 +33,8 @@ import { Subject } from 'rxjs';
 export class ProductGridComponent implements OnInit, OnDestroy {
   @Input() productList: Product[] = [];
   @Input() canEdit: boolean = false;
+  @Output() onProductClick = new EventEmitter<Product>();
+
   timeUntilAvailableMap: Map<string, string> = new Map();
   private destroy$ = new Subject<void>();
   private timerId?: number;
@@ -119,5 +123,10 @@ export class ProductGridComponent implements OnInit, OnDestroy {
       );
     });
     this.cdRef.markForCheck();
+  }
+
+  handleProductClick(product: Product) {
+    console.log('handleProductClick', product);
+    this.onProductClick.emit(product);
   }
 }

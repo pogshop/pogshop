@@ -1,0 +1,73 @@
+<div class="max-w-6xl mx-auto p-5 font-sans text-slate-200">
+  <div class="flex items-center justify-start mb-8 py-5" *ngIf="showBackButton">
+    <button
+      class="bg-violet-500/10 border border-violet-500/30 text-violet-400 p-3 rounded-xl cursor-pointer transition-all duration-300 flex items-center justify-center text-lg font-bold w-12 h-12 hover:bg-violet-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"
+      (click)="handleBackClick()"
+      [attr.aria-label]="'Go back'"
+    >
+      {{ backButtonText }}
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+    <div
+      class="bg-white/5 rounded-2xl p-5 text-center border border-white/10 relative overflow-hidden flex items-center justify-center"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-purple-500/10 -z-10"
+      ></div>
+      <img
+        [src]="product.imageURLs[0]"
+        [alt]="product.name"
+        class="max-w-full h-80 object-cover rounded-2xl shadow-2xl"
+      />
+    </div>
+
+    <div class="flex flex-col gap-5">
+      <h1 class="text-3xl font-bold text-slate-100 mb-2">
+        {{ product.name }}
+      </h1>
+
+      <div
+        class="text-2xl font-bold text-violet-400 bg-violet-500/10 px-4 py-2 rounded-xl inline-block w-fit"
+      >
+        ${{ product.price }}
+      </div>
+
+      <div class="flex items-center gap-2 my-2" *ngIf="inStock">
+        <div
+          [ngClass]="{
+            'bg-green-500/20 text-green-400': inStock,
+            'bg-red-500/20 text-red-400': !inStock
+          }"
+          class="px-3 py-1 rounded-full text-sm font-medium"
+        >
+          {{ stockBadgeText }}
+        </div>
+      </div>
+
+      <button
+        class="bg-gradient-to-r from-violet-500 to-purple-500 text-white border-none px-8 py-4 rounded-2xl text-lg font-semibold cursor-pointer transition-all duration-300 relative overflow-hidden hover:-translate-y-0.5 hover:shadow-xl hover:shadow-violet-500/40 active:translate-y-0 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"
+        (click)="handlePurchaseClick()"
+        [disabled]="!inStock"
+        [attr.aria-label]="'Purchase ' + product.name"
+      >
+        {{ inStock ? "Buy Now" : "Out of Stock" }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-6xl mx-auto px-5">
+  <!-- Main Product Description -->
+  <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8">
+    <h3 class="text-lg font-semibold mb-2 text-slate-100">
+      {{ product.name }}
+    </h3>
+    <div class="flex flex-col gap-4">
+      <p class="text-slate-300 leading-relaxed">
+        {{ product.description }}
+      </p>
+    </div>
+  </div>
+</div>

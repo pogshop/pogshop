@@ -13,6 +13,7 @@ import { UsersService } from '../../services/users-service.service';
 import { CommonModule } from '@angular/common';
 import { Product, ProductService } from '../../services/product.service';
 import { environment } from '../../../environments/environment';
+import { ProductDetailsSectionComponent } from '../../product-details-section/product-details-section.component';
 
 @Component({
   selector: 'app-shop-page',
@@ -21,6 +22,7 @@ import { environment } from '../../../environments/environment';
     CreatorBannerComponent,
     ProductGridComponent,
     CommonModule,
+    ProductDetailsSectionComponent,
   ],
   templateUrl: './shop-page.component.html',
   styleUrl: './shop-page.component.scss',
@@ -34,6 +36,8 @@ export class ShopPageComponent {
   isProductCreationOverlayOpen = false;
   products: Product[] = [];
   showNavBar = true;
+
+  selectedProduct: Product | null = null;
 
   private usersObservable?: Observable<[any, any]>;
 
@@ -108,5 +112,13 @@ export class ShopPageComponent {
       }
       this.cdRef.markForCheck();
     });
+  }
+
+  viewProductDetails(product: Product) {
+    this.selectedProduct = product;
+  }
+
+  closeProductDetails() {
+    this.selectedProduct = null;
   }
 }

@@ -20,7 +20,7 @@ export interface SimpleStreamAlertDialogData {
 })
 export class SimpleStreamAlertDialogComponent {
   audio: HTMLAudioElement;
-  private minimumDisplayTime = 1500; // 3 seconds in milliseconds
+  private minimumDisplayTime = 4000; // 3 seconds in milliseconds
   private startTime: number;
 
   constructor(

@@ -2,15 +2,18 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalService } from '../services/modal-service.service';
 import {
   Product,
   PRODUCT_STATUS,
+  PRODUCT_TYPE,
   ProductService,
 } from '../services/product.service';
 import { Subject } from 'rxjs';
@@ -46,6 +49,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   @Input() product?: Product;
   @Input() canEdit: boolean = false;
   @Input() timeUntilAvailable: string = '';
+  @Output() onProductClick = new EventEmitter<Product>();
 
   ProductEventType = ProductEventType;
   PRODUCT_STATUS = PRODUCT_STATUS;
@@ -141,7 +145,13 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  buyProduct(): void {
+  handleBuyProduct(): void {
+    if (this.product?.type === PRODUCT_TYPE.PHYSICAL) {
+      console.log('emitting product', this.product);
+      this.onProductClick.emit(this.product);
+      return;
+    }
+
     this.modalService.open(ProductCheckoutFormComponent, {
       data: {
         product: this.product,
