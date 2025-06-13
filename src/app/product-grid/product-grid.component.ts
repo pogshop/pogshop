@@ -126,7 +126,6 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   }
 
   handleProductClick(product: Product) {
-    console.log('handleProductClick', product);
     this.onProductClick.emit(product);
   }
 }
