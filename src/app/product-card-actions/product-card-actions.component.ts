@@ -91,4 +91,8 @@ export class ProductCardActionsComponent {
       },
     });
   }
+
+  stopPropagation(event: Event): void {
+    event.stopPropagation();
+  }
 }

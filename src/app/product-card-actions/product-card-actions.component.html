@@ -1,4 +1,4 @@
-<div class="flex justify-start space-x-2">
+<div class="flex justify-start space-x-2" (click)="stopPropagation($event)">
   <button
     class="p-2 text-gray-400 hover:text-white rounded-full hover:bg-gray-700 transition-colors"
     (click)="onEditProduct($event)"

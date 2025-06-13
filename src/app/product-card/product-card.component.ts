@@ -145,12 +145,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  handleBuyProduct(): void {
-    if (this.product?.type != PRODUCT_TYPE.INTERACTIVE) {
-      this.onProductClick.emit(this.product);
-      return;
-    }
-
+  handleBuyProduct(event: Event): void {
+    event?.stopPropagation();
     this.modalService.open(ProductCheckoutFormComponent, {
       data: {
         product: this.product,
