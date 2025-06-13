@@ -1,11 +1,11 @@
-<div class="max-w-6xl mx-auto p-5 font-sans text-slate-200">
+<div class="max-w-4xl mx-auto p-5 font-sans text-slate-200">
   <div class="flex items-center justify-start mb-8 py-5" *ngIf="showBackButton">
     <button
-      class="bg-violet-500/10 border border-violet-500/30 text-violet-400 p-3 rounded-xl cursor-pointer transition-all duration-300 flex items-center justify-center text-lg font-bold w-12 h-12 hover:bg-violet-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"
+      class="w-fit bg-violet-500/10 border border-violet-500/30 text-violet-400 p-3 rounded-xl cursor-pointer transition-all duration-300 flex items-center justify-center text-lg font-bold w-12 h-12 hover:bg-violet-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"
       (click)="handleBackClick()"
       [attr.aria-label]="'Go back'"
     >
-      {{ backButtonText }}
+      ← Back
     </button>
   </div>
 
@@ -56,9 +56,6 @@
       </button>
     </div>
   </div>
-</div>
-
-<div class="max-w-6xl mx-auto px-5">
   <!-- Main Product Description -->
   <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8">
     <h3 class="text-lg font-semibold mb-2 text-slate-100">

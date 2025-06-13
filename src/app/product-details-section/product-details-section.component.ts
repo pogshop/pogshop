@@ -23,7 +23,6 @@ export interface ProductInfo {
 export class ProductDetailsSectionComponent {
   @Input() product!: Product;
   @Input() showBackButton: boolean = true;
-  @Input() backButtonText: string = '←';
 
   @Output() onBack = new EventEmitter<void>();
   @Output() onPurchase = new EventEmitter<ProductInfo>();

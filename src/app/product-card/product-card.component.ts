@@ -146,8 +146,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   handleBuyProduct(): void {
-    if (this.product?.type === PRODUCT_TYPE.PHYSICAL) {
-      console.log('emitting product', this.product);
+    if (this.product?.type != PRODUCT_TYPE.INTERACTIVE) {
       this.onProductClick.emit(this.product);
       return;
     }
