@@ -56,7 +56,9 @@ export class ProductCardActionsComponent {
 
   copyProductLink(event: MouseEvent): void {
     (event.target as HTMLButtonElement).blur();
-    navigator.clipboard.writeText(`${window.location.href}`);
+    navigator.clipboard.writeText(
+      `${window.location.href}?productId=${this.product?.id}`
+    );
     this.copied = true;
     setTimeout(() => {
       this.copied = false;

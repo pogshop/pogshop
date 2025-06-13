@@ -141,7 +141,19 @@ export class CreatorBannerComponent {
 
   handleShare(): void {
     this.copied = true;
-    setTimeout(() => (this.copied = false), 2000);
+    let link = '';
+
+    if (this.user?.handle) {
+      link = `${window.location.origin}/${this.user?.handle}`;
+    } else {
+      link = `${window.location.origin}?userId=${this.user?.id}`;
+    }
+
+    navigator.clipboard.writeText(link);
+    setTimeout(() => {
+      this.copied = false;
+      this.cdRef.detectChanges();
+    }, 2000);
   }
 
   triggerFileInput(imageType: IMAGE_TYPE) {

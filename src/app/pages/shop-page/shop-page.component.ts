@@ -11,7 +11,11 @@ import { combineLatest, Observable, take } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
 import { CommonModule } from '@angular/common';
-import { Product, ProductService } from '../../services/product.service';
+import {
+  Product,
+  PRODUCT_STATUS,
+  ProductService,
+} from '../../services/product.service';
 import { environment } from '../../../environments/environment';
 import { ProductDetailsSectionComponent } from '../../product-details-section/product-details-section.component';
 
@@ -34,10 +38,11 @@ export class ShopPageComponent {
   user: any;
   authUser: any;
   isProductCreationOverlayOpen = false;
-  products: Product[] = [];
+  products: Product[] | null = null;
   showNavBar = true;
+  private productId: string | null = null;
 
-  selectedProduct: Product | null = null;
+  viewableSelectedProduct: Product | null = null;
 
   private usersObservable?: Observable<[any, any]>;
 
@@ -55,11 +60,15 @@ export class ShopPageComponent {
     if (environment.production) {
       this.showNavBar = false;
     }
+    this.productId = this.route.snapshot.queryParams['productId'];
   }
 
   private loadAllProducts(userId: string) {
     this.productService.getAllProductsByUserId(userId).subscribe((products) => {
       this.products = products;
+      if (this.productId) {
+        this.setViewableSelectedProduct(this.productId);
+      }
       this.cdRef.markForCheck();
     });
   }
@@ -67,6 +76,9 @@ export class ShopPageComponent {
   private loadPublicProducts(handle: string) {
     this.productService.getPublicProducts(handle).subscribe((products) => {
       this.products = products;
+      if (this.productId) {
+        this.setViewableSelectedProduct(this.productId);
+      }
       this.cdRef.markForCheck();
     });
   }
@@ -114,11 +126,20 @@ export class ShopPageComponent {
     });
   }
 
-  viewProductDetails(product: Product) {
-    this.selectedProduct = product;
+  setViewableSelectedProduct(productId: string) {
+    const product = this.products?.find((p) => p.id === productId);
+    if (!product) {
+      return;
+    }
+    if (this.canEdit) {
+      this.viewableSelectedProduct = product;
+    } else if (product.status === PRODUCT_STATUS.PUBLISHED) {
+      this.viewableSelectedProduct = product;
+    }
   }
 
   closeProductDetails() {
-    this.selectedProduct = null;
+    this.router.navigate([]);
+    this.viewableSelectedProduct = null;
   }
 }

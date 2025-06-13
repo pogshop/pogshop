@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { Product } from '../services/product.service';
 import { ProductCheckoutFormComponent } from '../product-checkout-form/product-checkout-form.component';
 import { ModalService } from '../services/modal-service.service';
@@ -29,8 +35,12 @@ export class ProductDetailsSectionComponent {
 
   inStock: boolean = false;
   stockBadgeText: string = '';
+  linkCopied: boolean = false;
 
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     const remainingInventory =
@@ -58,5 +68,16 @@ export class ProductDetailsSectionComponent {
       closeOnBackdropClick: true,
       width: 'fit-content',
     });
+  }
+
+  handleCopyLink(): void {
+    navigator.clipboard.writeText(
+      `${window.location.href}?productId=${this.product?.id}`
+    );
+    this.linkCopied = true;
+    setTimeout(() => {
+      this.linkCopied = false;
+      this.cdRef.detectChanges();
+    }, 2000);
   }
 }
