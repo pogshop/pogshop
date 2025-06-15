@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
+import { OrdersService } from '../../services/orders-service.service';
 
 export const TABS = {
   INTEGRATION: 'integrations',
@@ -27,16 +28,17 @@ export const TABS = {
 })
 export class ShopNavbarComponent {
   @Input() currentTab: string = TABS.SHOP;
-  @Input() balance: string = '47.93';
   @Output() tabChange = new EventEmitter<string>();
   isMobileMenuOpen = false;
   isOwnShop = true;
   TABS = TABS;
+  balance: number = 0;
 
   constructor(
     private router: Router,
     private usersService: UsersService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ordersService: OrdersService
   ) {
     this.currentTab = this.router.url.split('/')[1];
     // Empty current tab is the home page
@@ -48,6 +50,12 @@ export class ShopNavbarComponent {
       this.isOwnShop = this.getIsOwnShop();
       this.currentTab = TABS.SHOP;
     }
+  }
+
+  ngOnInit() {
+    this.ordersService.getBalances().subscribe((balances) => {
+      this.balance = balances.pendingBalance;
+    });
   }
 
   private getIsOwnShop(): boolean {

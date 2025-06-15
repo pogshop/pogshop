@@ -15,6 +15,7 @@ import {
   Query,
   getDocs,
 } from '@angular/fire/firestore';
+import { catchError, tap } from 'rxjs/operators';
 
 interface Item {
   productId: string;
@@ -29,11 +30,21 @@ export interface CheckoutSessionRequest {
   sellerUserId?: string;
 }
 
+interface CachedBalance {
+  data: {
+    balance: number;
+    pendingBalance: number;
+  };
+  timestamp: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class OrdersService {
   private apiUrl = `${environment.apiUrl}`;
+  private balanceCache: CachedBalance | null = null;
+  private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 
   constructor(private http: HttpClient, private firestore: Firestore) {}
 
@@ -139,10 +150,34 @@ export class OrdersService {
     balance: number;
     pendingBalance: number;
   }> {
-    // UserId is in the auth header.
-    return this.http.post<{
-      balance: number;
-      pendingBalance: number;
-    }>(`${this.apiUrl}/v1/balances/calculate`, {});
+    const now = Date.now();
+
+    // Return cached data if it exists and is not expired
+    if (
+      this.balanceCache &&
+      now - this.balanceCache.timestamp < this.CACHE_DURATION
+    ) {
+      return of(this.balanceCache.data);
+    }
+
+    // If no cache or expired, make the API call
+    return this.http
+      .post<{
+        balance: number;
+        pendingBalance: number;
+      }>(`${this.apiUrl}/v1/balances/calculate`, {})
+      .pipe(
+        tap((data) => {
+          // Update cache with new data
+          this.balanceCache = {
+            data,
+            timestamp: now,
+          };
+        }),
+        catchError((error) => {
+          console.error('Error fetching balances:', error);
+          throw error;
+        })
+      );
   }
 }
