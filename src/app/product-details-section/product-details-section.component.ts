@@ -47,10 +47,19 @@ export class ProductDetailsSectionComponent {
       this.product?.inventorySettings?.remainingInventory;
     const dailyLimit = this.product?.inventorySettings?.dailyLimit;
     const purchasedToday = this.product?.inventorySettings?.purchasedToday;
+    const firstPurchaseTodayAt =
+      this.product?.inventorySettings?.firstPurchaseTodayAt;
     this.inStock = remainingInventory == null || remainingInventory > 0;
 
-    if (dailyLimit != null && purchasedToday >= dailyLimit) {
-      this.inStock = false;
+    if (dailyLimit != null) {
+      const now = new Date().getTime();
+      const timeDiff = now - (firstPurchaseTodayAt || 0);
+      const isPassedOneDay = timeDiff > 24 * 60 * 60 * 1000;
+      if (!isPassedOneDay && purchasedToday >= dailyLimit) {
+        this.inStock = false;
+      } else {
+        this.inStock = true;
+      }
     }
 
     if (!this.inStock) {
