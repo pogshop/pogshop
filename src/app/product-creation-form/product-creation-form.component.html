@@ -167,9 +167,12 @@
       ($)</label
     >
     <input
-      type="text"
+      type="number"
       formControlName="price"
+      (input)="onPriceInput($event)"
       placeholder="0.00"
+      max="100000"
+      min="1"
       class="w-full bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
     />
     <div
@@ -187,6 +190,14 @@
       class="text-red-400 text-xs mt-1"
     >
       Set a price of at least $1
+    </div>
+    <div
+      *ngIf="
+        productForm.get('price')?.errors?.['max'] && productForm.get('price')?.touched
+      "
+      class="text-red-400 text-xs mt-1"
+    >
+      Price must be less than $100,000
     </div>
   </div>
 

@@ -82,6 +82,7 @@ export class ProductCreationFormComponent {
           Validators.required,
           Validators.min(1),
           Validators.pattern(/^\d+(\.\d{1,2})?$/),
+          Validators.max(100000),
         ],
       ],
       description: [this.product?.description || null],
@@ -313,5 +314,18 @@ export class ProductCreationFormComponent {
       this.soundFileInput.nativeElement.value = '';
     }
     this.cdRef.detectChanges();
+  }
+
+  onPriceInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    if (Number(value) > 100000) {
+      input.value = '100000';
+      this.productForm.get('price')?.setValue(100000);
+    }
+    if (Number(value) < 0) {
+      input.value = '0';
+      this.productForm.get('price')?.setValue(0);
+    }
   }
 }
