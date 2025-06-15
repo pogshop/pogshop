@@ -9,6 +9,7 @@ import { DocumentSnapshot } from '@angular/fire/firestore';
 import { PayoutsTableComponent } from '../../payouts-table/payouts-table.component';
 import { DashboardCardComponent } from '../../dashboard-card/dashboard-card.component';
 import { InfoCardComponent } from '../../info-card/info-card.component';
+import { PayoutCardComponent } from '../../payout-card/payout-card.component';
 
 @Component({
   selector: 'app-orders-page',
@@ -20,6 +21,7 @@ import { InfoCardComponent } from '../../info-card/info-card.component';
     PayoutsTableComponent,
     DashboardCardComponent,
     InfoCardComponent,
+    PayoutCardComponent,
   ],
   templateUrl: './orders-page.component.html',
   styleUrl: './orders-page.component.scss',

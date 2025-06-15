@@ -1,0 +1,27 @@
+<div
+  class="bg-gray-800 rounded-lg p-6 border-t-4 border-t-purple-500 hover:border-t-purple-400 transition-colors"
+>
+  <div class="text-xl font-semibold text-white mb-4">Upcoming Payouts</div>
+
+  <div class="space-y-4 flex gap-4 flex-col sm:flex-row">
+    @for (payout of payouts; track payout) {
+    <div class="bg-gray-700/50 rounded-lg p-4 h-full flex-1">
+      <div
+        class="sm:flex sm:justify-between sm:items-start flex-col lg:flex-row"
+      >
+        <div class="text-2xl font-bold text-purple-400">
+          ${{ payout.amount.toFixed(2) }}
+        </div>
+        <div class="space-y-1">
+          <div class="text-sm text-gray-400">
+            For sales up to: {{ payout.payoutCutoffTime | date : "mediumDate" }}
+          </div>
+          <div class="text-base font-medium text-purple-400">
+            Payout date: {{ payout.payoutDate | date : "mediumDate" }}
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>
