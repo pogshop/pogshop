@@ -83,8 +83,6 @@ export class ProductCardActionsComponent {
   }
 
   deleteProduct(event: MouseEvent): void {
-    (event.target as HTMLButtonElement).blur();
-
     this.modalService.open(DeleteProductDialogComponent, {
       closeOnBackdropClick: true,
       width: 'fit-content',

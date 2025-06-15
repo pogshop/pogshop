@@ -71,7 +71,7 @@ export class ProductCreationOverlayComponent {
       ...this.product,
       ...updatedProduct,
       inventorySettings: {
-        ...this.product?.inventorySettings,
+        // Each product type has unique inventory settings. Reset them entirely.
         ...updatedProduct?.inventorySettings,
       },
       purchaseSettings: {

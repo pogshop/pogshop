@@ -135,19 +135,26 @@ export class ProductCreationFormComponent {
       this.productForm.patchValue({
         type,
         digitalLink: '',
-        inventorySettings: {
-          requiresShipping: true,
-        },
+      });
+      this.productForm.get('inventorySettings')?.setValue({
+        requiresShipping: true,
+        remainingInventory: null,
+        purchasedToday: 0,
+        dailyLimit: null,
       });
     } else {
       this.productForm.patchValue({
         type,
         digitalLink: '',
-        inventorySettings: {
-          requiresShipping: false,
-        },
+      });
+      this.productForm.get('inventorySettings')?.setValue({
+        requiresShipping: false,
+        remainingInventory: null,
+        purchasedToday: 0,
+        dailyLimit: null,
       });
     }
+
     this.cdRef.markForCheck();
   }
 

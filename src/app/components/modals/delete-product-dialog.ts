@@ -5,6 +5,9 @@ import {
   Input,
   Output,
   HostListener,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MODAL_DATA, ModalRef } from '../../services/modal-service.service';
@@ -20,12 +23,20 @@ export interface DeleteProductDialogData {
   imports: [CommonModule],
   templateUrl: './delete-product-dialog.html',
 })
-export class DeleteProductDialogComponent {
+export class DeleteProductDialogComponent implements AfterViewInit {
+  @ViewChild('deleteButton') deleteButton?: ElementRef<HTMLButtonElement>;
+
   constructor(
     @Inject(MODAL_DATA) public data: DeleteProductDialogData,
     private productService: ProductService,
     private modalRef: ModalRef<DeleteProductDialogComponent, boolean>
   ) {}
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.deleteButton?.nativeElement.focus();
+    });
+  }
 
   @HostListener('document:keydown.enter')
   onEnterKey(): void {
