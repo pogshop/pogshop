@@ -75,15 +75,20 @@ export class OrdersService {
     }
     const documentSnapshots = await getDocs(q);
 
+    const lineItems = documentSnapshots.docs.map((doc) => doc.data());
     return {
-      lineItems: documentSnapshots.docs.map((doc) => doc.data()),
+      lineItems: lineItems,
       lastDocument: documentSnapshots.docs[documentSnapshots.docs.length - 1],
     };
   }
 
   getLineItemCount(userId: string): Observable<number> {
     const lineItemsRef = collection(this.firestore, 'lineItems');
-    const q = query(lineItemsRef, where('sellerId', '==', userId));
+    const q = query(
+      lineItemsRef,
+      where('sellerId', '==', userId),
+      where('payoutStatus', 'in', ['COMPLETED', 'PAYOUT_PROCESSING_ELIGIBLE'])
+    );
     return from(getCountFromServer(q)).pipe(
       map((snapshot) => snapshot.data().count)
     );
