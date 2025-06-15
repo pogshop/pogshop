@@ -7,14 +7,19 @@ import { OrdersService } from '../../services/orders-service.service';
 import { UsersService } from '../../services/users-service.service';
 import { DocumentSnapshot } from '@angular/fire/firestore';
 import { PayoutsTableComponent } from '../../payouts-table/payouts-table.component';
+import { DashboardCardComponent } from '../../dashboard-card/dashboard-card.component';
+import { InfoCardComponent } from '../../info-card/info-card.component';
 
 @Component({
   selector: 'app-orders-page',
+  standalone: true,
   imports: [
     ShopNavbarComponent,
     StripeBannerComponent,
     OrdersTableComponent,
     PayoutsTableComponent,
+    DashboardCardComponent,
+    InfoCardComponent,
   ],
   templateUrl: './orders-page.component.html',
   styleUrl: './orders-page.component.scss',
@@ -28,6 +33,8 @@ export class OrdersPageComponent {
   payouts: any[] = [];
   totalPayoutsCount: number = 0;
   lastPayoutDocument?: DocumentSnapshot;
+  balances?: any;
+  ABOUT_PAYOUTS_TEXT = ABOUT_PAYOUTS_TEXT;
 
   constructor(
     private ordersService: OrdersService,
@@ -45,6 +52,11 @@ export class OrdersPageComponent {
     await this.loadNextPayoutsPage();
     this.ordersService.getPayoutCount(this.userId).subscribe((count) => {
       this.totalPayoutsCount = count;
+      this.cdRef.detectChanges();
+    });
+
+    this.ordersService.getBalances().subscribe((balances) => {
+      this.balances = balances;
       this.cdRef.detectChanges();
     });
   }
@@ -69,3 +81,6 @@ export class OrdersPageComponent {
       });
   }
 }
+
+const ABOUT_PAYOUTS_TEXT =
+  'Pogshop uses Stripe to process all transactions and securely holds your earnings until you set up a Stripe account. Once connected, your earnings will be automatically transferred to your bank account every two weeks. Pog Shop charges no fees to creators - all processing fees are paid by the fans making purchases.';

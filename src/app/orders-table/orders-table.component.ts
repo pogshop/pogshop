@@ -47,6 +47,7 @@ export class OrdersTableComponent {
       data: {
         shippingDetails: shippingDetails,
       },
+      width: 'fit',
     });
   }
 

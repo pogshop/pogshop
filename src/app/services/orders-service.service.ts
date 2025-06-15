@@ -134,4 +134,15 @@ export class OrdersService {
       map((snapshot) => snapshot.data().count)
     );
   }
+
+  getBalances(): Observable<{
+    balance: number;
+    pendingBalance: number;
+  }> {
+    // UserId is in the auth header.
+    return this.http.post<{
+      balance: number;
+      pendingBalance: number;
+    }>(`${this.apiUrl}/v1/balances/calculate`, {});
+  }
 }

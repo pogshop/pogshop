@@ -1,10 +1,12 @@
 <div class="mb-8">
   <!-- Header with Search and Actions -->
-  <div class="flex justify-between items-center mb-4">
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4"
+  >
     <h2 class="text-xl font-bold text-white">Order History</h2>
 
-    <div class="flex items-center space-x-2">
-      <div class="relative">
+    <div class="flex items-center space-x-2 w-full sm:w-auto">
+      <div class="relative flex-1 sm:flex-none">
         <svg
           class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4"
           fill="none"
@@ -21,7 +23,7 @@
         <input
           type="text"
           placeholder="Search orders..."
-          class="bg-gray-800 text-gray-300 pl-10 pr-4 py-2 rounded-md border border-gray-700 focus:outline-none focus:border-purple-500"
+          class="w-full bg-gray-800 text-gray-300 pl-10 pr-4 py-2 rounded-md border border-gray-700 focus:outline-none focus:border-purple-500"
         />
       </div>
 
@@ -65,93 +67,141 @@
 
   <!-- Orders Table -->
   <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
-    <table class="w-full">
-      <thead>
-        <tr class="border-b border-gray-700">
-          <th class="text-left py-3 px-4 text-gray-400 font-medium">Date</th>
-          <th class="text-left py-3 px-4 text-gray-400 font-medium">
-            Twitch Username
-          </th>
-          <th class="text-left py-3 px-4 text-gray-400 font-medium">Product</th>
-          <th class="text-center py-3 px-4 text-gray-400 font-medium">
-            Quantity
-          </th>
-          <th class="text-right py-3 px-4 text-gray-400 font-medium">
-            Revenue
-          </th>
-          <th class="text-right py-3 px-4 text-gray-400 font-medium">
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (lineItem of renderedLineItems; track $index) {
-        <tr
-          class="border-b border-gray-700 hover:bg-gray-750 transition-colors"
-        >
-          <td class="py-3 px-4 text-gray-300">
-            {{ lineItem.createdAt | date : "MMM d, y, h:mm a" }}
-          </td>
-          <td class="py-3 px-4">
-            <div class="flex items-center">
-              <span class="text-purple-400">{{
-                lineItem.buyerUsername || "Anonymous"
-              }}</span>
-            </div>
-          </td>
-          <td class="py-3 px-4 max-w-[200px]">
-            <div class="truncate flex flex-col">
-              <span class="text-gray-300">{{ lineItem.name }}</span>
-              @if (lineItem?.shippingDetails) {
-              <div class="mt-1 gap-2 flex flex-col inline-flex">
-                <span
-                  class="text-xs px-2 py-0.5 bg-blue-900 text-blue-300 rounded-full w-fit"
-                  >Physical product</span
-                >
-                <button
-                  class="text-xs py-0.5 text-blue-300 rounded-full w-fit hover:cursor-pointer hover:underline"
-                  (click)="viewAddress(lineItem.shippingDetails)"
-                >
-                  View address
-                </button>
+    <!-- Desktop Table -->
+    <div class="hidden sm:block">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-gray-700">
+            <th class="text-left py-3 px-4 text-gray-400 font-medium">Date</th>
+            <th class="text-left py-3 px-4 text-gray-400 font-medium">
+              Twitch Username
+            </th>
+            <th class="text-left py-3 px-4 text-gray-400 font-medium">
+              Product
+            </th>
+            <th class="text-center py-3 px-4 text-gray-400 font-medium">
+              Quantity
+            </th>
+            <th class="text-right py-3 px-4 text-gray-400 font-medium">
+              Revenue
+            </th>
+            <th class="text-right py-3 px-4 text-gray-400 font-medium">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (lineItem of renderedLineItems; track $index) {
+          <tr
+            class="border-b border-gray-700 hover:bg-gray-750 transition-colors"
+          >
+            <td class="py-3 px-4 text-gray-300">
+              {{ lineItem.createdAt | date : "MMM d, y, h:mm a" }}
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex items-center">
+                <span class="text-purple-400">{{
+                  lineItem.buyerUsername || "Anonymous"
+                }}</span>
               </div>
-              }
-            </div>
-          </td>
-          <td class="py-3 px-4 text-center text-gray-300">
-            {{ lineItem.quantity }}
-          </td>
-          <td class="py-3 px-4 text-right font-medium text-white">
-            ${{ lineItem.priceAmount * lineItem.quantity }}
-          </td>
-          <td class="py-3 px-4 text-right"></td>
-        </tr>
-        } @empty {
-        <tr>
-          <td colspan="6" class="py-8 px-4 text-center text-gray-400">
-            No orders found
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+            </td>
+            <td class="py-3 px-4 max-w-[200px]">
+              <div class="truncate flex flex-col">
+                <span class="text-gray-300">{{ lineItem.name }}</span>
+                @if (lineItem?.shippingDetails) {
+                <div class="mt-1 gap-2 flex flex-col inline-flex">
+                  <span
+                    class="text-xs px-2 py-0.5 bg-blue-900 text-blue-300 rounded-full w-fit"
+                    >Physical product</span
+                  >
+                  <button
+                    class="text-xs py-0.5 text-blue-300 rounded-full w-fit hover:cursor-pointer hover:underline"
+                    (click)="viewAddress(lineItem.shippingDetails)"
+                  >
+                    View address
+                  </button>
+                </div>
+                }
+              </div>
+            </td>
+            <td class="py-3 px-4 text-center text-gray-300">
+              {{ lineItem.quantity }}
+            </td>
+            <td class="py-3 px-4 text-right font-medium text-white">
+              ${{ lineItem.priceAmount * lineItem.quantity }}
+            </td>
+            <td class="py-3 px-4 text-right"></td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="py-8 px-4 text-center text-gray-400">
+              No orders found
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="sm:hidden">
+      @for (lineItem of renderedLineItems; track $index) {
+      <div class="border-b border-gray-700 p-4">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-purple-400">{{
+            lineItem.buyerUsername || "Anonymous"
+          }}</span>
+          <span class="text-gray-300">{{
+            lineItem.createdAt | date : "MMM d, y, h:mm a"
+          }}</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-gray-300">{{ lineItem.name }}</span>
+          @if (lineItem?.shippingDetails) {
+          <div class="mt-1 gap-2 flex flex-col">
+            <span
+              class="text-xs px-2 py-0.5 bg-blue-900 text-blue-300 rounded-full w-fit"
+              >Physical product</span
+            >
+            <button
+              class="text-xs py-0.5 text-blue-300 rounded-full w-fit hover:cursor-pointer hover:underline"
+              (click)="viewAddress(lineItem.shippingDetails)"
+            >
+              View address
+            </button>
+          </div>
+          }
+        </div>
+        <div class="flex justify-between items-center text-sm">
+          <span class="text-gray-400">Quantity: {{ lineItem.quantity }}</span>
+          <span class="font-medium text-white"
+            >${{ lineItem.priceAmount * lineItem.quantity }}</span
+          >
+        </div>
+      </div>
+      } @empty {
+      <div class="py-8 px-4 text-center text-gray-400">No orders found</div>
+      }
+    </div>
   </div>
 
   <!-- Pagination -->
-  <div class="flex justify-between items-center mt-4 text-sm text-gray-400">
+  <div
+    class="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mt-4 text-sm text-gray-400"
+  >
     <div>
       Showing {{ 1 + currentPage * pageSize }}-{{
         Math.min((currentPage + 1) * pageSize, totalLineItemCount)
       }}
       of {{ totalLineItemCount }} orders
     </div>
-    <div class="flex items-center space-x-2">
+    <div class="flex items-center w-full sm:w-auto gap-2">
       <button
         (click)="loadPreviousPage($event)"
-        class="p-1 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        class="flex-1 sm:flex-none p-3 sm:p-1 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <svg
-          class="w-4 h-4"
+          class="w-5 h-5 sm:w-4 sm:h-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -167,10 +217,10 @@
 
       <button
         (click)="loadNextPage($event)"
-        class="p-1 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        class="flex-1 sm:flex-none p-3 sm:p-1 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed justify-items-end"
       >
         <svg
-          class="w-4 h-4"
+          class="w-5 h-5 sm:w-4 sm:h-4 self-end"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

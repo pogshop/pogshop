@@ -52,6 +52,7 @@ export class UsersService {
     onIdTokenChanged(this.auth, (user) => {
       if (user) {
         this.getAndSetAuthUserById(user.uid);
+        console.log(user.uid);
       } else {
         this.getAuthUserInProgress$.next(false);
         this.authUser$.next(null);
