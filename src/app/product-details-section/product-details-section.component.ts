@@ -45,7 +45,13 @@ export class ProductDetailsSectionComponent {
   ngOnInit(): void {
     const remainingInventory =
       this.product?.inventorySettings?.remainingInventory;
+    const dailyLimit = this.product?.inventorySettings?.dailyLimit;
+    const purchasedToday = this.product?.inventorySettings?.purchasedToday;
     this.inStock = remainingInventory == null || remainingInventory > 0;
+
+    if (dailyLimit != null && purchasedToday >= dailyLimit) {
+      this.inStock = false;
+    }
 
     if (!this.inStock) {
       this.stockBadgeText = 'Out of Stock';
