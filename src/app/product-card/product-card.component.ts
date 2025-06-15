@@ -84,17 +84,17 @@ export class ProductCardComponent implements OnInit, OnDestroy {
 
   private updateInventoryState(): void {
     if (
-      !this.product?.inventorySettings.dailyLimit &&
-      !this.product?.inventorySettings.remainingInventory
+      !this.product?.inventorySettings?.dailyLimit &&
+      this.product?.inventorySettings?.remainingInventory === null
     ) {
       this.remainingInventory = null;
       return;
     }
 
     // Set remaining inventory based on type
-    if (this.product?.inventorySettings?.remainingInventory) {
+    if (this.product?.inventorySettings?.remainingInventory !== null) {
       this.remainingInventory =
-        this.product.inventorySettings.remainingInventory;
+        this.product?.inventorySettings?.remainingInventory || 0;
     }
 
     const dailyLimit = this.product?.inventorySettings?.dailyLimit;
@@ -102,7 +102,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       this.product?.inventorySettings?.firstPurchaseTodayAt;
 
     if (dailyLimit && !firstPurchaseTodayAt) {
-      this.remainingInventory = this.product.inventorySettings.dailyLimit;
+      this.remainingInventory =
+        this.product?.inventorySettings?.dailyLimit || 0;
     }
 
     if (dailyLimit && firstPurchaseTodayAt) {
@@ -113,10 +114,10 @@ export class ProductCardComponent implements OnInit, OnDestroy {
 
       // If the product has been purchased more than 24 hours ago, reset the remaining inventory to daily limit
       if (timeDiff >= twentyFourHours) {
-        this.remainingInventory = this.product.inventorySettings.dailyLimit;
+        this.remainingInventory = dailyLimit || null;
       } else if (timeDiff < twentyFourHours) {
         const productsRemaining =
-          dailyLimit - this.product.inventorySettings.purchasedToday;
+          dailyLimit - (this.product?.inventorySettings?.purchasedToday || 0);
 
         this.remainingInventory = Math.max(productsRemaining, 0);
       }
