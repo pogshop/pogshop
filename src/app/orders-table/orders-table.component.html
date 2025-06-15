@@ -1,0 +1,188 @@
+<div class="mb-8">
+  <!-- Header with Search and Actions -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold text-white">Order History</h2>
+
+    <div class="flex items-center space-x-2">
+      <div class="relative">
+        <svg
+          class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search orders..."
+          class="bg-gray-800 text-gray-300 pl-10 pr-4 py-2 rounded-md border border-gray-700 focus:outline-none focus:border-purple-500"
+        />
+      </div>
+
+      <button
+        class="bg-gray-800 p-2 rounded-md border border-gray-700 hover:bg-gray-700 transition-colors"
+      >
+        <svg
+          class="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+          ></path>
+        </svg>
+      </button>
+
+      <button
+        class="bg-gray-800 p-2 rounded-md border border-gray-700 hover:bg-gray-700 transition-colors"
+      >
+        <svg
+          class="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-gray-700">
+          <th class="text-left py-3 px-4 text-gray-400 font-medium">Date</th>
+          <th class="text-left py-3 px-4 text-gray-400 font-medium">
+            Twitch Username
+          </th>
+          <th class="text-left py-3 px-4 text-gray-400 font-medium">Product</th>
+          <th class="text-center py-3 px-4 text-gray-400 font-medium">
+            Quantity
+          </th>
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">
+            Revenue
+          </th>
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (lineItem of renderedLineItems; track $index) {
+        <tr
+          class="border-b border-gray-700 hover:bg-gray-750 transition-colors"
+        >
+          <td class="py-3 px-4 text-gray-300">
+            {{ lineItem.createdAt | date : "MMM d, y, h:mm a" }}
+          </td>
+          <td class="py-3 px-4">
+            <div class="flex items-center">
+              <span class="text-purple-400">{{
+                lineItem.buyerUsername || "Anonymous"
+              }}</span>
+            </div>
+          </td>
+          <td class="py-3 px-4 max-w-[200px]">
+            <div class="truncate flex flex-col">
+              <span class="text-gray-300">{{ lineItem.name }}</span>
+              @if (lineItem?.shippingDetails) {
+              <div class="mt-1 gap-2 flex flex-col inline-flex">
+                <span
+                  class="text-xs px-2 py-0.5 bg-blue-900 text-blue-300 rounded-full w-fit"
+                  >Physical</span
+                >
+                <button
+                  class="text-xs py-0.5 text-blue-300 rounded-full w-fit hover:cursor-pointer hover:underline"
+                  (click)="viewAddress(lineItem.shippingDetails)"
+                >
+                  View address
+                </button>
+              </div>
+              }
+            </div>
+          </td>
+          <td class="py-3 px-4 text-center text-gray-300">
+            {{ lineItem.quantity }}
+          </td>
+          <td class="py-3 px-4 text-right font-medium text-white">
+            ${{ lineItem.priceAmount * lineItem.quantity }}
+          </td>
+          <td class="py-3 px-4 text-right"></td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="6" class="py-8 px-4 text-center text-gray-400">
+            No orders found
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-4 text-sm text-gray-400">
+    <div>
+      Showing {{ 1 + currentPage * pageSize }}-{{
+        Math.min((currentPage + 1) * pageSize, totalLineItemCount)
+      }}
+      of {{ totalLineItemCount }} orders
+    </div>
+    <div class="flex items-center space-x-2">
+      <button
+        (click)="loadPreviousPage($event)"
+        class="p-1 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+      </button>
+
+      <button
+        (click)="loadNextPage($event)"
+        class="p-1 rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
