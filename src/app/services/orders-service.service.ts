@@ -65,7 +65,10 @@ export class OrdersService {
       q = query(
         lineItemsRef,
         where('sellerId', '==', userId),
-        where('payoutStatus', 'in', ['COMPLETED', 'PAYOUT_S']),
+        where('payoutStatus', 'in', [
+          'COMPLETED',
+          'PAYOUT_PROCESSING_ELIGIBLE',
+        ]),
         limit(10),
         orderBy('createdAt', 'desc')
       );
