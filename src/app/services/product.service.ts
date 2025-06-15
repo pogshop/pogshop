@@ -25,6 +25,7 @@ export type Product = {
   id: string;
   userId: string;
   name: string;
+  createdAt: number;
   price: string | null;
   description: string;
   imageURLs: string[];

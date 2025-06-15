@@ -48,7 +48,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['productList']) {
       this.productList.sort((a, b) => {
-        return parseFloat(a.price || '0') - parseFloat(b.price || '0');
+        return b.createdAt - a.createdAt;
       });
       this.updateAllTimeDisplays();
     }
