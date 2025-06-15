@@ -71,9 +71,9 @@ export class ProductDetailsSectionComponent {
   }
 
   handleCopyLink(): void {
-    navigator.clipboard.writeText(
-      `${window.location.href}?productId=${this.product?.id}`
-    );
+    const url = new URL(window.location.href);
+    url.searchParams.set('productId', this.product?.id || '');
+    navigator.clipboard.writeText(url.toString());
     this.linkCopied = true;
     setTimeout(() => {
       this.linkCopied = false;
