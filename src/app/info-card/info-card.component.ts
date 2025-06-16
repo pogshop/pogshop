@@ -17,6 +17,7 @@ export class InfoCardComponent {
   @Input() cardTitle: string = '';
   @Input() mainText: string = '';
   @Input() cardColor: CardColor = 'blue';
+  @Input() isLoading: boolean = false;
 
   private colorMap: Record<CardColor, ColorMap> = {
     blue: {

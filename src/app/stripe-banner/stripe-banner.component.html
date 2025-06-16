@@ -1,76 +1,127 @@
 <!-- stripe-connection-banner.component.html -->
 @if(onboardingStatus === OnboardingStatus.INCOMPLETE) {
-<div class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-yellow-500">
+<div
+  class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-yellow-500"
+>
   <div class="flex flex-col sm:flex-row sm:items-start">
-    <div class="bg-yellow-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400">
+    <div
+      class="bg-yellow-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-yellow-400"
+      >
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
     </div>
-    <div class="w-full" >
-      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">Set up Stripe to access your earnings</h3>
+    <div class="w-full">
+      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">
+        Set up Stripe to access your earnings
+      </h3>
       <p class="text-gray-300 mb-4 text-center sm:text-left">
-        Good news! Pog Shop will hold your revenue. To withdraw your earnings, connect a Stripe account now.
+        Good news! Pog Shop will hold your revenue. To withdraw your earnings,
+        connect a Stripe account now.
       </p>
-      
+
       <form [formGroup]="stripeForm">
         <div *ngIf="showCountrySelector">
-          <p class="text-gray-300 mb-2 text-center sm:text-left">Please select your country for payouts to continue with Stripe onboarding:</p>
-          <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3">
+          <p class="text-gray-300 mb-2 text-center sm:text-left">
+            Please select your country for payouts to continue with Stripe
+            onboarding:
+          </p>
+          <div
+            class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3"
+          >
             <div class="relative w-full sm:w-64">
               <!-- Custom Dropdown Button -->
-              <div 
-                (click)="toggleDropdown()" 
+              <div
+                (click)="toggleDropdown()"
                 (blur)="closeDropdown()"
                 class="flex items-center justify-between w-full bg-gray-700 hover:bg-gray-650 text-white px-4 py-2 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent cursor-pointer transition duration-150"
               >
                 <div class="flex items-center">
-                  <span class="mr-2">{{getSelectedCountry().flag}}</span>
-                  <span class="text-white">{{getSelectedCountry().label}}</span>
+                  <span class="mr-2">{{ getSelectedCountry().flag }}</span>
+                  <span class="text-white">{{
+                    getSelectedCountry().label
+                  }}</span>
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" [class.transform]="isDropdownOpen" [class.rotate-180]="isDropdownOpen" class="text-gray-400 transition-transform duration-200">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  [class.transform]="isDropdownOpen"
+                  [class.rotate-180]="isDropdownOpen"
+                  class="text-gray-400 transition-transform duration-200"
+                >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </div>
 
               <!-- Dropdown Menu -->
-              <div 
-                *ngIf="isDropdownOpen" 
+              <div
+                *ngIf="isDropdownOpen"
                 class="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto"
               >
-                <div 
-                  *ngFor="let country of countryOptions" 
-                  (click)="selectCountry(country)" 
+                <div
+                  *ngFor="let country of countryOptions"
+                  (click)="selectCountry(country)"
                   class="flex items-center px-4 py-2 hover:bg-gray-600 cursor-pointer transition duration-150"
-                  [class.bg-gray-600]="getSelectedCountry().value === country.value"
+                  [class.bg-gray-600]="
+                    getSelectedCountry().value === country.value
+                  "
                 >
-                  <span class="mr-2">{{country.flag}}</span>
-                  <span class="text-white">{{country.label}}</span>
+                  <span class="mr-2">{{ country.flag }}</span>
+                  <span class="text-white">{{ country.label }}</span>
                 </div>
               </div>
 
               <!-- Hidden form control for Angular form validation -->
               <select formControlName="country" class="hidden">
-                <option *ngFor="let country of countryOptions" [value]="country.value"></option>
+                <option
+                  *ngFor="let country of countryOptions"
+                  [value]="country.value"
+                ></option>
               </select>
             </div>
-            <button 
+            <button
               type="button"
-              (click)="onContinue()" 
+              (click)="onContinue()"
               class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-150"
             >
               Continue
             </button>
           </div>
         </div>
-        
-        <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3" *ngIf="!showCountrySelector">
-          <div class="w-full sm:w-auto flex items-center justify-center sm:justify-start bg-gray-700 px-3 py-2 rounded-md">
+
+        <div
+          class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3"
+          *ngIf="!showCountrySelector"
+        >
+          <div
+            class="w-full sm:w-auto flex items-center justify-center sm:justify-start bg-gray-700 px-3 py-2 rounded-md"
+          >
             <span class="text-gray-300 mr-2">Country:</span>
-            <span class="font-medium text-white">{{getSelectedCountry().flag}} {{getSelectedCountry().label}}</span>
-            <button 
+            <span class="font-medium text-white"
+              >{{ getSelectedCountry().flag }}
+              {{ getSelectedCountry().label }}</span
+            >
+            <button
               type="button"
               [disabled]="isLoading"
               (click)="onChangeCountry()"
@@ -79,21 +130,52 @@
               Change
             </button>
           </div>
-          <button 
+          <button
             type="button"
-            (click)="onConnectStripe()" 
+            (click)="onConnectStripe()"
             [disabled]="isLoading"
             class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-medium flex items-center justify-center sm:justify-start transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+            <svg
+              *ngIf="!isLoading"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="mr-2"
+            >
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
               <line x1="1" y1="10" x2="23" y2="10"></line>
             </svg>
-            <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <svg
+              *ngIf="isLoading"
+              class="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
-            {{ isLoading ? 'Redirecting to Stripe...' : 'Connect Stripe Account' }}
+            {{
+              isLoading ? "Redirecting to Stripe..." : "Connect Stripe Account"
+            }}
           </button>
         </div>
       </form>
@@ -101,89 +183,175 @@
   </div>
 </div>
 } @else if(onboardingStatus === OnboardingStatus.PENDING) {
-<div class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-yellow-500">
+<div
+  class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-yellow-500"
+>
   <div class="flex flex-col sm:flex-row sm:items-start">
-    <div class="bg-yellow-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-300">
+    <div
+      class="bg-yellow-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-yellow-300"
+      >
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
     </div>
     <div class="w-full">
-      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">Stripe account connection pending</h3>
+      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">
+        Stripe account connection pending
+      </h3>
       <p class="text-gray-300 mb-4 text-center sm:text-left">
         Your Stripe account is being connected. Please check back soon.
       </p>
-    </div>  
+    </div>
   </div>
 </div>
 } @else if(onboardingStatus === OnboardingStatus.COMPLETED) {
 <div class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-green-500">
   <div class="flex flex-col sm:flex-row sm:items-start">
-    <div class="bg-green-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+    <div
+      class="bg-green-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-white"
+      >
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
-      </div>
+    </div>
     <div class="w-full flex justify-between items-start">
       <div>
-        <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">Stripe account connected</h3>
+        <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">
+          Stripe account connected
+        </h3>
         <p class="text-gray-300 mb-4 text-center sm:text-left">
           Your Stripe account is connected and ready for payouts!
         </p>
-        <button 
-          type="button"
-          (click)="onViewPaymentDashboard()" 
-          [disabled]="isLoading"
-          class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium flex items-center justify-center sm:justify-start transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-            <line x1="1" y1="10" x2="23" y2="10"></line>
-          </svg>
-          {{ isLoading ? 'Redirecting to Stripe...' : 'View Payment Dashboard' }}
-        </button>
       </div>
-    </div>  
+      <button
+        type="button"
+        (click)="onViewPaymentDashboard()"
+        [disabled]="isLoading"
+        class="w-full sm:w-auto border border-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium flex items-center justify-center sm:justify-start transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mr-2"
+        >
+          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+          <line x1="1" y1="10" x2="23" y2="10"></line>
+        </svg>
+        {{ isLoading ? "Redirecting to Stripe..." : "View Payment Dashboard" }}
+      </button>
+    </div>
   </div>
 </div>
-}
-@else if(onboardingStatus === OnboardingStatus.ERROR) {
-<div class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-purple-500">
+} @else if(onboardingStatus === OnboardingStatus.ERROR) {
+<div
+  class="bg-gray-800 rounded-lg p-4 sm:p-6 mb-8 border-l-4 border-purple-500"
+>
   <div class="flex flex-col sm:flex-row sm:items-start">
-    <div class="bg-purple-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-300">
+    <div
+      class="bg-purple-600 bg-opacity-20 rounded-full p-3 mb-4 sm:mb-0 sm:mr-4 flex-shrink-0 self-center sm:self-start"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-purple-300"
+      >
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
     </div>
     <div class="w-full">
-      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">Complete your Stripe setup</h3>
+      <h3 class="text-xl font-bold mb-2 text-white text-center sm:text-left">
+        Complete your Stripe setup
+      </h3>
       <p class="text-gray-300 mb-4 text-center sm:text-left">
-        There are outstanding requirements to complete before you can accept payments. Let's get your account fully set up!
+        There are outstanding requirements to complete before you can accept
+        payments. Let's get your account fully set up!
       </p>
-      <button 
+      <button
         type="button"
-        (click)="onConnectStripe()" 
+        (click)="onConnectStripe()"
         [disabled]="isLoading"
         class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-medium flex items-center justify-center sm:justify-start transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <svg
+          *ngIf="!isLoading"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mr-2"
+        >
           <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
           <line x1="1" y1="10" x2="23" y2="10"></line>
         </svg>
-        <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        <svg
+          *ngIf="isLoading"
+          class="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
         </svg>
-        {{ isLoading ? 'Redirecting to Stripe...' : 'Complete Setup' }}
+        {{ isLoading ? "Redirecting to Stripe..." : "Complete Setup" }}
       </button>
     </div>
   </div>
 </div>
 }
-
-        
-

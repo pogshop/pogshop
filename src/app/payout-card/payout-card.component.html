@@ -3,6 +3,13 @@
 >
   <div class="text-xl font-semibold text-white mb-4">Upcoming Payouts</div>
 
+  @if (isLoading) {
+  <div class="flex justify-center items-center py-8">
+    <div
+      class="animate-spin rounded-full h-8 w-8 border-4 border-purple-400 border-t-transparent"
+    ></div>
+  </div>
+  } @else {
   <div class="space-y-4 flex gap-4 flex-col sm:flex-row">
     @for (payout of payouts; track payout) {
     <div class="bg-gray-700/50 rounded-lg p-4 h-full flex-1">
@@ -24,4 +31,5 @@
     </div>
     }
   </div>
+  }
 </div>

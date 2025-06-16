@@ -2,14 +2,17 @@
 <div class="container mx-auto px-4 py-8 flex flex-col gap-4">
   <p class="text-2xl font-bold text-white mb-4">Orders</p>
   <app-stripe-banner></app-stripe-banner>
-  <app-payout-card [payouts]="balances?.payouts"></app-payout-card>
+  <app-payout-card
+    [payouts]="balances?.payouts"
+    [isLoading]="!payoutsLoaded"
+  ></app-payout-card>
   <app-info-card
     [cardTitle]="'About Payouts'"
     [mainText]="ABOUT_PAYOUTS_TEXT"
     [cardColor]="'blue'"
   ></app-info-card>
   <h2 class="text-xl font-bold text-white my-4">Earnings Summary</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
     <app-dashboard-card
       [cardTitle]="'Total Orders'"
       [mainText]="totalLineItemCount.toString()"
@@ -20,12 +23,12 @@
       [mainText]="`$${balances?.pendingBalance?.toString()}`"
       [cardColor]="'green'"
     ></app-dashboard-card>
+    <app-dashboard-card
+      [cardTitle]="'Lifetime Earnings'"
+      [mainText]="`$${balances?.lifetimeEarnings?.toString()}`"
+      [cardColor]="'yellow'"
+    ></app-dashboard-card>
   </div>
-  <app-dashboard-card
-    [cardTitle]="'Lifetime Earnings'"
-    [mainText]="`$${balances?.lifetimeEarnings?.toString()}`"
-    [cardColor]="'yellow'"
-  ></app-dashboard-card>
 
   <app-orders-table
     (onLoadNextPage)="loadNextOrdersPage()"

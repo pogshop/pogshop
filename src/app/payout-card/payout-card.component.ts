@@ -15,4 +15,5 @@ interface PayoutInfo {
 })
 export class PayoutCardComponent {
   @Input() payouts: PayoutInfo[] = [];
+  @Input() isLoading: boolean = false;
 }

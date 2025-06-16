@@ -37,6 +37,7 @@ export class OrdersPageComponent {
   lastPayoutDocument?: DocumentSnapshot;
   balances?: any;
   ABOUT_PAYOUTS_TEXT = ABOUT_PAYOUTS_TEXT;
+  payoutsLoaded = false;
 
   constructor(
     private ordersService: OrdersService,
@@ -46,9 +47,11 @@ export class OrdersPageComponent {
 
   async ngOnInit() {
     this.userId = this.userService.authUser$.value?.id ?? '';
+
     await this.loadNextOrdersPage();
     this.ordersService.getLineItemCount(this.userId).subscribe((count) => {
       this.totalLineItemCount = count;
+
       this.cdRef.detectChanges();
     });
     await this.loadNextPayoutsPage();
@@ -59,6 +62,7 @@ export class OrdersPageComponent {
 
     this.ordersService.getBalances().subscribe((balances) => {
       this.balances = balances;
+      this.payoutsLoaded = true;
       this.cdRef.detectChanges();
     });
   }
