@@ -76,7 +76,7 @@ export class CreateProductSelectorComponent {
 
   onProductSelected(selectedProduct: any) {
     const product = {
-      type: selectedProduct?.type,
+      type: selectedProduct?.type || PRODUCT_TYPE.INTERACTIVE,
       name: selectedProduct?.name,
       price: selectedProduct?.price,
       description: selectedProduct?.description,

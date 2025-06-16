@@ -16,19 +16,28 @@
       <button
         type="button"
         *ngFor="let type of productTypes"
+        (click)="productForm.get('type')?.setValue(type.value)"
         [ngClass]="{
-          'px-4 py-2 rounded-full font-medium transition-colors': true,
+          'px-4 py-2 rounded-md font-medium transition-colors ': true,
+          'bg-green-600':
+            productForm.get('type')?.value === type.value &&
+            type.value === PRODUCT_TYPE.INTERACTIVE,
+          'bg-blue-600':
+            productForm.get('type')?.value === type.value &&
+            type.value === PRODUCT_TYPE.DIGITAL,
           'bg-purple-600 text-white':
-            productForm.get('type')?.value === type.value,
-          'bg-gray-800 text-gray-400 hover:text-gray-100':
+            productForm.get('type')?.value === type.value &&
+            type.value === PRODUCT_TYPE.PHYSICAL,
+          'bg-gray-800 hover:text-gray-100 hover:bg-gray-700':
             productForm.get('type')?.value !== type.value
         }"
-        (click)="selectProductType(type.value)"
       >
         <svg
           class="inline mr-1 w-4 h-4"
           fill="none"
-          stroke="currentColor"
+          [attr.stroke]="
+            productForm.get('type')?.value === type.value ? 'white' : 'gray'
+          "
           viewBox="0 0 24 24"
         >
           <path
@@ -38,7 +47,14 @@
             stroke-width="1.5"
           />
         </svg>
-        {{ type.label }}
+        <span
+          [ngClass]="{
+            'text-gray-400': productForm.get('type')?.value !== type.value,
+            'text-white': productForm.get('type')?.value === type.value
+          }"
+        >
+          {{ type.label }}
+        </span>
       </button>
     </div>
   </div>

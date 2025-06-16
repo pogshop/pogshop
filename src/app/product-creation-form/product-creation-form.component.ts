@@ -116,8 +116,6 @@ export class ProductCreationFormComponent {
       this.productFormStatus.emit(this.productForm.valid);
     });
 
-    this.productForm.updateValueAndValidity();
-
     if (this.product) {
       this.productForm.patchValue(this.product);
       this.isLimitedInventory =
@@ -129,6 +127,9 @@ export class ProductCreationFormComponent {
         this.product.soundEffect?.audioURL ||
         'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3';
     }
+    this.productForm.updateValueAndValidity();
+
+    this.cdRef.markForCheck();
   }
 
   selectProductType(type: PRODUCT_TYPE) {
