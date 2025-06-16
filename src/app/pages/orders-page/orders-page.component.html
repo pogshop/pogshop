@@ -16,17 +16,20 @@
     <app-dashboard-card
       [cardTitle]="'Total Orders'"
       [mainText]="totalLineItemCount.toString()"
+      [isLoading]="!payoutsLoaded"
       [cardColor]="'blue'"
     ></app-dashboard-card>
     <app-dashboard-card
       [cardTitle]="'Pending Balance'"
       [mainText]="`$${balances?.pendingBalance?.toString()}`"
       [cardColor]="'green'"
+      [isLoading]="!payoutsLoaded"
     ></app-dashboard-card>
     <app-dashboard-card
       [cardTitle]="'Lifetime Earnings'"
       [mainText]="`$${balances?.lifetimeEarnings?.toString()}`"
       [cardColor]="'yellow'"
+      [isLoading]="!payoutsLoaded"
     ></app-dashboard-card>
   </div>
 

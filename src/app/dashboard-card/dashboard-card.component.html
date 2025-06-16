@@ -8,9 +8,19 @@
     <h3 class="text-lg font-bold text-gray-100">{{ cardTitle }}</h3>
   </div>
 
+  @if (isLoading) {
+  <div class="flex justify-center items-center flex-1">
+    <div
+      class="animate-spin rounded-full h-8 w-8 border-4 {{
+        cardColorClass()
+      }} border-t-transparent"
+    ></div>
+  </div>
+  } @else {
   <div
     class="text-2xl font-bold {{ cardColorClass() }} flex-1 flex items-center"
   >
     {{ mainText }}
   </div>
+  }
 </div>
