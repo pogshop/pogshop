@@ -1,27 +1,33 @@
 <div class="min-h-full bg-gray-900 text-gray-100 font-sans p-6 mb-12">
-  <div>
+  <div class="w-full">
     <!-- Product Grid -->
     <div
       *ngIf="canEdit || productList.length"
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-92"
     >
-      <app-create-product-card *ngIf="canEdit"></app-create-product-card>
+      <app-create-product-card
+        *ngIf="canEdit"
+        class="flex justify-center w-full sm:w-auto"
+      ></app-create-product-card>
       @for (product of productList; track product.id) {
 
-      <app-product-card
-        *ngIf="canEdit || !product.isHidden"
-        [canEdit]="canEdit"
-        [product]="product"
-        [timeUntilAvailable]="timeUntilAvailableMap.get(product.id) || ''"
-        (onProductClick)="handleProductClick(product)"
-      >
-        <app-product-card-actions
-          *ngIf="canEdit"
+      <div class="flex justify-center">
+        <app-product-card
+          *ngIf="canEdit || !product.isHidden"
+          [canEdit]="canEdit"
           [product]="product"
-        ></app-product-card-actions>
-      </app-product-card>
+          [timeUntilAvailable]="timeUntilAvailableMap.get(product.id) || ''"
+          (onProductClick)="handleProductClick(product)"
+        >
+          <app-product-card-actions
+            *ngIf="canEdit"
+            [product]="product"
+          ></app-product-card-actions>
+        </app-product-card>
+      </div>
       }
       <app-suggest-product-card
+        class="flex justify-center w-full sm:w-auto"
         *ngIf="canEdit"
         [canEdit]="canEdit"
       ></app-suggest-product-card>
