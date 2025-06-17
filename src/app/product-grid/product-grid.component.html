@@ -3,7 +3,7 @@
     <!-- Product Grid -->
     <div
       *ngIf="canEdit || productList.length"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
     >
       <app-create-product-card
         *ngIf="canEdit"
@@ -11,7 +11,7 @@
       ></app-create-product-card>
       @for (product of productList; track product.id) {
 
-      <div class="flex-auto h-[60vh] md:h-[70vh]">
+      <div class="flex-auto h-[60vh] md:h-[65vh]">
         <app-product-card
           *ngIf="canEdit || !product.isHidden"
           [canEdit]="canEdit"
