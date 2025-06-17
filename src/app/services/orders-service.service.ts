@@ -146,7 +146,7 @@ export class OrdersService {
     );
   }
 
-  getBalances(): Observable<{
+  getBalances(forceRefresh: boolean = false): Observable<{
     balance: number;
     pendingBalance: number;
   }> {
@@ -165,7 +165,15 @@ export class OrdersService {
       .post<{
         balance: number;
         pendingBalance: number;
-      }>(`${this.apiUrl}/v1/balances/calculate`, {})
+      }>(
+        `${this.apiUrl}/v1/balances/calculate`,
+        {}, // Body is empty
+        {
+          params: {
+            forceRefresh: forceRefresh,
+          },
+        }
+      )
       .pipe(
         tap((data) => {
           // Update cache with new data
