@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,7 +45,8 @@ export class ShopNavbarComponent {
     private router: Router,
     private usersService: UsersService,
     private route: ActivatedRoute,
-    private ordersService: OrdersService
+    private ordersService: OrdersService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.currentTab = this.router.url.split('/')[1];
     this.handle = this.router.url.split('/')[1];
@@ -58,16 +60,19 @@ export class ShopNavbarComponent {
       this.isOwnShop = this.getIsOwnShop();
       this.currentTab = TABS.SHOP;
     }
-    this.canViewNavBar = this.usersService.authUser$.value;
     this.userCurrency = getUserDisplayCurrency(
       this.usersService.authUser$.value
     );
   }
 
   ngOnInit() {
-    this.ordersService.getBalances().subscribe((balances) => {
-      this.balance = balances.pendingBalance;
-    });
+    if (this.isOwnShop) {
+      this.ordersService.getBalances().subscribe((balances) => {
+        this.balance = balances.pendingBalance;
+      });
+    }
+    this.canViewNavBar = this.usersService.authUser$.value;
+    this.cdRef.detectChanges();
   }
 
   private getIsOwnShop(): boolean {

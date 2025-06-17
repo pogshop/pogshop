@@ -39,7 +39,6 @@ export class ShopPageComponent {
   authUser: any;
   isProductCreationOverlayOpen = false;
   products: Product[] | null = null;
-  showNavBar = true;
   private productId: string | null = null;
 
   viewableSelectedProduct: Product | null = null;
@@ -57,9 +56,6 @@ export class ShopPageComponent {
       this.initializeProducts();
     });
 
-    if (environment.production) {
-      this.showNavBar = false;
-    }
     this.productId = this.route.snapshot.queryParams['productId'];
   }
 
