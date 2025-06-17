@@ -13,7 +13,6 @@ import { ModalService } from '../services/modal-service.service';
 import {
   Product,
   PRODUCT_STATUS,
-  PRODUCT_TYPE,
   ProductService,
 } from '../services/product.service';
 import { Subject } from 'rxjs';
@@ -62,6 +61,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   user: any;
   currency = 'USD';
   private destroy$ = new Subject<void>();
+
   constructor(
     private productService: ProductService,
     private cdRef: ChangeDetectorRef,

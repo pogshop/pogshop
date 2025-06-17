@@ -70,34 +70,26 @@
         </p>
       </div>
 
-      <!-- Sales Count -->
-      <div
-        *ngIf="product?.salesCount || canEdit"
-        class="mt-2 w-fit items-center px-2.5 py-0.5 rounded-full text-md sm:text-xs font-medium bg-green-500/10 text-green-400 border border-green-400/50"
-      >
-        {{ product?.salesCount || 0 }} sold
-      </div>
+      <div class="flex justify-between">
+        <!-- Sales Count -->
+        <div
+          *ngIf="product?.salesCount || canEdit"
+          class="mt-2 w-fit items-center px-2.5 py-0.5 rounded-full text-md sm:text-xs font-medium bg-green-500/10 text-green-400 border border-green-400/50"
+        >
+          {{ product?.salesCount || 0 }} sold
+        </div>
 
-      <!-- Stock/Time Badge -->
-      <div
-        *ngIf="
-          remainingInventory !== null &&
-          remainingInventory > 0 &&
-          product?.inventorySettings?.dailyLimit
-        "
-        class="mt-2 text-sm text-gray-400"
-      >
-        {{ remainingInventory }} left today
-      </div>
-      <div
-        *ngIf="
-          remainingInventory !== null &&
-          remainingInventory > 0 &&
-          timeUntilAvailable
-        "
-        class="mt-2 text-sm text-gray-400"
-      >
-        Available in {{ timeUntilAvailable }}
+        <!-- Stock/Time Badge -->
+        <div
+          *ngIf="
+            remainingInventory !== null &&
+            remainingInventory > 0 &&
+            product?.inventorySettings?.dailyLimit
+          "
+          class="mt-2 w-fit items-center px-2.5 py-0.5 rounded-full text-md sm:text-xs font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-400/50"
+        >
+          {{ remainingInventory }} left today
+        </div>
       </div>
 
       <!-- Action Buttons -->
@@ -114,6 +106,8 @@
         >
           @if(canEdit) {
           <span>Buy Product</span>
+          } @else if(timeUntilAvailable) {
+          <span>Available in {{ timeUntilAvailable }}</span>
           } @else if(remainingInventory === 0 &&
           product?.inventorySettings?.dailyLimit ) {
           <span>Sold Out</span>
@@ -121,22 +115,7 @@
           <span>BUY NOW</span>
           }
         </button>
-
-        <!-- Additional Action Buttons -->
-        <div *ngIf="canEdit" class="grid grid-cols-2 gap-2">
-          <button
-            class="w-full py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
-            (click)="testAlert($event)"
-          >
-            Test Alert
-          </button>
-          <button
-            class="w-full py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
-            (click)="toggleHideProduct($event)"
-          >
-            {{ product?.isHidden ? "Unhide" : "Hide" }}
-          </button>
-        </div>
+        <ng-content></ng-content>
       </div>
     </div>
   </div>

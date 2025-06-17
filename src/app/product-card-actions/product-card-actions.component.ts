@@ -45,6 +45,7 @@ export class ProductCardActionsComponent {
 
   onEditProduct(event: MouseEvent): void {
     (event.target as HTMLButtonElement).blur();
+    event.stopPropagation();
     this.modalService.open(ProductCreationOverlayComponent, {
       closeOnBackdropClick: true,
       width: 'fit-content',
@@ -90,6 +91,14 @@ export class ProductCardActionsComponent {
         productId: this.product?.id,
       },
     });
+  }
+
+  toggleHideProduct(event: MouseEvent): void {
+    (event.target as HTMLButtonElement).blur();
+    if (this.product) {
+      this.product.isHidden = !this.product.isHidden;
+      this.cdRef.detectChanges();
+    }
   }
 
   stopPropagation(event: Event): void {
