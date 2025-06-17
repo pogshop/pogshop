@@ -82,7 +82,7 @@
     </button>
     }
     <div
-      class="flex items-center bg-gray-700 px-3 py-1 rounded-full text-white"
+      class="flex items-center bg-gray-700 px-3 py-1 rounded-full text-white min-w-24"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +99,7 @@
         <line x1="12" y1="1" x2="12" y2="23"></line>
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
       </svg>
-      <span class="font-medium">{{ balance }}</span>
+      <span class="font-medium">{{ balance | currency : userCurrency }}</span>
     </div>
   </div>
 

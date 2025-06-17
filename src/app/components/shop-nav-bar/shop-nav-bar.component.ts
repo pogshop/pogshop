@@ -6,11 +6,12 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
 import { OrdersService } from '../../services/orders-service.service';
 import { environment } from '../../../environments/environment';
+import { getUserDisplayCurrency } from '../../helpers/userHelpers';
 
 export const TABS = {
   INTEGRATION: 'integrations',
@@ -22,7 +23,7 @@ export const TABS = {
 @Component({
   selector: 'app-shop-nav-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CurrencyPipe],
   templateUrl: './shop-nav-bar.component.html',
   styleUrls: ['./shop-nav-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +38,7 @@ export class ShopNavbarComponent {
   isProd = environment.production;
   canViewNavBar = false;
   handle: string = '';
+  userCurrency: string = 'USD';
 
   constructor(
     private router: Router,
@@ -45,6 +47,8 @@ export class ShopNavbarComponent {
     private ordersService: OrdersService
   ) {
     this.currentTab = this.router.url.split('/')[1];
+    this.handle = this.router.url.split('/')[1];
+
     // Empty current tab is the home page
     if (
       this.currentTab &&
@@ -55,7 +59,9 @@ export class ShopNavbarComponent {
       this.currentTab = TABS.SHOP;
     }
     this.canViewNavBar = this.usersService.authUser$.value;
-    this.handle = this.router.url.split('/')[1];
+    this.userCurrency = getUserDisplayCurrency(
+      this.usersService.authUser$.value
+    );
   }
 
   ngOnInit() {
