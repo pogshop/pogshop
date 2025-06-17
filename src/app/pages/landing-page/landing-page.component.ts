@@ -156,9 +156,9 @@ export class LandingPageComponent implements OnInit {
   }
 
   navigateToLogin() {
-    // this.router.navigate(['/login'], {
-    //   state: { handle: this.handleFormControl.value || '', isNewUser: true },
-    // });
+    this.router.navigate(['/login'], {
+      state: { handle: this.handleFormControl.value || '', isNewUser: true },
+    });
   }
 
   private handleVideo() {
