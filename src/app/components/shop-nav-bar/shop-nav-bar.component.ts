@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users-service.service';
 import { OrdersService } from '../../services/orders-service.service';
+import { environment } from '../../../environments/environment';
 
 export const TABS = {
   INTEGRATION: 'integrations',
@@ -33,6 +34,9 @@ export class ShopNavbarComponent {
   isOwnShop = true;
   TABS = TABS;
   balance: number = 0;
+  isProd = environment.production;
+  canViewNavBar = false;
+  handle: string = '';
 
   constructor(
     private router: Router,
@@ -50,6 +54,8 @@ export class ShopNavbarComponent {
       this.isOwnShop = this.getIsOwnShop();
       this.currentTab = TABS.SHOP;
     }
+    this.canViewNavBar = this.usersService.authUser$.value;
+    this.handle = this.router.url.split('/')[1];
   }
 
   ngOnInit() {
@@ -63,8 +69,7 @@ export class ShopNavbarComponent {
     if (!authUser) {
       return false;
     }
-    const hasMatchingHandle =
-      authUser?.handle === this.router.url.split('/')[1];
+    const hasMatchingHandle = authUser?.handle === this.handle;
     const hasMatchingId =
       authUser?.id === this.route.snapshot.queryParams['userId'];
 

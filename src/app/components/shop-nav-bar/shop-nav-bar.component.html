@@ -1,4 +1,11 @@
 <!-- navbar.component.html -->
+@if(!canViewNavBar) {
+<div
+  class="flex justify-center w-full py-4 px-6 bg-gray-800 border-b border-gray-700"
+>
+  <span class="text-xl font-bold text-white">{{ handle }}'s Shop</span>
+</div>
+} @else if(canViewNavBar) {
 <nav
   class="flex justify-between items-center py-4 px-6 bg-gray-800 border-b border-gray-700 sticky top-0 z-50"
 >
@@ -33,17 +40,7 @@
     >
       {{ isOwnShop ? "Your Shop" : "Back to Your Shop" }}
     </button>
-    <button
-      (click)="setCurrentTab(TABS.LIBRARY)"
-      [ngClass]="{
-        'text-purple-400 border-b-2 border-purple-400':
-          currentTab === TABS.LIBRARY,
-        'text-gray-300 hover:text-white': currentTab !== TABS.LIBRARY
-      }"
-      class="px-4 py-2 font-medium"
-    >
-      Library
-    </button>
+
     <button
       (click)="setCurrentTab(TABS.ORDERS)"
       [ngClass]="{
@@ -76,12 +73,14 @@
     >
       Sign Out
     </button>
+    @if(!isProd) {
     <button
       (click)="deleteAccount()"
       class="px-4 py-2 font-medium text-gray-300 hover:text-white bg-red-500 rounded-md"
     >
       Delete Account
     </button>
+    }
     <div
       class="flex items-center bg-gray-700 px-3 py-1 rounded-full text-white"
     >
@@ -174,16 +173,6 @@
           {{ isOwnShop ? "Shop" : "Back to Your Shop" }}
         </button>
         <button
-          (click)="setCurrentTab('library')"
-          [ngClass]="{
-            'text-purple-400': currentTab === TABS.LIBRARY,
-            'text-gray-300 hover:text-white': currentTab !== TABS.LIBRARY
-          }"
-          class="px-4 py-2 font-medium text-left"
-        >
-          Library
-        </button>
-        <button
           (click)="setCurrentTab('orders')"
           [ngClass]="{
             'text-purple-400': currentTab === TABS.ORDERS,
@@ -246,3 +235,4 @@
     </div>
   </div>
 </nav>
+}
