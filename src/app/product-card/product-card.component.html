@@ -1,6 +1,6 @@
 <div
   (click)="onProductClick.emit(product)"
-  class="product-card group sm:w-78 transition-all duration-300 flex flex-col h-96 w-full border border-white/[0.08] bg-white/[0.03] shadow-lg shadow-black/20 rounded-lg hover:border-none"
+  class="product-card group transition-all duration-300 flex flex-col border border-white/[0.08] bg-white/[0.03] shadow-lg shadow-black/20 rounded-lg hover:border-none"
   [ngClass]="{
     'hover:-translate-y-3 hover:shadow-lg hover:outline hover:outline-2 hover:outline-purple-600':
       !disableProduct && !product?.isHidden
@@ -8,11 +8,11 @@
   [class.product-card--hidden]="disableProduct || product?.isHidden"
 >
   <!-- Product Image -->
-  <div class="relative overflow-hidden rounded-t-lg flex-1">
+  <div class="relative overflow-hidden rounded-t-lg flex-2">
     <img
       [src]="product?.imageURLs?.[0] || 'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_pog.png'"
       [alt]="product?.name"
-      class="w-full h-full object-cover"
+      class="size-full object-cover"
     />
     <!-- Edit Button -->
     <span
@@ -41,12 +41,6 @@
         ></path>
       </svg>
     </button>
-    <div
-      *ngIf="product?.inventorySettings?.remainingInventory === 0"
-      class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-    >
-      <span class="text-white font-bold text-lg">Sold Out</span>
-    </div>
     <!-- Price Tag -->
     <div
       *ngIf="product?.price"
@@ -96,7 +90,7 @@
       <div class="mt-4 space-y-2">
         <button
           [class]="
-            'w-full h-20 sm:h-auto py-2.5 rounded-lg flex items-center justify-center transition-colors text-lg font-bold ' +
+            'w-full h-14 sm:h-auto py-2.5 rounded-lg flex items-center justify-center transition-colors text-lg font-bold ' +
             (disableProduct && !canEdit
               ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
               : 'bg-purple-600 hover:bg-purple-700 text-white')
@@ -108,8 +102,7 @@
           <span>Buy Product</span>
           } @else if(timeUntilAvailable) {
           <span>Available in {{ timeUntilAvailable }}</span>
-          } @else if(remainingInventory === 0 &&
-          product?.inventorySettings?.dailyLimit ) {
+          } @else if(remainingInventory === 0) {
           <span>Sold Out</span>
           } @else {
           <span>BUY NOW</span>

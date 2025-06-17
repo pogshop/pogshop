@@ -1,17 +1,17 @@
-<div class="min-h-full bg-gray-900 text-gray-100 font-sans p-6 mb-12">
-  <div class="w-full">
+<div class="bg-gray-900 text-gray-100 font-sans p-6 mb-12">
+  <div class="">
     <!-- Product Grid -->
     <div
       *ngIf="canEdit || productList.length"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-92"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       <app-create-product-card
         *ngIf="canEdit"
-        class="flex justify-center w-full sm:w-auto"
+        class="flex justify-center"
       ></app-create-product-card>
       @for (product of productList; track product.id) {
 
-      <div class="flex justify-center">
+      <div class="flex-auto h-[60vh]">
         <app-product-card
           *ngIf="canEdit || !product.isHidden"
           [canEdit]="canEdit"
