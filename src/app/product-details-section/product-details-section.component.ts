@@ -51,7 +51,7 @@ export class ProductDetailsSectionComponent {
       this.userCurrency = getUserDisplayCurrency(user);
       this.cdRef.detectChanges();
     });
-    const remainingInventory =
+    let remainingInventory =
       this.product?.inventorySettings?.remainingInventory;
     const dailyLimit = this.product?.inventorySettings?.dailyLimit;
     const purchasedToday = this.product?.inventorySettings?.purchasedToday;
@@ -67,6 +67,7 @@ export class ProductDetailsSectionComponent {
         this.inStock = false;
       } else {
         this.inStock = true;
+        remainingInventory = dailyLimit - purchasedToday;
       }
     }
 
@@ -74,6 +75,8 @@ export class ProductDetailsSectionComponent {
       this.stockBadgeText = 'Out of Stock';
     } else if (remainingInventory != null && remainingInventory > 0) {
       this.stockBadgeText = `${remainingInventory} left!`;
+    } else if (this.product.salesCount) {
+      this.stockBadgeText = `${this.product.salesCount} sold`;
     } else {
       this.stockBadgeText = 'Available!';
     }

@@ -1,6 +1,6 @@
 <div
   (click)="onProductClick.emit(product)"
-  class="product-card group sm:w-78 transition-all duration-300 flex flex-col h-96 w-full"
+  class="product-card group sm:w-78 transition-all duration-300 flex flex-col h-96 w-full border border-white/[0.08] bg-white/[0.03] shadow-lg shadow-black/20 rounded-lg hover:border-none"
   [ngClass]="{
     'hover:-translate-y-3 hover:shadow-lg hover:outline hover:outline-2 hover:outline-purple-600':
       !disableProduct && !product?.isHidden
@@ -59,7 +59,7 @@
   <!-- Product Info -->
   <div class="flex-1">
     <div
-      class="p-8 bg-gray-800 rounded-b-lg flex flex-col box-border justify-between h-full"
+      class="p-8 rounded-b-lg flex flex-col box-border justify-between h-full bg-white/[0.04]"
     >
       <div class="flex flex-col">
         <h3 class="text-2xl font-bold text-gray-100 mb-1">
