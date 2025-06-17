@@ -50,6 +50,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   @Input() product?: Product;
   @Input() canEdit: boolean = false;
   @Input() timeUntilAvailable: string = '';
+  @Input() disableCheckout: boolean = false;
   @Output() onProductClick = new EventEmitter<Product>();
 
   ProductEventType = ProductEventType;
@@ -86,6 +87,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     if (this.product) {
       this.updateInventoryState();
     }
+    this.cdRef.markForCheck();
   }
 
   private updateInventoryState(): void {

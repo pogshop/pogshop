@@ -95,7 +95,7 @@
               ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
               : 'bg-purple-600 hover:bg-purple-700 text-white')
           "
-          [disabled]="disableProduct && !canEdit"
+          [disabled]="disableCheckout || (disableProduct && !canEdit)"
           (click)="handleBuyProduct($event)"
         >
           @if(canEdit) {

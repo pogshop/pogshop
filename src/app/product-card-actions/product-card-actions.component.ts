@@ -5,7 +5,7 @@ import {
   Input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from '../services/product.service';
+import { Product, ProductService } from '../services/product.service';
 import { ModalService } from '../services/modal-service.service';
 import { ProductCreationOverlayComponent } from '../product-creation-overlay/product-creation-overlay.component';
 import { DeleteProductDialogComponent } from '../components/modals/delete-product-dialog';
@@ -28,7 +28,8 @@ export class ProductCardActionsComponent {
   constructor(
     private usersService: UsersService,
     private modalService: ModalService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private productService: ProductService
   ) {}
 
   ngOnInit() {
@@ -97,6 +98,11 @@ export class ProductCardActionsComponent {
     (event.target as HTMLButtonElement).blur();
     if (this.product) {
       this.product.isHidden = !this.product.isHidden;
+      this.productService
+        .updateProduct(this.product.id, {
+          isHidden: this.product.isHidden,
+        })
+        .subscribe();
       this.cdRef.detectChanges();
     }
   }
