@@ -7,7 +7,7 @@
     >
       <app-create-product-card
         *ngIf="canEdit"
-        class="flex justify-center"
+        class="flex-auto w-full"
       ></app-create-product-card>
       @for (product of productList; track product.id) {
 
@@ -27,7 +27,7 @@
       </div>
       }
       <app-suggest-product-card
-        class="flex justify-center w-full sm:w-auto"
+        class="flex-auto w-full"
         *ngIf="canEdit"
         [canEdit]="canEdit"
       ></app-suggest-product-card>
