@@ -20,6 +20,8 @@ import { Subject } from 'rxjs';
 import { ProductCheckoutFormComponent } from '../product-checkout-form/product-checkout-form.component';
 import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-stream-alert-dialog';
 import { UsersService } from '../services/users-service.service';
+import { getUserDisplayCurrency } from '../helpers/userHelpers';
+import { DeleteProductDialogComponent } from '../components/modals/delete-product-dialog';
 
 export enum ProductEventType {
   CREATE = 'CREATE',
@@ -58,6 +60,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   remainingInventory: number | null = null;
   showSoundModal: boolean = false;
   user: any;
+  currency = 'USD';
   private destroy$ = new Subject<void>();
   constructor(
     private productService: ProductService,
@@ -70,16 +73,19 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     if (!this.product?.userId) {
       return;
     }
-
     this.usersService.getUserById(this.product?.userId).subscribe((user) => {
       this.user = user;
+      this.currency = getUserDisplayCurrency(user);
     });
+
     this.updateInventoryState();
     this.cdRef.markForCheck();
   }
 
   ngOnChanges(): void {
-    this.updateInventoryState();
+    if (this.product) {
+      this.updateInventoryState();
+    }
   }
 
   private updateInventoryState(): void {
@@ -128,7 +134,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     this.cdRef.markForCheck();
   }
 
-  testAlert(): void {
+  testAlert(event: Event): void {
+    event?.stopPropagation();
     this.modalService.open(SimpleStreamAlertDialogComponent, {
       data: {
         displayImage: this.product?.imageURLs?.[0],
@@ -157,7 +164,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleHideProduct(): void {
+  toggleHideProduct(event: Event): void {
+    event?.stopPropagation();
     if (this.product) {
       this.product.isHidden = !this.product.isHidden;
       this.productService
@@ -170,6 +178,19 @@ export class ProductCardComponent implements OnInit, OnDestroy {
             this.cdRef.detectChanges();
           },
         });
+    }
+  }
+
+  deleteProduct(event: MouseEvent): void {
+    event.stopPropagation();
+    if (this.product) {
+      this.modalService.open(DeleteProductDialogComponent, {
+        closeOnBackdropClick: true,
+        width: 'fit-content',
+        data: {
+          productId: this.product.id,
+        },
+      });
     }
   }
 }

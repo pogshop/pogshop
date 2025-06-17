@@ -22,6 +22,7 @@ import {
   ModalService,
 } from '../services/modal-service.service';
 import { UsersService } from '../services/users-service.service';
+import { getUserDisplayCurrency } from '../helpers/userHelpers';
 import { OrdersService } from '../services/orders-service.service';
 import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-stream-alert-dialog';
 
@@ -58,6 +59,8 @@ export class ProductCheckoutFormComponent {
   isQuantityInputEnabled = false;
   remainingQuantity: number | null = null;
   private destroy$ = new Subject<void>();
+  isSubmitting = false;
+  userCurrency = 'USD';
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +79,7 @@ export class ProductCheckoutFormComponent {
     this.usersService.getUserById(this.product.userId).subscribe((user) => {
       this.userImageURL = user.profilePhotoURL;
       this.userHandle = user.handle;
+      this.userCurrency = getUserDisplayCurrency(user);
       this.cdRef.markForCheck();
     });
     this.setupFormSubscriptions();
@@ -258,6 +262,7 @@ export class ProductCheckoutFormComponent {
 
   onSubmit(): void {
     if (this.checkoutForm.valid) {
+      this.isSubmitting = true;
       this.checkoutForm.disable();
       const formValue = this.checkoutForm.value;
 
@@ -279,9 +284,12 @@ export class ProductCheckoutFormComponent {
         .subscribe({
           next: (response) => {
             window.location.href = response.url;
+            this.isSubmitting = false;
           },
           error: (error) => {
             this.checkoutForm.enable();
+            this.isSubmitting = false;
+
             console.error('Error creating checkout session:', error);
           },
         });

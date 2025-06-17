@@ -17,7 +17,7 @@
         class="sm:flex sm:justify-between sm:items-start flex-col lg:flex-row"
       >
         <div class="text-2xl font-bold text-purple-400">
-          ${{ payout.amount.toFixed(2) }}
+          {{ payout.amount.toFixed(2) | currency : userCurrency }}
         </div>
         <div class="space-y-1">
           <div class="text-sm text-gray-400">

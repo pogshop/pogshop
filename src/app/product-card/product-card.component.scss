@@ -1,18 +1,12 @@
 .product-card {
   position: relative;
-  border-radius: 0.5rem;
-  border-width: 2px;
-  border-color: transparent;
+  border-radius: 1rem;
   background-color: rgb(31, 41, 55);
   overflow: hidden;
-  transition: all;
   height: 100%;
+  box-sizing: border-box;
 
   &.product-card--hidden {
     opacity: 0.6;
-  }
-
-  &:hover {
-    border-color: rgb(168, 85, 247);
   }
 }

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UsersService } from '../services/users-service.service';
 
 interface PayoutInfo {
   amount: number;
@@ -16,4 +17,10 @@ interface PayoutInfo {
 export class PayoutCardComponent {
   @Input() payouts: PayoutInfo[] = [];
   @Input() isLoading: boolean = false;
+  userCurrency: string = 'USD';
+
+  constructor(private usersService: UsersService) {
+    this.userCurrency =
+      this.usersService.authUser$.value?.currency.toUpperCase() ?? 'USD';
+  }
 }

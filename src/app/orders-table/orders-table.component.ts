@@ -5,13 +5,13 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ModalService } from '../services/modal-service.service';
 import { ViewAddressDialogComponent } from '../components/modals/view-address-dialog.component';
 
 @Component({
   selector: 'app-orders-table',
-  imports: [DatePipe],
+  imports: [DatePipe, CurrencyPipe],
   templateUrl: './orders-table.component.html',
   styleUrl: './orders-table.component.scss',
 })

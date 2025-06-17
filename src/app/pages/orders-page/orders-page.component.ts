@@ -10,6 +10,7 @@ import { PayoutsTableComponent } from '../../payouts-table/payouts-table.compone
 import { DashboardCardComponent } from '../../dashboard-card/dashboard-card.component';
 import { InfoCardComponent } from '../../info-card/info-card.component';
 import { PayoutCardComponent } from '../../payout-card/payout-card.component';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-orders-page',
@@ -22,6 +23,7 @@ import { PayoutCardComponent } from '../../payout-card/payout-card.component';
     DashboardCardComponent,
     InfoCardComponent,
     PayoutCardComponent,
+    CurrencyPipe,
   ],
   templateUrl: './orders-page.component.html',
   styleUrl: './orders-page.component.scss',
@@ -38,6 +40,7 @@ export class OrdersPageComponent {
   balances?: any;
   ABOUT_PAYOUTS_TEXT = ABOUT_PAYOUTS_TEXT;
   payoutsLoaded = false;
+  userCurrency: string = 'USD';
 
   constructor(
     private ordersService: OrdersService,
@@ -47,6 +50,8 @@ export class OrdersPageComponent {
 
   async ngOnInit() {
     this.userId = this.userService.authUser$.value?.id ?? '';
+    this.userCurrency =
+      this.userService.authUser$.value?.currency.toUpperCase() ?? 'USD';
 
     await this.loadNextOrdersPage();
     this.ordersService.getLineItemCount(this.userId).subscribe((count) => {

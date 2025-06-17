@@ -21,13 +21,13 @@
     ></app-dashboard-card>
     <app-dashboard-card
       [cardTitle]="'Pending Balance'"
-      [mainText]="`$${balances?.pendingBalance?.toString()}`"
+      [mainText]="`${balances?.pendingBalance?.toString() | currency : userCurrency}`"
       [cardColor]="'green'"
       [isLoading]="!payoutsLoaded"
     ></app-dashboard-card>
     <app-dashboard-card
       [cardTitle]="'Lifetime Earnings'"
-      [mainText]="`$${balances?.lifetimeEarnings?.toString()}`"
+      [mainText]="`${balances?.lifetimeEarnings?.toString() | currency : userCurrency}`"
       [cardColor]="'yellow'"
       [isLoading]="!payoutsLoaded"
     ></app-dashboard-card>

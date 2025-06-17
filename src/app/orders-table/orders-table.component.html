@@ -128,7 +128,10 @@
               {{ lineItem.quantity }}
             </td>
             <td class="py-3 px-4 text-right font-medium text-white">
-              ${{ lineItem.priceAmount * lineItem.quantity }}
+              {{
+                lineItem.priceAmount * lineItem.quantity
+                  | currency : lineItem.currency.toUpperCase()
+              }}
             </td>
             <td class="py-3 px-4 text-right"></td>
           </tr>

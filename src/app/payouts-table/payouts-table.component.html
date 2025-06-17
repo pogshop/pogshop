@@ -27,9 +27,10 @@
             </td>
             <td class="py-3 px-4">
               <div class="truncate flex flex-col">
-                <span class="text-gray-300"
-                  >${{ payout.decimalAmount / 100 }}</span
-                >
+                <span class="text-gray-300">{{
+                  payout.decimalAmount / 100
+                    | currency : payout.payoutCurrency?.toUpperCase() || "USD"
+                }}</span>
               </div>
             </td>
           </tr>

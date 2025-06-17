@@ -33,6 +33,7 @@ export type Product = {
   status: PRODUCT_STATUS;
   type: PRODUCT_TYPE;
   digitalLink: string | null;
+  salesCount: number;
   purchaseSettings: {
     payWhatYouWant: boolean;
     acceptTips: boolean;

@@ -9,6 +9,8 @@ import { Product } from '../services/product.service';
 import { ProductCheckoutFormComponent } from '../product-checkout-form/product-checkout-form.component';
 import { ModalService } from '../services/modal-service.service';
 import { CommonModule } from '@angular/common';
+import { UsersService } from '../services/users-service.service';
+import { getUserDisplayCurrency } from '../helpers/userHelpers';
 
 export interface ProductInfo {
   id: string;
@@ -29,6 +31,7 @@ export interface ProductInfo {
 export class ProductDetailsSectionComponent {
   @Input() product!: Product;
   @Input() showBackButton: boolean = true;
+  @Input() userCurrency: string = 'USD';
 
   @Output() onBack = new EventEmitter<void>();
   @Output() onPurchase = new EventEmitter<ProductInfo>();
@@ -39,10 +42,15 @@ export class ProductDetailsSectionComponent {
 
   constructor(
     private modalService: ModalService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private usersService: UsersService
   ) {}
 
   ngOnInit(): void {
+    this.usersService.getUserById(this.product.userId).subscribe((user) => {
+      this.userCurrency = getUserDisplayCurrency(user);
+      this.cdRef.detectChanges();
+    });
     const remainingInventory =
       this.product?.inventorySettings?.remainingInventory;
     const dailyLimit = this.product?.inventorySettings?.dailyLimit;

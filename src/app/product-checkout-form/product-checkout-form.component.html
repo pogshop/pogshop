@@ -57,7 +57,8 @@
               class="text-purple-400 font-semibold mt-1"
               *ngIf="!product.purchaseSettings.payWhatYouWant"
             >
-              ${{ product.price }} each
+              {{ product.price | currency : userCurrency : "symbol" : "1.2-2" }}
+              each
             </p>
           </div>
         </div>
@@ -232,14 +233,20 @@
                   <span class="text-gray-300 mx-2 w-16 text-right">
                     x {{ checkoutForm.get("quantity")?.value }}</span
                   >
-                  ${{ (getPricePerUnit() * getQuantity()).toFixed(2) }}</span
+                  {{
+                    (getPricePerUnit() * getQuantity()).toFixed(2)
+                      | currency : userCurrency : "symbol-narrow" : "1.2-2"
+                  }}</span
                 >
               </div>
 
               <!-- Subtotal -->
               <div class="flex justify-between pt-1 border-t border-gray-600">
                 <span class="text-gray-300">Subtotal</span>
-                <span class="text-white">${{ getSubtotal().toFixed(2) }}</span>
+                <span class="text-white">{{
+                  getSubtotal().toFixed(2)
+                    | currency : userCurrency : "symbol-narrow" : "1.2-2"
+                }}</span>
               </div>
 
               <!-- Tip -->
@@ -256,9 +263,10 @@
 
               <div class="flex justify-between" *ngIf="getServiceFee() > 0">
                 <span class="text-gray-300">Taxes & Platform Fees</span>
-                <span class="text-white"
-                  >${{ getServiceFee().toFixed(2) }}</span
-                >
+                <span class="text-white">{{
+                  getServiceFee().toFixed(2)
+                    | currency : userCurrency : "symbol-narrow" : "1.2-2"
+                }}</span>
               </div>
 
               <!-- Final Total -->
@@ -266,7 +274,9 @@
                 class="border-t border-gray-600 pt-2 flex justify-between font-semibold"
               >
                 <span class="text-white">Total</span>
-                <span class="text-white">${{ getTotalPrice() }}</span>
+                <span class="text-white">{{
+                  getTotalPrice() | currency : userCurrency
+                }}</span>
               </div>
             </div>
           </div>
@@ -307,6 +317,11 @@
                 [disabled]="checkoutForm.invalid || checkoutForm.disabled"
                 class="px-6 py-3 w-full bg-purple-600 hover:bg-purple-700 rounded-lg text-white transition-colors font-semibold flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
+                @if (isSubmitting) {
+                <div
+                  class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"
+                ></div>
+                } @else {
                 <svg
                   class="w-4 h-4 mr-2"
                   fill="none"
@@ -320,11 +335,14 @@
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l1.5-6m0 0h10m-10 0L5.4 5M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6"
                   ></path>
                 </svg>
+                }
                 {{
                   remainingQuantity === 0
                     ? product.inventorySettings.dailyLimit
                       ? "Sold Out Today"
                       : "Sold Out"
+                    : isSubmitting
+                    ? "Redirecting..."
                     : "Checkout"
                 }}
               </button>
