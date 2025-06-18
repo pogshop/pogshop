@@ -64,7 +64,7 @@
         </p>
       </div>
 
-      <div class="flex justify-between">
+      <div class="flex justify-between w-full mt-2">
         <!-- Sales Count -->
         <div
           *ngIf="product?.salesCount || canEdit"
@@ -74,16 +74,20 @@
         </div>
 
         <!-- Stock/Time Badge -->
+        @if(remainingInventory !== null && remainingInventory > 0 &&
+        product?.inventorySettings?.dailyLimit) {
         <div
-          *ngIf="
-            remainingInventory !== null &&
-            remainingInventory > 0 &&
-            product?.inventorySettings?.dailyLimit
-          "
           class="mt-2 w-fit items-center px-2.5 py-0.5 rounded-full text-md sm:text-xs font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-400/50"
         >
           {{ remainingInventory }} left today
         </div>
+        } @else if(remainingInventory) {
+        <div
+          class="mt-2 w-fit items-center px-2.5 py-0.5 rounded-full text-md sm:text-xs font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-400/50"
+        >
+          {{ remainingInventory }} left!
+        </div>
+        }
       </div>
 
       <!-- Action Buttons -->
