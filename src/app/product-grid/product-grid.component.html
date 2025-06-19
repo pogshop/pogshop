@@ -11,7 +11,7 @@
       ></app-create-product-card>
       @for (product of productList; track product.id) {
 
-      <div class="flex-auto h-[60vh] md:h-[65vh]">
+      <div class="flex-auto h-[60vh] md:h-[65vh] md:max-h-[500px]">
         <app-product-card
           *ngIf="canEdit || !product.isHidden"
           [canEdit]="canEdit"
