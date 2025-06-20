@@ -78,7 +78,7 @@ export class ModalService {
     const defaultConfig: ModalConfig = {
       width: '500px',
       maxWidth: '100vw',
-      maxHeight: '100vh',
+      height: 'fit-content',
       closeOnBackdropClick: true,
       closeOnEscapeKey: true,
       showCloseButton: true,
@@ -137,7 +137,6 @@ export class ModalService {
         .global()
         .centerHorizontally()
         .centerVertically(),
-      scrollStrategy: this.overlay.scrollStrategies.block(),
       disposeOnNavigation: true,
     });
 

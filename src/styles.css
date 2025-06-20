@@ -8,3 +8,17 @@ body {
   background-color: rgba(0, 0, 0, 0.6); /* Even darker option */
   backdrop-filter: blur(0.6px); /* Optional: adds slight blur effect */
 }
+
+.scrollable-modal-panel {
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Hide scrollbar for webkit browsers (Chrome, Safari, Edge) */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for webkit browsers */
+.scrollable-modal-panel::-webkit-scrollbar {
+  display: none;
+}

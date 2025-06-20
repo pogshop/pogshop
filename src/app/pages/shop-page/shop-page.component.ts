@@ -18,6 +18,8 @@ import {
 } from '../../services/product.service';
 import { environment } from '../../../environments/environment';
 import { ProductDetailsSectionComponent } from '../../product-details-section/product-details-section.component';
+import { PurchaseSuccessfulDialogComponent } from '../../components/modals/purchase-successful-dialog';
+import { ModalService } from '../../services/modal-service.service';
 
 @Component({
   selector: 'app-shop-page',
@@ -50,13 +52,26 @@ export class ShopPageComponent {
     private route: ActivatedRoute,
     private router: Router,
     private cdRef: ChangeDetectorRef,
-    private productService: ProductService
+    private productService: ProductService,
+    private modalService: ModalService
   ) {
     this.route.url.pipe(take(1)).subscribe((params) => {
       this.initializeProducts();
     });
 
     this.productId = this.route.snapshot.queryParams['productId'];
+  }
+
+  ngOnInit() {
+    const params = this.route.snapshot.queryParams;
+    if (params['checkoutStatus'] === 'success') {
+      this.modalService.open(PurchaseSuccessfulDialogComponent, {
+        data: {},
+        width: 'fit',
+        closeOnBackdropClick: false,
+        panelClass: ['scrollable-modal-panel'],
+      });
+    }
   }
 
   private loadAllProducts(userId: string) {
