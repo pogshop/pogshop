@@ -1,10 +1,32 @@
 <div
-  class="min-h-fit text-gray-100 flex items-center justify-center p-2 sm:p-5 overflow-y-auto max-w-[600px] w-[600px]"
+  class="min-h-fit text-gray-100 flex items-center justify-center p-2 sm:p-5 overflow-y-auto w-full max-w-[95vw] sm:max-w-[600px]"
 >
   <div
-    class="bg-gray-800 border border-gray-700 rounded-xl max-w-2xl w-full overflow-y-auto shadow-2xl mx-2"
+    class="bg-gray-800 border border-gray-700 rounded-xl w-full overflow-y-auto shadow-2xl mx-1 sm:mx-2"
   >
-    <div class="p-2 sm:p-10 flex flex-col items-center gap-2">
+    <!-- Mobile Close Button -->
+    <div class="flex justify-end p-2 sm:hidden mr-3 mt-3">
+      <button
+        class="text-gray-400 hover:text-white transition-colors"
+        (click)="closeModal()"
+      >
+        <svg
+          class="w-8 h-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-3 sm:p-10 flex flex-col items-center gap-2">
       <app-seller-referral-form></app-seller-referral-form>
     </div>
   </div>
