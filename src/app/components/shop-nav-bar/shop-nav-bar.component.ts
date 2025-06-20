@@ -48,8 +48,11 @@ export class ShopNavbarComponent {
     private ordersService: OrdersService,
     private cdRef: ChangeDetectorRef
   ) {
-    this.currentTab = this.router.url.split('/')[1];
-    this.handle = this.router.url.split('/')[1];
+    // Use URL constructor to parse the URL and get the first path segment
+    const url = new URL(this.router.url, window.location.origin);
+    const pathSegments = url.pathname.split('/').filter((segment) => segment);
+    this.currentTab = pathSegments[0] || '';
+    this.handle = pathSegments[0] || '';
 
     // Empty current tab is the home page
     if (

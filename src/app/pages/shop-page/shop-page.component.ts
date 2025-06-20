@@ -20,6 +20,7 @@ import { environment } from '../../../environments/environment';
 import { ProductDetailsSectionComponent } from '../../product-details-section/product-details-section.component';
 import { PurchaseSuccessfulDialogComponent } from '../../components/modals/purchase-successful-dialog';
 import { ModalService } from '../../services/modal-service.service';
+import { SellerSuggestionDialogComponent } from '../../components/modals/seller-suggestion-dialog';
 
 @Component({
   selector: 'app-shop-page',
@@ -152,5 +153,14 @@ export class ShopPageComponent {
   closeProductDetails() {
     this.router.navigate([]);
     this.viewableSelectedProduct = null;
+  }
+
+  openReferralForm() {
+    this.modalService.open(SellerSuggestionDialogComponent, {
+      width: 'fit-content',
+      maxWidth: '600px',
+      closeOnBackdropClick: true,
+      panelClass: ['scrollable-modal-panel'],
+    });
   }
 }

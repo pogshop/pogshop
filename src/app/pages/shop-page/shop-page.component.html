@@ -31,6 +31,35 @@
   [user]="user"
   [authUser]="authUser"
 ></app-creator-banner>
+
+<!-- Notification Banner -->
+<div
+  class="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-white my-4"
+>
+  <div class="max-w-6xl mx-auto px-4 py-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="text-2xl">🎉</div>
+        <div>
+          <p class="font-semibold text-sm sm:text-base">
+            Know a streamer who should start a Pog shop?
+          </p>
+          <p class="text-purple-100 text-xs sm:text-sm">
+            Help them grow their channel and make their streams more
+            interactive!
+          </p>
+        </div>
+      </div>
+      <button
+        (click)="openReferralForm()"
+        class="bg-white text-purple-600 hover:bg-purple-50 hover:text-purple-700 hover:shadow-lg hover:scale-105 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex-shrink-0"
+      >
+        Suggest Streamer
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="max-w-6xl mx-auto">
   @if(viewableSelectedProduct) {
   <app-product-details-section
