@@ -41,6 +41,12 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# SSL certificates for localhost development
+localhost.crt
+localhost.key
+*.crt
+*.key
+
 # Firebase
 .firebase/
 .firebase/hosting.json

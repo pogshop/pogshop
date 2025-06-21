@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
   Auth,
+  browserPopupRedirectResolver,
   OAuthProvider,
   signInWithRedirect,
 } from '@angular/fire/auth';
-import {  Observable, from, of } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 const API_URL = `${environment.apiUrl}/v1/emails`;
@@ -23,7 +24,7 @@ export class AuthService {
    */
   sendMagicLink(email: string): Observable<any> {
     const redirectUrl = this.getRedirectUrl();
-    
+
     window.localStorage.setItem('emailForSignIn', email);
     return this.http.post(
       `${API_URL}`,
@@ -55,18 +56,20 @@ export class AuthService {
 
     // Get fresh token as an observable
     return from(
-        firebaseUser.getIdToken().then(token => {
-        
-        this.cachedToken = token;
-        this.tokenExpiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
-        return token;
-      }).catch(error => {
-        console.error('Error getting auth token:', error);
-        // Sign out the user if the token cannot be refreshed
-        // This happens when a user deletes their account
-        this.signOut();
-        return null;
-      })
+      firebaseUser
+        .getIdToken()
+        .then((token) => {
+          this.cachedToken = token;
+          this.tokenExpiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
+          return token;
+        })
+        .catch((error) => {
+          console.error('Error getting auth token:', error);
+          // Sign out the user if the token cannot be refreshed
+          // This happens when a user deletes their account
+          this.signOut();
+          return null;
+        })
     );
   }
 
@@ -75,7 +78,6 @@ export class AuthService {
    */
   async signOut() {
     await this.auth.signOut();
-
   }
 
   /**
@@ -105,7 +107,11 @@ export class AuthService {
     });
 
     try {
-      return await signInWithRedirect(this.auth, provider);
+      return await signInWithRedirect(
+        this.auth,
+        provider,
+        browserPopupRedirectResolver
+      );
     } catch (error) {
       console.error('Error during Twitch login:', error);
       throw error;
