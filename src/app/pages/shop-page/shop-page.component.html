@@ -44,10 +44,11 @@
         <div class="text-xl sm:text-2xl flex-shrink-0">🎉</div>
         <div class="min-w-0 flex-1">
           <p class="font-semibold text-sm sm:text-base leading-tight">
-            Know a streamer who should start a Pog shop?
+            @if(user.handle) { Give a suggestion to &#64;{{ user.handle }}! }
+            @else { Give a suggestion to the streamer! }
           </p>
           <p class="text-purple-100 text-xs sm:text-sm leading-tight mt-1">
-            Help them grow and make their streams more interactive!
+            Tell them who you want to see them collab with on stream!
           </p>
         </div>
       </div>
@@ -55,7 +56,7 @@
         (click)="openReferralForm()"
         class="bg-white text-purple-600 hover:bg-purple-50 hover:text-purple-700 hover:shadow-lg hover:scale-105 px-3 sm:px-4 py-2 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 flex-shrink-0 w-full sm:w-auto"
       >
-        Suggest Streamer
+        Suggest Collab
       </button>
     </div>
   </div>

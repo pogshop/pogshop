@@ -66,11 +66,15 @@ export class ShopPageComponent {
   ngOnInit() {
     const params = this.route.snapshot.queryParams;
     if (params['checkoutStatus'] === 'success') {
-      this.modalService.open(PurchaseSuccessfulDialogComponent, {
-        data: {},
-        width: 'fit',
-        closeOnBackdropClick: false,
-        panelClass: ['scrollable-modal-panel'],
+      this.usersObservable?.pipe(take(1)).subscribe(([user, authUser]) => {
+        this.modalService.open(PurchaseSuccessfulDialogComponent, {
+          width: 'fit-content',
+          closeOnBackdropClick: false,
+          panelClass: ['scrollable-modal-panel'],
+          data: {
+            userHandle: user?.handle,
+          },
+        });
       });
     }
   }
@@ -161,6 +165,9 @@ export class ShopPageComponent {
       maxWidth: '600px',
       closeOnBackdropClick: true,
       panelClass: ['scrollable-modal-panel'],
+      data: {
+        userHandle: this.user.handle,
+      },
     });
   }
 }

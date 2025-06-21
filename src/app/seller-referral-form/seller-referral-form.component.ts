@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FeedbackService } from '../services/feedback-service.service';
@@ -15,6 +15,7 @@ enum FormState {
   styleUrl: './seller-referral-form.component.scss',
 })
 export class SellerReferralFormComponent {
+  @Input() userHandle: string | null = null;
   suggestionForm: any;
   isSubmitting = false;
   submitSuccess = false;
@@ -22,7 +23,6 @@ export class SellerReferralFormComponent {
   FormState = FormState;
 
   constructor(
-    private router: Router,
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
     private feedbackService: FeedbackService
