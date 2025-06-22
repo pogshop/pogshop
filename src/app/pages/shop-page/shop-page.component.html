@@ -71,7 +71,7 @@
   ></app-product-details-section>
   } @else if(products != null) {
   <app-product-grid
-    (onProductClick)="setViewableSelectedProduct($event.id)"
+    (onProductClick)="navigateToProduct($event.id)"
     [productList]="products"
     [canEdit]="canEdit"
   ></app-product-grid>

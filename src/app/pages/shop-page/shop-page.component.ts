@@ -77,6 +77,17 @@ export class ShopPageComponent {
         });
       });
     }
+
+    // Listen for route changes to handle productId query parameters
+    this.route.queryParams.subscribe((params) => {
+      const productId = params['productId'];
+      if (productId && this.products) {
+        this.setViewableSelectedProduct(productId);
+      } else if (!productId) {
+        this.viewableSelectedProduct = null;
+      }
+      this.cdRef.markForCheck();
+    });
   }
 
   private loadAllProducts(userId: string) {
@@ -142,6 +153,23 @@ export class ShopPageComponent {
     });
   }
 
+  navigateToProduct(productId: string) {
+    if (this.user?.handle) {
+      this.router.navigate(['/', this.user.handle], {
+        queryParams: {
+          productId: productId,
+        },
+      });
+    } else {
+      this.router.navigate(['/shop'], {
+        queryParams: {
+          userId: this.user.id,
+          productId: productId,
+        },
+      });
+    }
+  }
+
   setViewableSelectedProduct(productId: string) {
     const product = this.products?.find((p) => p.id === productId);
     if (!product) {
@@ -155,8 +183,18 @@ export class ShopPageComponent {
   }
 
   closeProductDetails() {
-    this.router.navigate([]);
+    if (this.user?.handle) {
+      this.router.navigate(['/', this.user.handle]);
+    } else {
+      this.router.navigate(['/shop'], {
+        queryParams: {
+          userId: this.user.id,
+        },
+      });
+    }
+
     this.viewableSelectedProduct = null;
+    this.cdRef.markForCheck();
   }
 
   openReferralForm() {
