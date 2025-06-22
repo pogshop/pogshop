@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { ShopNavbarComponent } from '../../components/shop-nav-bar/shop-nav-bar.component';
 import { UsersService } from '../../services/users-service.service';
 import { environment } from '../../../environments/environment';
+import { FooterComponent } from '../../footer/footer.component';
 @Component({
   selector: 'app-integrations-page',
   standalone: true,
-  imports: [CommonModule, ShopNavbarComponent],
+  imports: [CommonModule, ShopNavbarComponent, FooterComponent],
   templateUrl: './integrations-page.component.html',
   styleUrls: ['./integrations-page.component.scss'],
 })

@@ -21,6 +21,7 @@ import { ProductDetailsSectionComponent } from '../../product-details-section/pr
 import { PurchaseSuccessfulDialogComponent } from '../../components/modals/purchase-successful-dialog';
 import { ModalService } from '../../services/modal-service.service';
 import { SellerSuggestionDialogComponent } from '../../components/modals/seller-suggestion-dialog';
+import { FooterComponent } from '../../footer/footer.component';
 
 @Component({
   selector: 'app-shop-page',
@@ -30,6 +31,7 @@ import { SellerSuggestionDialogComponent } from '../../components/modals/seller-
     ProductGridComponent,
     CommonModule,
     ProductDetailsSectionComponent,
+    FooterComponent,
   ],
   templateUrl: './shop-page.component.html',
   styleUrl: './shop-page.component.scss',
