@@ -13,9 +13,13 @@
     class="bg-gray-800 rounded-full px-8 py-4 border-2 border-purple-600 w-fit lg:w-3/4"
   >
     <div class="text-center">
-      <div class="text-gray-100 text-xs mb-1">
-        <span class="font-bold">{{ displayUsername || "SuperPog420" }}</span>
-        just ordered
+      <span class="text-gray-100 text-md mb-1 flex flex-col items-center"
+        >New order!</span
+      >
+      <div class="text-gray-100 text-md mb-1 flex flex-col items-center">
+        <span class="font-bold text-4xl">{{
+          displayUsername || "SuperPog420"
+        }}</span>
       </div>
       <div class="text-gray-100 text-xl font-bold mb-1 word-wrap break-words">
         {{ displayProductName || "Your Product" }}

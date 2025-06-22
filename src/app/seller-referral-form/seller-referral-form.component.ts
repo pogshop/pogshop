@@ -29,8 +29,8 @@ export class SellerReferralFormComponent {
   ) {
     // Initialize form (you'll need to import ReactiveFormsModule and FormBuilder)
     this.suggestionForm = this.fb.group({
-      usernames: ['', Validators.required],
-      message: [''],
+      usernames: [''],
+      message: ['', Validators.required],
     });
   }
 
