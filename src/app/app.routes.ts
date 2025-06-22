@@ -74,6 +74,7 @@ export const routes: Routes = [
       import('./pages/shop-page/shop-page.component').then(
         (m) => m.ShopPageComponent
       ),
+    title: 'Pogshop - Shop',
   },
   {
     // Used as a literal route to logout the user since the route won't reload when the user is logged out.
@@ -88,5 +89,6 @@ export const routes: Routes = [
       import('./pages/shop-page/shop-page.component').then(
         (m) => m.ShopPageComponent
       ),
+    title: 'Pogshop - Shop',
   },
 ];
