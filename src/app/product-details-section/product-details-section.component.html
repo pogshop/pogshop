@@ -86,61 +86,63 @@
       </button>
     </div>
   </div>
-  <!-- Main Product Description -->
-  <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8">
-    <h3
-      class="text-lg font-semibold mb-2 text-slate-100 flex items-center gap-2"
-    >
-      {{ product.name }}
-    </h3>
-    <div class="flex flex-col gap-4">
-      <p class="text-slate-300 leading-relaxed">
-        {{ product.description }}
-      </p>
+  <div class="flex w-full gap-5 flex-col md:flex-row">
+    <!-- Main Product Description -->
+    <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8 flex-2">
+      <h3
+        class="text-lg font-semibold mb-2 text-slate-100 flex items-center gap-2"
+      >
+        {{ product.name }}
+      </h3>
+      <div class="flex flex-col gap-4">
+        <p class="text-slate-300 leading-relaxed">
+          {{ product.description }}
+        </p>
+      </div>
     </div>
-  </div>
 
-  <!-- Product Features/Highlights -->
-  <div
-    class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8"
-    *ngIf="product.features"
-  >
-    <h3
-      class="text-lg font-semibold mb-4 text-slate-100 flex items-center gap-2"
+    <!-- Product Features/Highlights -->
+    <div
+      class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8 flex-1 h-fit"
+      *ngIf="product.features.length"
     >
-      <svg
-        class="w-5 h-5 text-purple-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+      <h3
+        class="text-lg font-semibold mb-4 text-slate-100 flex items-center gap-2"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-        ></path>
-      </svg>
-      Highlights
-    </h3>
-    <div class="flex flex-col gap-3">
-      <div
-        *ngFor="let feature of product.features; let i = index"
-        class="flex items-start gap-3 p-4 rounded-lg"
-        [ngClass]="{
-          'bg-purple-500/10 border border-purple-500/20': i % 2 === 0,
-          'bg-blue-500/10 border border-blue-500/20': i % 2 === 1
-        }"
-      >
+        <svg
+          class="w-5 h-5 text-purple-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        Highlights
+      </h3>
+      <div class="flex flex-col gap-3">
         <div
-          class="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+          *ngFor="let feature of product.features; let i = index"
+          class="flex items-start gap-3 p-4 rounded-lg"
           [ngClass]="{
-            'bg-purple-400': i % 2 === 0,
-            'bg-blue-400': i % 2 === 1
+            'bg-purple-500/10 border border-purple-500/20': i % 2 === 0,
+            'bg-blue-500/10 border border-blue-500/20': i % 2 === 1
           }"
-        ></div>
-        <div>
-          <p class="text-sm text-gray-300">{{ feature }}</p>
+        >
+          <div
+            class="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+            [ngClass]="{
+              'bg-purple-400': i % 2 === 0,
+              'bg-blue-400': i % 2 === 1
+            }"
+          ></div>
+          <div>
+            <p class="text-sm text-gray-300">{{ feature }}</p>
+          </div>
         </div>
       </div>
     </div>
