@@ -10,6 +10,7 @@ import {
 import {
   FormBuilder,
   FormGroup,
+  FormArray,
   FormsModule,
   ReactiveFormsModule,
   Validators,
@@ -86,6 +87,7 @@ export class ProductCreationFormComponent {
         ],
       ],
       description: [this.product?.description || null],
+      features: this.fb.array([]),
       imageURLs: [this.product?.imageURLs || null],
       digitalLink: [this.product?.digitalLink || null],
       isHidden: [this.product?.isHidden || false],
@@ -111,6 +113,13 @@ export class ProductCreationFormComponent {
       }),
     });
 
+    // Initialize highlights if product has features
+    if (this.product?.features && this.product.features.length > 0) {
+      this.product.features.forEach((feature) => {
+        this.highlightsArray.push(this.fb.control(feature));
+      });
+    }
+
     this.productForm.valueChanges.subscribe((value) => {
       this.onProductFormUpdated.emit(value);
       this.productFormStatus.emit(this.productForm.valid);
@@ -130,6 +139,14 @@ export class ProductCreationFormComponent {
     this.productForm.updateValueAndValidity();
 
     this.cdRef.markForCheck();
+  }
+
+  get highlightsArray(): FormArray {
+    return this.productForm.get('features') as FormArray;
+  }
+
+  get highlightsControls() {
+    return this.highlightsArray.controls as any[];
   }
 
   selectProductType(type: PRODUCT_TYPE) {
@@ -328,5 +345,17 @@ export class ProductCreationFormComponent {
       input.value = '0';
       this.productForm.get('price')?.setValue(0);
     }
+  }
+
+  addHighlight() {
+    if (this.highlightsArray.length < 3) {
+      this.highlightsArray.push(this.fb.control(''));
+      this.cdRef.detectChanges();
+    }
+  }
+
+  removeHighlight(index: number) {
+    this.highlightsArray.removeAt(index);
+    this.cdRef.detectChanges();
   }
 }

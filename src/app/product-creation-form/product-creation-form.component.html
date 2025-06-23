@@ -257,6 +257,70 @@
     ></textarea>
   </div>
 
+  <!-- Product Highlights -->
+  <div>
+    <label class="block font-medium text-gray-100 mb-2">
+      Product Highlights
+      <span class="text-sm text-gray-400 font-normal">(up to 3)</span>
+    </label>
+    <p class="text-sm text-gray-400 mb-3">
+      Add key features that make your product stand out. These will be displayed
+      on the product page.
+    </p>
+    <div class="space-y-3">
+      <div
+        *ngFor="let highlight of highlightsControls; let i = index"
+        class="flex gap-2"
+      >
+        <input
+          [formControl]="highlight"
+          placeholder="Enter a product highlight..."
+          class="flex-1 bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+        <button
+          type="button"
+          (click)="removeHighlight(i)"
+          class="px-3 py-3 bg-gray-600 hover:bg-gray-500 text-gray-300 rounded-lg transition-colors"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <button
+        type="button"
+        (click)="addHighlight()"
+        [disabled]="highlightsArray.length >= 3"
+        class="w-full py-3 px-4 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-gray-300 rounded-lg border border-gray-600 transition-colors flex items-center justify-center gap-2"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
+        Add Highlight
+      </button>
+    </div>
+  </div>
+
   <!-- Interactive Type Settings -->
   <div
     formGroupName="inventorySettings"

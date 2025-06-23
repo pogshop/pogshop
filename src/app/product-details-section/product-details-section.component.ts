@@ -40,6 +40,7 @@ export class ProductDetailsSectionComponent {
   inStock: boolean = false;
   stockBadgeText: string = '';
   linkCopied: boolean = false;
+  remainingInventory: number | null = null;
 
   constructor(
     private modalService: ModalService,
@@ -55,30 +56,41 @@ export class ProductDetailsSectionComponent {
       this.userCurrency = getUserDisplayCurrency(user);
       this.cdRef.detectChanges();
     });
+
+    this.calculateInventoryStatus();
+  }
+
+  private calculateInventoryStatus(): void {
     let remainingInventory =
       this.product?.inventorySettings?.remainingInventory;
     const dailyLimit = this.product?.inventorySettings?.dailyLimit;
     const purchasedToday = this.product?.inventorySettings?.purchasedToday;
     const firstPurchaseTodayAt =
       this.product?.inventorySettings?.firstPurchaseTodayAt;
+
     this.inStock = remainingInventory == null || remainingInventory > 0;
 
     if (dailyLimit != null) {
       const now = new Date().getTime();
       const timeDiff = now - (firstPurchaseTodayAt || 0);
       const isPassedOneDay = timeDiff > 24 * 60 * 60 * 1000;
+
       if (!isPassedOneDay && purchasedToday >= dailyLimit) {
         this.inStock = false;
+        this.remainingInventory = 0;
       } else {
         this.inStock = true;
-        remainingInventory = dailyLimit - purchasedToday;
+        this.remainingInventory = dailyLimit - purchasedToday;
       }
+    } else {
+      this.remainingInventory = remainingInventory;
     }
 
+    // Keep the old logic for backward compatibility
     if (!this.inStock) {
       this.stockBadgeText = 'Out of Stock';
-    } else if (remainingInventory != null && remainingInventory > 0) {
-      this.stockBadgeText = `${remainingInventory} left!`;
+    } else if (this.remainingInventory != null && this.remainingInventory > 0) {
+      this.stockBadgeText = `${this.remainingInventory} left!`;
     } else if (this.product.salesCount) {
       this.stockBadgeText = `${this.product.salesCount} sold`;
     } else {

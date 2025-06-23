@@ -34,6 +34,7 @@ export type Product = {
   type: PRODUCT_TYPE;
   digitalLink: string | null;
   salesCount: number;
+  features: string[];
   purchaseSettings: {
     payWhatYouWant: boolean;
     acceptTips: boolean;
