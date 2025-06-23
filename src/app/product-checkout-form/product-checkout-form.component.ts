@@ -74,7 +74,7 @@ export class ProductCheckoutFormComponent {
     private analyticsService: AnalyticsService
   ) {
     this.product = this.data.product;
-    this.analyticsService.logFormView('product_checkout_form', {
+    this.analyticsService.logFormInteraction('product_checkout_form', 'view', {
       product_id: this.product.id,
       product_name: this.product.name,
       product_price: this.product.price,
@@ -269,6 +269,15 @@ export class ProductCheckoutFormComponent {
 
   onSubmit(): void {
     if (this.checkoutForm.valid) {
+      this.analyticsService.logFormInteraction(
+        'product_checkout_form',
+        'submit',
+        {
+          product_id: this.product.id,
+          product_name: this.product.name,
+          product_price: this.product.price,
+        }
+      );
       this.isSubmitting = true;
       this.checkoutForm.disable();
       const formValue = this.checkoutForm.value;

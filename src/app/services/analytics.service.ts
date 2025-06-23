@@ -18,9 +18,11 @@ export interface AnalyticsEventData {
 })
 export class AnalyticsService {
   private deviceInfo: DeviceInfo;
+  private sessionStartTime: number;
 
   constructor(private analytics: Analytics) {
     this.deviceInfo = this.initializeDeviceInfo();
+    this.sessionStartTime = this.initializeSessionStartTime();
   }
 
   private initializeDeviceInfo(): DeviceInfo {
@@ -39,8 +41,40 @@ export class AnalyticsService {
     };
   }
 
+  private initializeSessionStartTime(): number {
+    // Try to get existing session start time from sessionStorage
+    const existingStartTime = sessionStorage.getItem('analytics_session_start');
+    if (existingStartTime) {
+      return parseInt(existingStartTime, 10);
+    }
+
+    // Create new session start time
+    const startTime = Date.now();
+    sessionStorage.setItem('analytics_session_start', startTime.toString());
+    return startTime;
+  }
+
   /**
-   * Log an analytics event with device information automatically included
+   * Get current session duration in seconds
+   * @returns Session duration in seconds
+   */
+  getSessionDuration(): number {
+    const currentTime = Date.now();
+    const durationMs = currentTime - this.sessionStartTime;
+    return Math.round(durationMs / 1000); // Convert to seconds
+  }
+
+  /**
+   * Get current session duration in minutes
+   * @returns Session duration in minutes
+   */
+  getSessionDurationMinutes(): number {
+    const durationSeconds = this.getSessionDuration();
+    return Math.round((durationSeconds / 60) * 100) / 100; // Round to 2 decimal places
+  }
+
+  /**
+   * Log an analytics event with device information and session time automatically included
    * @param eventName - The name of the event to log
    * @param additionalData - Additional data to include with the event
    */
@@ -48,13 +82,15 @@ export class AnalyticsService {
     const eventData = {
       ...additionalData,
       ...this.deviceInfo,
+      session_duration_seconds: this.getSessionDuration(),
+      session_duration_minutes: this.getSessionDurationMinutes(),
     };
 
     logEvent(this.analytics, eventName, eventData);
   }
 
   /**
-   * Log a page view event with device information
+   * Log a page view event with device information and session time
    * @param pageName - The name of the page being viewed
    * @param additionalData - Additional data to include
    */
@@ -66,7 +102,7 @@ export class AnalyticsService {
   }
 
   /**
-   * Log a form view event with device information
+   * Log a form view event with device information and session time
    * @param formName - The name of the form being viewed
    * @param additionalData - Additional data to include
    */
@@ -78,7 +114,7 @@ export class AnalyticsService {
   }
 
   /**
-   * Log a button click event with device information
+   * Log a button click event with device information and session time
    * @param buttonName - The name of the button clicked
    * @param additionalData - Additional data to include
    */
@@ -93,7 +129,7 @@ export class AnalyticsService {
   }
 
   /**
-   * Log a purchase event with device information
+   * Log a purchase event with device information and session time
    * @param productId - The ID of the product purchased
    * @param amount - The purchase amount
    * @param additionalData - Additional data to include
@@ -106,6 +142,24 @@ export class AnalyticsService {
     this.logEvent('purchase', {
       product_id: productId,
       amount: amount,
+      ...additionalData,
+    });
+  }
+
+  /**
+   * Log a form interaction event with session time
+   * @param formName - The name of the form
+   * @param action - The action performed (view, submit, etc.)
+   * @param additionalData - Additional data to include
+   */
+  logFormInteraction(
+    formName: string,
+    action: string,
+    additionalData: AnalyticsEventData = {}
+  ): void {
+    this.logEvent('form_interaction', {
+      form_name: formName,
+      action: action,
       ...additionalData,
     });
   }
@@ -140,5 +194,13 @@ export class AnalyticsService {
    */
   isTouchDevice(): boolean {
     return this.deviceInfo.isTouchDevice;
+  }
+
+  /**
+   * Get session start time
+   * @returns Session start timestamp
+   */
+  getSessionStartTime(): number {
+    return this.sessionStartTime;
   }
 }
