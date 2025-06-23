@@ -101,7 +101,10 @@
   </div>
 
   <!-- Product Features/Highlights -->
-  <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8">
+  <div
+    class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8"
+    *ngIf="product.features"
+  >
     <h3
       class="text-lg font-semibold mb-4 text-slate-100 flex items-center gap-2"
     >
@@ -120,7 +123,7 @@
       </svg>
       Highlights
     </h3>
-    <div class="flex flex-col gap-3" *ngIf="product.features">
+    <div class="flex flex-col gap-3">
       <div
         *ngFor="let feature of product.features; let i = index"
         class="flex items-start gap-3 p-4 rounded-lg"
