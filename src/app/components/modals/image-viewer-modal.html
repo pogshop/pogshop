@@ -1,5 +1,5 @@
 <div
-  class="bg-gray-900/95 backdrop-blur-sm rounded-lg w-full max-w-xl p-4 flex flex-col border border-gray-600/50 flex justify-center"
+  class="bg-gray-900/95 backdrop-blur-sm rounded-lg w-full max-w-xl p-4 flex flex-col border border-gray-600/50 flex justify-center h-fit"
 >
   <!-- Header with close button -->
   <div class="flex items-center justify-between mb-2">
@@ -39,7 +39,7 @@
       <img
         [src]="data.imageUrl"
         [alt]="data.imageAlt"
-        class="max-w-full max-h-fit object-contain rounded-lg shadow-2xl"
+        class="max-w-full max-h-[500px] object-contain rounded-lg shadow-2xl"
         (click)="close()"
         style="cursor: pointer"
       />

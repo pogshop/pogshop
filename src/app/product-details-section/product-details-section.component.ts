@@ -161,9 +161,9 @@ export class ProductDetailsSectionComponent {
       data: modalData,
       closeOnBackdropClick: true,
       width: 'fit',
-      maxWidth: '800px',
-      height: 'fit-content',
-      maxHeight: '80vh',
+      maxWidth: '600px',
+      height: '600px',
+      maxHeight: '600px',
       backdropClass: ['modal-center', 'modal-backdrop-dark'],
     });
   }
