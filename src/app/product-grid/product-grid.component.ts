@@ -48,6 +48,13 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['productList']) {
       this.productList.sort((a, b) => {
+        // First, separate hidden and non-hidden products
+        if (a.isHidden !== b.isHidden) {
+          // Non-hidden products come first (isHidden: false comes before isHidden: true)
+          return a.isHidden ? 1 : -1;
+        }
+
+        // Within each group (hidden/non-hidden), sort by createdAt in descending order
         return b.createdAt - a.createdAt;
       });
       this.updateAllTimeDisplays();

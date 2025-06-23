@@ -22,6 +22,11 @@ import {
   PRODUCT_TYPE,
   ProductService,
 } from '../services/product.service';
+import { UsersService } from '../services/users-service.service';
+import {
+  getUserDisplayCurrency,
+  getCurrencySymbol,
+} from '../helpers/userHelpers';
 
 @Component({
   selector: 'app-product-creation-form',
@@ -46,6 +51,7 @@ export class ProductCreationFormComponent {
   isLimitedInventory = false;
   hasDailyLimit = false;
   MAX_IMAGES = 4;
+  userCurrency = 'USD';
 
   readonly PRODUCT_TYPE = PRODUCT_TYPE;
   private audioPlayer = new Audio(
@@ -72,9 +78,19 @@ export class ProductCreationFormComponent {
     },
   ];
 
-  constructor(private fb: FormBuilder, private cdRef: ChangeDetectorRef) {}
+  constructor(
+    private fb: FormBuilder,
+    private cdRef: ChangeDetectorRef,
+    private usersService: UsersService
+  ) {}
 
   ngOnInit() {
+    // Get user currency
+    const currentUser = this.usersService.authUser$.value;
+    if (currentUser) {
+      this.userCurrency = getUserDisplayCurrency(currentUser);
+    }
+
     this.productForm = this.fb.group({
       type: [this.product?.type || PRODUCT_TYPE.INTERACTIVE],
       name: [this.product?.name || '', [Validators.required]],
@@ -429,5 +445,9 @@ export class ProductCreationFormComponent {
   removeHighlight(index: number) {
     this.highlightsArray.removeAt(index);
     this.cdRef.detectChanges();
+  }
+
+  getCurrencySymbol(): string {
+    return getCurrencySymbol(this.userCurrency);
   }
 }
