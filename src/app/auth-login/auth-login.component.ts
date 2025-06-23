@@ -10,7 +10,8 @@ import {
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth-service.service';
-import { Analytics, logEvent } from '@angular/fire/analytics';
+import { logEvent } from '@angular/fire/analytics';
+import { AnalyticsService } from '../services/analytics.service';
 
 @Component({
   selector: 'app-auth-login',
@@ -30,9 +31,9 @@ export class AuthLoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private analytics: Analytics
+    private analyticsService: AnalyticsService
   ) {
-    logEvent(this.analytics, 'login_page_viewed');
+    this.analyticsService.logPageView('login_page_viewed');
     this.handle =
       this.router.getCurrentNavigation()?.extras.state?.['handle'] || '';
     this.isNewUser =
@@ -50,6 +51,7 @@ export class AuthLoginComponent {
   }
 
   sendMagicLink(): void {
+    this.analyticsService.logEvent('login_page_magic_link_button_clicked');
     if (this.loginForm.invalid) {
       return;
     }
@@ -69,6 +71,7 @@ export class AuthLoginComponent {
   }
 
   twitchLogin(): void {
+    this.analyticsService.logEvent('login_page_twitch_login_button_clicked');
     this.authService.twitchLogin();
   }
 }
