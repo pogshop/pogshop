@@ -122,6 +122,7 @@ export class ProductCreationFormComponent {
     }
 
     this.productForm.valueChanges.subscribe((value) => {
+      console.log(value);
       this.onProductFormUpdated.emit(value);
       this.productFormStatus.emit(this.productForm.valid);
     });
@@ -151,31 +152,19 @@ export class ProductCreationFormComponent {
   }
 
   selectProductType(type: PRODUCT_TYPE) {
-    if (type === PRODUCT_TYPE.PHYSICAL) {
-      this.productForm.patchValue({
-        type,
-        digitalLink: '',
-      });
-      this.productForm.get('inventorySettings')?.setValue({
+    this.productForm.patchValue({
+      type,
+      digitalLink: '',
+      inventorySettings: {
         requiresShipping: true,
         remainingInventory: null,
         purchasedToday: 0,
         dailyLimit: null,
-      });
-    } else {
-      this.productForm.patchValue({
-        type,
-        digitalLink: '',
-      });
-      this.productForm.get('inventorySettings')?.setValue({
-        requiresShipping: false,
-        remainingInventory: null,
-        purchasedToday: 0,
-        dailyLimit: null,
-      });
-    }
-
-    this.cdRef.markForCheck();
+      },
+    });
+    console.log(this.productForm.value);
+    this.productForm.updateValueAndValidity();
+    this.cdRef.detectChanges();
   }
 
   toggleSoundPlayback() {
