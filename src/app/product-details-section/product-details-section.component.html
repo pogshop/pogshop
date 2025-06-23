@@ -45,14 +45,27 @@
     <div class="flex flex-col gap-4">
       <!-- Main Product Image -->
       <div
-        class="text-center relative overflow-hidden flex items-center justify-center"
+        class="text-center relative overflow-hidden flex items-center justify-center group"
       >
         <div class="absolute inset-0 -z-10"></div>
         <img
           [src]="product.imageURLs[selectedImageIndex]"
           [alt]="product.name"
-          class="max-w-full h-80 object-contain rounded-2xl shadow-2xl"
+          class="max-w-full h-80 object-contain rounded-2xl shadow-2xl cursor-pointer hover:opacity-90 transition-opacity"
+          (click)="
+            openImageModal(
+              product.imageURLs[selectedImageIndex],
+              selectedImageIndex
+            )
+          "
+          [attr.aria-label]="'View ' + product.name + ' in full size'"
         />
+        <!-- Full size indicator -->
+        <div
+          class="absolute top-4 right-4 bg-black/50 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          Click to enlarge
+        </div>
       </div>
 
       <!-- All Product Images Thumbnails -->
@@ -62,7 +75,7 @@
       >
         <div
           *ngFor="let image of product.imageURLs; let i = index"
-          class="relative overflow-hidden"
+          class="relative overflow-hidden group"
         >
           <img
             [src]="image"
@@ -74,6 +87,14 @@
                 i !== selectedImageIndex
             }"
             (click)="selectMainImage(i)"
+            (dblclick)="openImageModal(image, i)"
+            [attr.aria-label]="
+              'Select ' +
+              product.name +
+              ' - Image ' +
+              (i + 1) +
+              ' (double-click to view full size)'
+            "
           />
         </div>
       </div>

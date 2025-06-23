@@ -1,0 +1,52 @@
+<div
+  class="bg-gray-900/95 backdrop-blur-sm rounded-lg w-full max-w-xl p-4 flex flex-col border border-gray-600/50 flex justify-center"
+>
+  <!-- Header with close button -->
+  <div class="flex items-center justify-between mb-2">
+    <div class="flex-1"></div>
+    <div class="text-center flex-1">
+      <h3 class="text-lg font-semibold text-white truncate">
+        {{ data.productName }}
+      </h3>
+    </div>
+    <div class="flex-1 flex justify-end">
+      <button
+        #closeButton
+        (click)="close()"
+        class="w-8 h-8 bg-gray-800/80 hover:bg-gray-700/80 rounded-full flex items-center justify-center text-white transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400"
+        [attr.aria-label]="'Close image viewer'"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Image container -->
+  <div class="flex flex-col items-center justify-center">
+    <div class="max-w-full flex items-center justify-center">
+      <img
+        [src]="data.imageUrl"
+        [alt]="data.imageAlt"
+        class="max-w-full max-h-fit object-contain rounded-lg shadow-2xl"
+        (click)="close()"
+        style="cursor: pointer"
+      />
+    </div>
+
+    <div class="mt-2 text-center">
+      <p class="text-xs text-gray-400">Click anywhere to close</p>
+    </div>
+  </div>
+</div>

@@ -126,7 +126,7 @@ export class ModalService {
   private createOverlay(config: ModalConfig): OverlayRef {
     const overlayConfig = new OverlayConfig({
       hasBackdrop: true,
-      backdropClass: ['modal-backdrop-dark'],
+      backdropClass: config.backdropClass || ['modal-backdrop-dark'],
       panelClass: config.panelClass,
       width: config.width,
       height: config.height,

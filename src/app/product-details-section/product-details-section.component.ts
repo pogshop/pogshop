@@ -12,6 +12,10 @@ import { CommonModule } from '@angular/common';
 import { UsersService } from '../services/users-service.service';
 import { getUserDisplayCurrency } from '../helpers/userHelpers';
 import { AnalyticsService } from '../services/analytics.service';
+import {
+  ImageViewerModalComponent,
+  ImageViewerModalData,
+} from '../components/modals/image-viewer-modal';
 
 export interface ProductInfo {
   id: string;
@@ -140,5 +144,27 @@ export class ProductDetailsSectionComponent {
     // Update the selected image index
     this.selectedImageIndex = imageIndex;
     this.cdRef.detectChanges();
+  }
+
+  openImageModal(imageUrl: string, imageIndex: number): void {
+    this.analyticsService.logEvent('product_details_page_image_modal_opened', {
+      totalImages: this.product.imageURLs.length,
+    });
+
+    const modalData: ImageViewerModalData = {
+      imageUrl: imageUrl,
+      imageAlt: `${this.product.name} - Image ${imageIndex + 1}`,
+      productName: this.product.name,
+    };
+
+    this.modalService.open(ImageViewerModalComponent, {
+      data: modalData,
+      closeOnBackdropClick: true,
+      width: 'fit',
+      maxWidth: '800px',
+      height: 'fit-content',
+      maxHeight: '80vh',
+      backdropClass: ['modal-center', 'modal-backdrop-dark'],
+    });
   }
 }

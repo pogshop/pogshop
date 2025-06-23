@@ -9,6 +9,12 @@ body {
   backdrop-filter: blur(0.6px); /* Optional: adds slight blur effect */
 }
 
+.modal-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .scrollable-modal-panel {
   max-height: 90vh;
   overflow-y: auto;
