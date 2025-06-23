@@ -681,7 +681,10 @@
           [ngClass]="{ 'border-purple-500 bg-purple-600/10': isDragging }"
         >
           <!-- Empty primary slot -->
-          <div *ngIf="!getProductImages()[0]" class="space-y-4">
+          <div
+            *ngIf="!getProductImages()[0]"
+            class="space-y-4 flex flex-col items-center"
+          >
             <div
               class="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center"
             >
