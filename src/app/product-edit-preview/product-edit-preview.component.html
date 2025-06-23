@@ -18,11 +18,13 @@
       <h4 class="text-sm font-medium text-gray-400 mb-3">
         Stream Alert Preview
       </h4>
-      <app-simple-stream-alert
-        [displayImage]="product?.imageURLs?.[0]"
-        [displayProductName]="product?.name"
-        [displayHandle]="handle"
-      ></app-simple-stream-alert>
+      <div class="mx-auto">
+        <app-simple-stream-alert
+          [displayImage]="product?.imageURLs?.[0]"
+          [displayProductName]="product?.name"
+          [displayHandle]="handle"
+        ></app-simple-stream-alert>
+      </div>
     </div>
   </div>
 </div>
