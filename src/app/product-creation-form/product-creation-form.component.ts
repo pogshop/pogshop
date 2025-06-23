@@ -45,6 +45,7 @@ export class ProductCreationFormComponent {
   isDragging = false;
   isLimitedInventory = false;
   hasDailyLimit = false;
+  MAX_IMAGES = 4;
 
   readonly PRODUCT_TYPE = PRODUCT_TYPE;
   private audioPlayer = new Audio(
@@ -242,18 +243,88 @@ export class ProductCreationFormComponent {
 
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
-      this.handleFile(files[0]);
+      // Find the first empty slot
+      const currentImages = this.productForm.get('imageURLs')?.value || [];
+      let targetSlot = 0;
+
+      // Find first empty slot
+      for (let i = 0; i < this.MAX_IMAGES; i++) {
+        if (!currentImages[i]) {
+          targetSlot = i;
+          break;
+        }
+      }
+
+      // If all slots are full, use the first slot
+      if (targetSlot >= this.MAX_IMAGES) {
+        targetSlot = 0;
+      }
+
+      this.handleImageFileForSlot(files[0], targetSlot);
     }
   }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.handleFile(input.files[0]);
+      // Find the first empty slot
+      const currentImages = this.productForm.get('imageURLs')?.value || [];
+      let targetSlot = 0;
+
+      // Find first empty slot
+      for (let i = 0; i < this.MAX_IMAGES; i++) {
+        if (!currentImages[i]) {
+          targetSlot = i;
+          break;
+        }
+      }
+
+      // If all slots are full, use the first slot
+      if (targetSlot >= this.MAX_IMAGES) {
+        targetSlot = 0;
+      }
+
+      this.handleImageFileForSlot(input.files[0], targetSlot);
     }
   }
 
-  private handleFile(file: File) {
+  removeImage(event: Event, removeIndex?: number) {
+    event.stopPropagation();
+    const currentImages = this.productForm.get('imageURLs')?.value || [];
+
+    if (removeIndex !== undefined) {
+      // Remove specific image
+      const updatedImages = currentImages.filter(
+        (unusedImageString: string, imageIndex: number) =>
+          imageIndex !== removeIndex
+      );
+      this.productForm.patchValue({ imageURLs: updatedImages });
+    } else {
+      // Remove all images (for backward compatibility)
+      this.productForm.patchValue({ imageURLs: [] });
+      if (this.fileInput) {
+        this.fileInput.nativeElement.value = '';
+      }
+    }
+
+    this.cdRef.detectChanges();
+  }
+
+  onImageSlotClick(index: number) {
+    // Trigger file input for specific slot
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = (event) => {
+      const input = event.target as HTMLInputElement;
+      if (input.files && input.files.length > 0) {
+        this.handleImageFileForSlot(input.files[0], index);
+      }
+    };
+    fileInput.click();
+  }
+
+  private handleImageFileForSlot(file: File, slotIndex: number) {
     // Check file type
     if (!file.type.startsWith('image/')) {
       alert('Please upload an image file');
@@ -270,18 +341,30 @@ export class ProductCreationFormComponent {
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const selectedImage = e.target?.result as string;
-      this.productForm.patchValue({ imageURLs: [selectedImage] });
+      const currentImages = this.productForm.get('imageURLs')?.value || [];
+
+      // Ensure array is long enough
+      while (currentImages.length <= slotIndex) {
+        currentImages.push(null);
+      }
+
+      // Update the specific slot
+      currentImages[slotIndex] = selectedImage;
+      this.productForm.patchValue({ imageURLs: currentImages });
       this.cdRef.detectChanges();
     };
     reader.readAsDataURL(file);
   }
 
-  removeImage(event: Event) {
-    event.stopPropagation();
-    this.productForm.patchValue({ imageURLs: [] });
-    if (this.fileInput) {
-      this.fileInput.nativeElement.value = '';
+  getProductImages() {
+    const currentImages = this.productForm.get('imageURLs')?.value || [];
+    const productImages = [];
+
+    for (let i = 0; i < this.MAX_IMAGES; i++) {
+      productImages.push(currentImages[i] || null);
     }
+
+    return productImages;
   }
 
   onSoundFileSelected(event: Event) {

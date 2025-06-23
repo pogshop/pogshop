@@ -41,6 +41,7 @@ export class ProductDetailsSectionComponent {
   stockBadgeText: string = '';
   linkCopied: boolean = false;
   remainingInventory: number | null = null;
+  selectedImageIndex: number = 0;
 
   constructor(
     private modalService: ModalService,
@@ -128,5 +129,16 @@ export class ProductDetailsSectionComponent {
       this.linkCopied = false;
       this.cdRef.detectChanges();
     }, 2000);
+  }
+
+  selectMainImage(imageIndex: number): void {
+    this.analyticsService.logEvent('product_details_page_image_clicked', {
+      imageIndex: imageIndex,
+      totalImages: this.product.imageURLs.length,
+    });
+
+    // Update the selected image index
+    this.selectedImageIndex = imageIndex;
+    this.cdRef.detectChanges();
   }
 }

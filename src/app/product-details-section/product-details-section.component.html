@@ -42,15 +42,41 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
-    <div
-      class="text-center relative overflow-hidden flex items-center justify-center"
-    >
-      <div class="absolute inset-0 -z-10"></div>
-      <img
-        [src]="product.imageURLs[0]"
-        [alt]="product.name"
-        class="max-w-full h-80 object-fill rounded-2xl shadow-2xl"
-      />
+    <div class="flex flex-col gap-4">
+      <!-- Main Product Image -->
+      <div
+        class="text-center relative overflow-hidden flex items-center justify-center"
+      >
+        <div class="absolute inset-0 -z-10"></div>
+        <img
+          [src]="product.imageURLs[selectedImageIndex]"
+          [alt]="product.name"
+          class="max-w-full h-80 object-contain rounded-2xl shadow-2xl"
+        />
+      </div>
+
+      <!-- All Product Images Thumbnails -->
+      <div
+        *ngIf="product.imageURLs.length > 1"
+        class="flex gap-3 justify-center flex-wrap"
+      >
+        <div
+          *ngFor="let image of product.imageURLs; let i = index"
+          class="relative overflow-hidden"
+        >
+          <img
+            [src]="image"
+            [alt]="product.name + ' - Image ' + (i + 1)"
+            class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity box-border"
+            [ngClass]="{
+              'border-3 border-violet-500': i === selectedImageIndex,
+              'opacity-60 border-2 border-violet-500/30':
+                i !== selectedImageIndex
+            }"
+            (click)="selectMainImage(i)"
+          />
+        </div>
+      </div>
     </div>
 
     <div class="flex flex-col gap-5">

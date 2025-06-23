@@ -484,52 +484,124 @@
   <!-- Image Upload -->
   <div>
     <label class="block font-medium text-gray-100 mb-2"
-      >Product Image or GIF</label
+      >Product Images (up to 4)</label
     >
-    <div
-      class="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-purple-500 transition-colors cursor-pointer"
-      (click)="fileInput.click()"
-      (dragover)="onDragOver($event)"
-      (dragleave)="onDragLeave($event)"
-      (drop)="onDrop($event)"
-      [ngClass]="{ 'border-purple-500': isDragging }"
-    >
-      <input
-        #fileInput
-        type="file"
-        accept="image/*"
-        class="hidden"
-        (change)="onFileSelected($event)"
-      />
-      <div *ngIf="!product?.imageURLs?.length" class="space-y-2">
-        <svg
-          class="mx-auto mb-2 text-gray-400 w-8 h-8"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+
+    <!-- Primary large image slot -->
+    <div class="mb-4">
+      <div
+        class="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-purple-500 transition-colors cursor-pointer min-h-[200px] flex flex-col items-center justify-center"
+        (click)="onImageSlotClick(0)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        [ngClass]="{ 'border-purple-500': isDragging }"
+      >
+        <!-- Empty primary slot -->
+        <div *ngIf="!getProductImages()[0]" class="space-y-3">
+          <svg
+            class="mx-auto text-gray-400 w-12 h-12"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <p class="text-gray-400">Click to upload main product image</p>
+          <p class="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
+        </div>
+
+        <!-- Primary image preview -->
+        <div *ngIf="getProductImages()[0]" class="relative w-full h-full">
+          <img
+            [src]="getProductImages()[0]"
+            class="w-full max-h-48 object-contain rounded-lg"
+            alt="Primary product image"
           />
-        </svg>
-        <p class="text-gray-400">Click to upload or drag and drop</p>
-        <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 5MB</p>
+          <button
+            type="button"
+            class="absolute -top-2 -right-2 bg-gray-600/70 hover:bg-gray-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+            (click)="removeImage($event, 0)"
+          >
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div *ngIf="product?.imageURLs?.length" class="space-y-2">
-        <img
-          [src]="product!.imageURLs[0]"
-          class="mx-auto max-h-48 rounded-lg"
-        />
-        <button
-          type="button"
-          class="text-red-400 hover:text-red-300 text-sm"
-          (click)="removeImage($event)"
-        >
-          Remove image
-        </button>
+    </div>
+
+    <!-- Additional image slots -->
+    <div class="grid grid-cols-3 gap-3">
+      <div
+        *ngFor="let image of getProductImages().slice(1); let i = index"
+        class="border-2 border-dashed border-gray-700 rounded-lg p-3 text-center hover:border-purple-500 transition-colors cursor-pointer min-h-[100px] flex flex-col items-center justify-center"
+        (click)="onImageSlotClick(i + 1)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        [ngClass]="{ 'border-purple-500': isDragging }"
+      >
+        <!-- Empty additional slot -->
+        <div *ngIf="!image" class="space-y-1">
+          <svg
+            class="mx-auto text-gray-400 w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <p class="text-xs text-gray-400">Additional Product Image</p>
+        </div>
+
+        <!-- Additional image preview -->
+        <div *ngIf="image" class="relative w-full h-full rounded-md">
+          <img
+            [src]="image"
+            class="w-full h-16 object-contain rounded-md"
+            alt="Additional product image"
+          />
+          <button
+            type="button"
+            class="absolute -top-1 -right-1 bg-gray-600/70 hover:bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+            (click)="removeImage($event, i + 1)"
+          >
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
