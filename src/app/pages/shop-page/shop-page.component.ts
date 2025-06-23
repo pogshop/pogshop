@@ -22,6 +22,7 @@ import { PurchaseSuccessfulDialogComponent } from '../../components/modals/purch
 import { ModalService } from '../../services/modal-service.service';
 import { SellerSuggestionDialogComponent } from '../../components/modals/seller-suggestion-dialog';
 import { FooterComponent } from '../../footer/footer.component';
+import { Analytics, logEvent } from '@angular/fire/analytics';
 
 @Component({
   selector: 'app-shop-page',
@@ -56,8 +57,10 @@ export class ShopPageComponent {
     private router: Router,
     private cdRef: ChangeDetectorRef,
     private productService: ProductService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private analytics: Analytics
   ) {
+    logEvent(this.analytics, 'shop_page_viewed');
     this.route.url.pipe(take(1)).subscribe((params) => {
       this.initializeProducts();
     });

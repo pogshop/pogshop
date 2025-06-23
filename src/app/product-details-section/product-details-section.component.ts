@@ -11,6 +11,7 @@ import { ModalService } from '../services/modal-service.service';
 import { CommonModule } from '@angular/common';
 import { UsersService } from '../services/users-service.service';
 import { getUserDisplayCurrency } from '../helpers/userHelpers';
+import { AnalyticsService } from '../services/analytics.service';
 
 export interface ProductInfo {
   id: string;
@@ -43,8 +44,11 @@ export class ProductDetailsSectionComponent {
   constructor(
     private modalService: ModalService,
     private cdRef: ChangeDetectorRef,
-    private usersService: UsersService
-  ) {}
+    private usersService: UsersService,
+    private analyticsService: AnalyticsService
+  ) {
+    this.analyticsService.logPageView('product_details_page_viewed');
+  }
 
   ngOnInit(): void {
     this.usersService.getUserById(this.product.userId).subscribe((user) => {
@@ -83,10 +87,14 @@ export class ProductDetailsSectionComponent {
   }
 
   handleBackClick(): void {
+    this.analyticsService.logEvent('product_details_page_back_button_clicked');
     this.onBack.emit();
   }
 
   handlePurchaseClick(): void {
+    this.analyticsService.logEvent(
+      'product_details_page_purchase_button_clicked'
+    );
     this.modalService.open(ProductCheckoutFormComponent, {
       data: {
         product: this.product,
@@ -97,6 +105,9 @@ export class ProductDetailsSectionComponent {
   }
 
   handleCopyLink(): void {
+    this.analyticsService.logEvent(
+      'product_details_page_copy_link_button_clicked'
+    );
     const url = new URL(window.location.href);
     url.searchParams.set('productId', this.product?.id || '');
     navigator.clipboard.writeText(url.toString());

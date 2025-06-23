@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MODAL_DATA, ModalRef } from '../../services/modal-service.service';
 import { CommonModule } from '@angular/common';
 import { SellerReferralFormComponent } from '../../seller-referral-form/seller-referral-form.component';
+import { Analytics, logEvent } from '@angular/fire/analytics';
 
 interface SellerSuggestionData {
   userHandle: string;
@@ -15,8 +16,11 @@ interface SellerSuggestionData {
 export class SellerSuggestionDialogComponent {
   constructor(
     private modalRef: ModalRef<SellerSuggestionDialogComponent>,
-    @Inject(MODAL_DATA) public data: SellerSuggestionData
-  ) {}
+    @Inject(MODAL_DATA) public data: SellerSuggestionData,
+    private analytics: Analytics
+  ) {
+    logEvent(this.analytics, 'seller_suggestion_dialog_viewed');
+  }
 
   closeModal(): void {
     this.modalRef.close();

@@ -25,6 +25,7 @@ import { UsersService } from '../services/users-service.service';
 import { getUserDisplayCurrency } from '../helpers/userHelpers';
 import { OrdersService } from '../services/orders-service.service';
 import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-stream-alert-dialog';
+import { AnalyticsService } from '../services/analytics.service';
 
 export interface ProductCheckoutFormDialogData {
   product: Product;
@@ -69,9 +70,15 @@ export class ProductCheckoutFormComponent {
     private cdRef: ChangeDetectorRef,
     private usersService: UsersService,
     private ordersService: OrdersService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private analyticsService: AnalyticsService
   ) {
     this.product = this.data.product;
+    this.analyticsService.logFormView('product_checkout_form', {
+      product_id: this.product.id,
+      product_name: this.product.name,
+      product_price: this.product.price,
+    });
   }
 
   ngOnInit(): void {
@@ -312,6 +319,7 @@ export class ProductCheckoutFormComponent {
 
   testAlert(event: MouseEvent): void {
     event.stopPropagation();
+    this.analyticsService.logEvent('product_checkout_form_test_alert_clicked');
     this.modalService.open(SimpleStreamAlertDialogComponent, {
       data: {
         displayImage: this.product?.imageURLs?.[0],

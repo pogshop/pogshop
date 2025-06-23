@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Analytics, logEvent } from '@angular/fire/analytics';
 import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -9,4 +10,8 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(private analytics: Analytics) {
+    logEvent(this.analytics, 'pogshop_visited');
+  }
+}

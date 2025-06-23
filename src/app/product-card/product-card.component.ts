@@ -21,6 +21,7 @@ import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-st
 import { UsersService } from '../services/users-service.service';
 import { getUserDisplayCurrency } from '../helpers/userHelpers';
 import { DeleteProductDialogComponent } from '../components/modals/delete-product-dialog';
+import { Analytics, logEvent } from '@angular/fire/analytics';
 
 export enum ProductEventType {
   CREATE = 'CREATE',
@@ -67,7 +68,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private cdRef: ChangeDetectorRef,
     private modalService: ModalService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private analytics: Analytics
   ) {}
 
   ngOnInit(): void {
@@ -156,6 +158,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   handleBuyProduct(event: Event): void {
+    logEvent(this.analytics, 'product_card_buy_button_clicked');
     event?.stopPropagation();
     this.modalService.open(ProductCheckoutFormComponent, {
       data: {
