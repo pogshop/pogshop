@@ -316,10 +316,10 @@
 
       <!-- Pay What You Want Toggle -->
       <div
-        class="flex items-center justify-between bg-gray-700/50 rounded-lg p-4"
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-700/50 rounded-lg p-4 gap-4"
       >
-        <div>
-          <label class="font-medium text-gray-100"
+        <div class="flex-1">
+          <label class="font-medium text-gray-100 text-base sm:text-sm"
             >Let fans pay what they want</label
           >
           <p class="text-sm text-gray-400 mt-1">
@@ -329,7 +329,7 @@
         <button
           type="button"
           (click)="togglePayWhatYouWant()"
-          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+          class="relative inline-flex h-8 w-14 sm:h-6 sm:w-11 items-center rounded-full transition-colors self-start sm:self-auto"
           [ngClass]="{
             'bg-purple-600': productForm.get('purchaseSettings.payWhatYouWant')
               ?.value,
@@ -338,9 +338,9 @@
           }"
         >
           <span
-            class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+            class="inline-block h-6 w-6 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform"
             [ngClass]="{
-              'translate-x-6': productForm.get(
+              'translate-x-7 sm:translate-x-6': productForm.get(
                 'purchaseSettings.payWhatYouWant'
               )?.value,
               'translate-x-1': !productForm.get(
@@ -464,28 +464,30 @@
       class="space-y-6"
     >
       <div class="bg-gray-700/50 rounded-lg p-4">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <label class="font-medium text-gray-100"
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4"
+        >
+          <div class="flex-1">
+            <label class="font-medium text-gray-100 text-base sm:text-sm"
               >Daily Purchase Limit</label
             >
-            <p class="text-sm text-gray-400">
+            <p class="text-sm text-gray-400 mt-1">
               Prevent spam by limiting purchases per day
             </p>
           </div>
           <button
             type="button"
             (click)="toggleDailyLimit()"
-            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+            class="relative inline-flex h-8 w-14 sm:h-6 sm:w-11 items-center rounded-full transition-colors self-start sm:self-auto"
             [ngClass]="{
               'bg-purple-600': hasDailyLimit,
               'bg-gray-600': !hasDailyLimit
             }"
           >
             <span
-              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+              class="inline-block h-6 w-6 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform"
               [ngClass]="{
-                'translate-x-6': hasDailyLimit,
+                'translate-x-7 sm:translate-x-6': hasDailyLimit,
                 'translate-x-1': !hasDailyLimit
               }"
             ></span>
@@ -570,19 +572,21 @@
       class="space-y-4"
     >
       <div class="bg-gray-700/50 rounded-lg p-4">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <label class="font-medium text-gray-100"
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        >
+          <div class="flex-1">
+            <label class="font-medium text-gray-100 text-base sm:text-sm"
               >Collect Shipping Address</label
             >
-            <p class="text-sm text-gray-400">
+            <p class="text-sm text-gray-400 mt-1">
               Get customer addresses to ship physical items
             </p>
           </div>
           <button
             type="button"
             (click)="toggleCollectShipping()"
-            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+            class="relative inline-flex h-8 w-14 sm:h-6 sm:w-11 items-center rounded-full transition-colors min-w-fit self-start sm:self-auto"
             [ngClass]="{
               'bg-purple-600': productForm.get(
                 'inventorySettings.requiresShipping'
@@ -593,9 +597,9 @@
             }"
           >
             <span
-              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+              class="inline-block h-6 w-6 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform min-w-fit"
               [ngClass]="{
-                'translate-x-6': productForm.get(
+                'translate-x-7 sm:translate-x-6': productForm.get(
                   'inventorySettings.requiresShipping'
                 )?.value,
                 'translate-x-1': !productForm.get(
@@ -608,26 +612,30 @@
       </div>
 
       <div class="bg-gray-700/50 rounded-lg p-4">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <label class="font-medium text-gray-100">Limited Inventory</label>
-            <p class="text-sm text-gray-400">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4"
+        >
+          <div class="flex-1">
+            <label class="font-medium text-gray-100 text-base sm:text-sm"
+              >Limited Inventory</label
+            >
+            <p class="text-sm text-gray-400 mt-1">
               Set a maximum number of items available
             </p>
           </div>
           <button
             type="button"
             (click)="toggleLimitedInventory()"
-            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+            class="relative inline-flex h-8 w-14 sm:h-6 sm:w-11 items-center rounded-full transition-colors self-start sm:self-auto"
             [ngClass]="{
               'bg-purple-600': isLimitedInventory,
               'bg-gray-600': !isLimitedInventory
             }"
           >
             <span
-              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+              class="inline-block h-6 w-6 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform"
               [ngClass]="{
-                'translate-x-6': isLimitedInventory,
+                'translate-x-7 sm:translate-x-6': isLimitedInventory,
                 'translate-x-1': !isLimitedInventory
               }"
             ></span>
