@@ -6,13 +6,7 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-} from '@angular/animations';
+
 import { CommonModule } from '@angular/common';
 import {
   AbstractControl,
@@ -53,27 +47,6 @@ enum LOGIN_STATUS {
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('bubblePop', [
-      state(
-        'visible',
-        style({
-          transform: 'scale(1) translateY(0)',
-          opacity: 1,
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          transform: 'scale(0.2) translateY(50px)',
-          opacity: 0,
-        })
-      ),
-      transition('hidden => visible', [
-        animate('0.6s cubic-bezier(0.34, 1.56, 0.64, 1)'),
-      ]),
-    ]),
-  ],
 })
 export class LandingPageComponent implements OnInit {
   showFloatingEmotes = false;
