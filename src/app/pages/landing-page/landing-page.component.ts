@@ -2,8 +2,6 @@ import {
   Component,
   OnInit,
   HostListener,
-  ElementRef,
-  ViewChild,
   DestroyRef,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
@@ -22,7 +20,6 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
 } from '@angular/forms';
-import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 import { HandleServiceService } from '../../services/handle-service.service';
@@ -49,7 +46,6 @@ enum LOGIN_STATUS {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    LucideAngularModule,
     NavBarComponent,
     ShopPageComponent,
     CdnImagePipe,
@@ -96,9 +92,6 @@ export class LandingPageComponent implements OnInit {
   }> = [];
   handleFormControl: FormControl;
 
-  // Needed to auto play video
-  @ViewChild('videoPlayer') videoPlayer!: ElementRef;
-
   constructor(
     private router: Router,
     private handleService: HandleServiceService,
@@ -123,7 +116,6 @@ export class LandingPageComponent implements OnInit {
           ? LOGIN_STATUS.LOGGED_IN
           : LOGIN_STATUS.LOGGED_OUT;
         this.changeDetectorRef.markForCheck();
-        this.handleVideo();
       });
   }
 
@@ -169,25 +161,6 @@ export class LandingPageComponent implements OnInit {
       state: { handle: this.handleFormControl.value || '', isNewUser: true },
     });
   }
-
-  private handleVideo() {
-    if (this.isLoggedIn === LOGIN_STATUS.LOGGED_IN) {
-      return;
-    }
-    const video = this.videoPlayer?.nativeElement;
-    if (!video) {
-      return;
-    }
-    video.muted = true; // Must be muted for autoplay to work
-    video
-      .play()
-      .then()
-      .catch((err: any) => {
-        console.error('Autoplay failed:', err);
-        // Handle the error - perhaps show a play button
-      });
-  }
-
   @HostListener('window:scroll', ['$event'])
   handleScroll() {
     const scrollPosition = window.scrollY;
