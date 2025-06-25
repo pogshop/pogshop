@@ -254,12 +254,8 @@ export class ProductCheckoutFormComponent {
     return parseFloat(this.checkoutForm.get('tipAmount')?.value || '0');
   }
 
-  getServiceFee(): number {
-    return this.getSubtotal() * 0.2;
-  }
-
   getTotalPrice(): string {
-    const total = this.getSubtotal() + this.getTip() + this.getServiceFee();
+    const total = this.getSubtotal() + this.getTip();
     return total.toFixed(2);
   }
 

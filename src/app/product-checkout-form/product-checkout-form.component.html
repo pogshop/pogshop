@@ -322,15 +322,6 @@
                 <span class="text-purple-300">${{ getTip().toFixed(2) }}</span>
               </div>
 
-              <!-- Service Fee -->
-              <div class="flex justify-between" *ngIf="getServiceFee() > 0">
-                <span class="text-gray-300">Taxes & Service Fees </span>
-                <span class="text-white">{{
-                  getServiceFee().toFixed(2)
-                    | currency : userCurrency : "symbol-narrow" : "1.2-2"
-                }}</span>
-              </div>
-
               <!-- Final Total -->
               <div
                 class="border-t border-gray-600 pt-2 flex justify-between font-semibold"
