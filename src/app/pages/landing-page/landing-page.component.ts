@@ -33,6 +33,8 @@ import { ShopPageComponent } from '../shop-page/shop-page.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UsersService } from '../../services/users-service.service';
 import { CdnImagePipe } from '../../pipes/cdn-image.pipe';
+import { AnalyticsService } from '../../services/analytics.service';
+import { AuthService } from '../../services/auth-service.service';
 
 enum LOGIN_STATUS {
   LOADING = 'LOADING',
@@ -102,7 +104,9 @@ export class LandingPageComponent implements OnInit {
     private handleService: HandleServiceService,
     private usersService: UsersService,
     private destroyRef: DestroyRef,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private analyticsService: AnalyticsService,
+    private authService: AuthService
   ) {
     this.handleFormControl = new FormControl<string | null>('', {
       validators: [
@@ -121,6 +125,11 @@ export class LandingPageComponent implements OnInit {
         this.changeDetectorRef.markForCheck();
         this.handleVideo();
       });
+  }
+
+  twitchLogin(): void {
+    this.analyticsService.logEvent('landing_page_twitch_login_button_clicked');
+    this.authService.twitchLogin();
   }
 
   ngOnInit() {

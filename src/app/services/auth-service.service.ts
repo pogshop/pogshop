@@ -3,6 +3,7 @@ import {
   Auth,
   browserPopupRedirectResolver,
   OAuthProvider,
+  signInWithPopup,
   signInWithRedirect,
 } from '@angular/fire/auth';
 import { Observable, from, of } from 'rxjs';
@@ -16,8 +17,11 @@ const API_URL = `${environment.apiUrl}/v1/emails`;
 export class AuthService {
   private cachedToken: string | null = null;
   private tokenExpiration: number | null = null;
+  private isDevelopment: boolean = false;
 
-  constructor(private auth: Auth, private http: HttpClient) {}
+  constructor(private auth: Auth, private http: HttpClient) {
+    this.isDevelopment = !environment.production;
+  }
 
   /**
    * Send a magic link to the user's email
@@ -107,6 +111,10 @@ export class AuthService {
     });
 
     try {
+      if (this.isDevelopment) {
+        await signInWithPopup(this.auth, provider);
+        return;
+      }
       return await signInWithRedirect(
         this.auth,
         provider,

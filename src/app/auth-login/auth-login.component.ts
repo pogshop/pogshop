@@ -10,8 +10,8 @@ import {
 import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth-service.service';
-import { logEvent } from '@angular/fire/analytics';
 import { AnalyticsService } from '../services/analytics.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-auth-login',
@@ -27,12 +27,14 @@ export class AuthLoginComponent {
   disableMagicLinkButton = false;
   handle: string = '';
   isNewUser: boolean = false;
+  isProd: boolean = false;
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
     private analyticsService: AnalyticsService
   ) {
+    this.isProd = environment.production;
     this.analyticsService.logPageView('login_page_viewed');
     this.handle =
       this.router.getCurrentNavigation()?.extras.state?.['handle'] || '';
