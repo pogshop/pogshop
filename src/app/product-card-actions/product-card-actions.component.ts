@@ -98,12 +98,14 @@ export class ProductCardActionsComponent {
     (event.target as HTMLButtonElement).blur();
     if (this.product) {
       this.product.isHidden = !this.product.isHidden;
+
       this.productService
         .updateProduct(this.product.id, {
           isHidden: this.product.isHidden,
         })
-        .subscribe();
-      this.cdRef.detectChanges();
+        .subscribe(() => {
+          this.cdRef.detectChanges();
+        });
     }
   }
 
