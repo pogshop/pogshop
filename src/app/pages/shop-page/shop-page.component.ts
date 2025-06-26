@@ -23,6 +23,7 @@ import { ModalService } from '../../services/modal-service.service';
 import { SellerSuggestionDialogComponent } from '../../components/modals/seller-suggestion-dialog';
 import { FooterComponent } from '../../footer/footer.component';
 import { Analytics, logEvent } from '@angular/fire/analytics';
+import { PogshopSpinnerComponent } from '../../components/pogshop-spinner/pogshop-spinner.component';
 
 @Component({
   selector: 'app-shop-page',
@@ -33,6 +34,7 @@ import { Analytics, logEvent } from '@angular/fire/analytics';
     CommonModule,
     ProductDetailsSectionComponent,
     FooterComponent,
+    PogshopSpinnerComponent,
   ],
   templateUrl: './shop-page.component.html',
   styleUrl: './shop-page.component.scss',

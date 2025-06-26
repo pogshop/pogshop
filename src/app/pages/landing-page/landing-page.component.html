@@ -1,5 +1,7 @@
 @if(isLoggedIn === LOGIN_STATUS.LOGGED_IN) {
 <app-shop-page></app-shop-page>
+} @else if(isLoggedIn === LOGIN_STATUS.LOADING) {
+<app-pogshop-spinner></app-pogshop-spinner>
 } @else if(isLoggedIn === LOGIN_STATUS.LOGGED_OUT) {
 <div
   class="flex flex-col min-h-screen bg-gray-900 text-gray-100 font-sans relative overflow-hidden"

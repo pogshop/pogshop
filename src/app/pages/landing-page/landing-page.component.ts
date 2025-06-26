@@ -26,6 +26,7 @@ import { UsersService } from '../../services/users-service.service';
 import { CdnImagePipe } from '../../pipes/cdn-image.pipe';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth-service.service';
+import { PogshopSpinnerComponent } from '../../components/pogshop-spinner/pogshop-spinner.component';
 
 enum LOGIN_STATUS {
   LOADING = 'LOADING',
@@ -43,6 +44,7 @@ enum LOGIN_STATUS {
     NavBarComponent,
     ShopPageComponent,
     CdnImagePipe,
+    PogshopSpinnerComponent,
   ],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss'],
