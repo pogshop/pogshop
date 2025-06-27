@@ -1,0 +1,143 @@
+<div class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+  <div class="p-6">
+    <div class="flex items-center mb-4">
+      <div class="bg-blue-900 bg-opacity-30 p-3 rounded-md mr-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-blue-400"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold">Nightbot Integration</h2>
+        <p class="text-gray-400 text-sm">
+          Connect to trigger chat messages on stream
+        </p>
+      </div>
+    </div>
+
+    <p class="text-gray-300 mb-6">
+      Connect your Nightbot account to automatically send chat messages when
+      viewers purchase your products. This will announce purchases in your
+      Twitch chat, creating excitement and encouraging more sales!
+    </p>
+
+    <!-- Connection Status -->
+    <div class="mb-6">
+      <div
+        *ngIf="!isConnected"
+        class="bg-gray-700 p-4 rounded-md border border-gray-600"
+      >
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-semibold text-gray-200 mb-1">Not Connected</h3>
+            <p class="text-gray-400 text-sm">
+              Connect your Nightbot account to enable chat messages
+            </p>
+          </div>
+          <button
+            (click)="connectNightbot()"
+            [disabled]="isConnecting"
+            class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-md font-medium flex items-center transition-colors"
+          >
+            <svg
+              *ngIf="isConnecting"
+              class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <svg
+              *ngIf="!isConnecting"
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+              ></path>
+            </svg>
+            {{ isConnecting ? "Connecting..." : "Connect Nightbot" }}
+          </button>
+        </div>
+      </div>
+
+      <div
+        *ngIf="isConnected"
+        class="bg-green-900 bg-opacity-20 p-4 rounded-md border border-green-600"
+      >
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-semibold text-green-400 mb-1">Connected</h3>
+            <p class="text-gray-300 text-sm">
+              Nightbot is connected and ready to send chat messages
+            </p>
+          </div>
+          <button
+            (click)="connectNightbot()"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+          >
+            Reconnect
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Preview -->
+    <div class="bg-gray-700 p-4 rounded-md mb-6">
+      <h3 class="font-bold text-lg mb-3">Message Preview</h3>
+      <p class="text-gray-300 text-sm mb-2">
+        When someone purchases a product, Nightbot will send this message to
+        your chat:
+      </p>
+      <div class="bg-gray-800 p-3 rounded border border-gray-600">
+        <p class="text-green-400 font-mono text-sm">
+          🎉POGGERS! SuperPog420 just bought 5 pushups! pogshop.gg/{{ handle }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Setup Instructions -->
+    <div>
+      <h3 class="font-bold text-lg mb-2">How it works</h3>
+      <ul class="list-disc list-inside space-y-2 text-gray-300">
+        <li>Connect your Nightbot account using OAuth</li>
+        <li>We'll automatically create a custom command in your Nightbot</li>
+        <li>
+          When viewers purchase products, Nightbot will announce it in your chat
+        </li>
+        <li>Messages include the buyer's username, product name, and price</li>
+        <li>You can customize the message format in your Nightbot dashboard</li>
+      </ul>
+    </div>
+  </div>
+</div>

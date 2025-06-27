@@ -5,10 +5,17 @@ import { ShopNavbarComponent } from '../../components/shop-nav-bar/shop-nav-bar.
 import { UsersService } from '../../services/users-service.service';
 import { environment } from '../../../environments/environment';
 import { FooterComponent } from '../../footer/footer.component';
+import { NightbotIntegrationComponent } from '../../nightbot-integration/nightbot-integration.component';
+
 @Component({
   selector: 'app-integrations-page',
   standalone: true,
-  imports: [CommonModule, ShopNavbarComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    ShopNavbarComponent,
+    FooterComponent,
+    NightbotIntegrationComponent,
+  ],
   templateUrl: './integrations-page.component.html',
   styleUrls: ['./integrations-page.component.scss'],
 })
