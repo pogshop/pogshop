@@ -11,6 +11,7 @@ import { DashboardCardComponent } from '../../dashboard-card/dashboard-card.comp
 import { InfoCardComponent } from '../../info-card/info-card.component';
 import { PayoutCardComponent } from '../../payout-card/payout-card.component';
 import { CurrencyPipe } from '@angular/common';
+import { FooterComponent } from '../../footer/footer.component';
 
 @Component({
   selector: 'app-orders-page',
@@ -24,6 +25,7 @@ import { CurrencyPipe } from '@angular/common';
     InfoCardComponent,
     PayoutCardComponent,
     CurrencyPipe,
+    FooterComponent,
   ],
   templateUrl: './orders-page.component.html',
   styleUrl: './orders-page.component.scss',

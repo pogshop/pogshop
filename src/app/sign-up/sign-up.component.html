@@ -17,106 +17,179 @@
   </div>
 
   <!-- Navigation -->
-  <app-nav-bar class="relative z-50"></app-nav-bar>
+  <app-nav-bar></app-nav-bar>
 
   <!-- Content -->
-  <div class="relative z-10">
-    <div
-      class="flex items-center justify-center min-h-[calc(100vh-88px)] py-12 px-4"
-    >
-      <div class="w-full max-w-md">
-        <div class="relative">
+  <div class="flex items-center justify-center px-4 flex-col h-full">
+    <div class="py-8"></div>
+    <div class="w-full max-w-md">
+      <div class="relative">
+        <div
+          class="relative bg-gray-800/80 backdrop-blur-lg p-8 rounded-xl shadow-2xl border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-[1.02]"
+        >
+          <!-- Decorative elements -->
           <div
-            class="relative bg-gray-800/80 backdrop-blur-lg p-8 rounded-xl shadow-2xl border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-[1.02]"
-          >
-            <!-- Decorative elements -->
-            <div class="absolute -top-4 -right-4 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl animate-pulse"></div>
-            <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-pink-500/20 rounded-full blur-2xl animate-pulse" style="animation-delay: 1s"></div>
-            
-            <div class="text-center mb-8">
-              <div class="relative inline-block">
-                <h1 class="text-4xl font-bold mb-2 relative z-10">
-                  Welcome to<br />
-                  <span class="relative">
-                    Pog Shop!
-                    <span class="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                  </span>
-                </h1>
-              </div>
-              <p class="text-gray-300 mt-4">Choose a username to get started.</p>
-            </div>
+            class="absolute -top-4 -right-4 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl animate-pulse"
+          ></div>
+          <div
+            class="absolute -bottom-4 -left-4 w-24 h-24 bg-pink-500/20 rounded-full blur-2xl animate-pulse"
+            style="animation-delay: 1s"
+          ></div>
 
-            <div class="space-y-4">
-              <div class="relative group">
-                <label class="block text-sm font-medium mb-2 text-gray-200 group-hover:text-purple-400 transition-colors duration-300">
-                  Username <span class="text-red-400">*</span>
-                </label>
-                <div class="flex group">
+          <div class="text-center mb-8">
+            <div class="inline-block">
+              <h1 class="text-4xl font-bold mb-2">
+                Welcome to<br />
+                <span class="relative">
+                  Pogshop!
                   <span
-                    class="inline-flex items-center px-3 bg-gray-700/50 border border-gray-600 border-r-0 rounded-l-md text-gray-300 group-hover:border-purple-500/50 transition-colors duration-300"
+                    class="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                  ></span>
+                </span>
+              </h1>
+            </div>
+            <p class="text-gray-300 mt-4">Choose your handle to get started.</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="relative group">
+              <label
+                class="block text-sm font-medium mb-2 text-gray-200 group-hover:text-purple-400 transition-colors duration-300"
+              >
+                Username <span class="text-red-400">*</span>
+              </label>
+              <div class="flex group">
+                <span
+                  class="inline-flex items-center px-3 bg-gray-700/50 border border-gray-600 border-r-0 rounded-l-md text-gray-300 group-hover:border-purple-500/50 transition-colors duration-300"
+                >
+                  pogshop.gg/
+                </span>
+                <input
+                  type="text"
+                  [formControl]="handleFormControl"
+                  placeholder="username"
+                  class="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-r-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-500 group-hover:border-purple-500/50 transition-colors duration-300"
+                />
+              </div>
+              <div
+                class="handle-status min-h-[28px] mt-2 break-words transition-all duration-200"
+                *ngIf="handleStatus"
+              >
+                <div
+                  class="flex items-center space-x-2"
+                  *ngIf="handleStatus === 'checking'"
+                >
+                  <div
+                    class="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"
+                  ></div>
+                  <span class="checking text-gray-400"
+                    >Checking availability...</span
                   >
-                    pogshop.com/
-                  </span>
-                  <input
-                    type="text"
-                    [formControl]="handleFormControl"
-                    placeholder="username"
-                    class="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-r-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-500 group-hover:border-purple-500/50 transition-colors duration-300"
-                  />
                 </div>
                 <div
-                  class="handle-status min-h-[28px] mt-2 break-words transition-all duration-200"
-                  *ngIf="handleStatus"
+                  class="flex items-center space-x-2"
+                  *ngIf="handleStatus === 'available'"
                 >
-                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'checking'">
-                    <div class="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-                    <span class="checking text-gray-400">Checking availability...</span>
-                  </div>
-                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'available'">
-                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="available text-green-500 font-medium">Username is available!</span>
-                  </div>
-                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'taken'">
-                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    <span class="taken text-red-400 font-medium">Username is already taken</span>
-                  </div>
-                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'invalid'">
-                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                    <span class="taken text-red-400 font-medium">
-                      Username must be at least 3 characters
-                      and contain only letters and numbers
-                    </span>
-                  </div>
-                  <div class="flex items-center space-x-2" *ngIf="handleStatus === 'reserved'">
-                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                    <span class="taken text-red-400 font-medium">This username is reserved</span>
-                  </div>
+                  <svg
+                    class="w-5 h-5 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  <span class="available text-green-500 font-medium"
+                    >Username is available!</span
+                  >
+                </div>
+                <div
+                  class="flex items-center space-x-2"
+                  *ngIf="handleStatus === 'taken'"
+                >
+                  <svg
+                    class="w-5 h-5 text-red-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  <span class="taken text-red-400 font-medium"
+                    >Username is already taken</span
+                  >
+                </div>
+                <div
+                  class="flex items-center space-x-2"
+                  *ngIf="handleStatus === 'invalid'"
+                >
+                  <svg
+                    class="w-5 h-5 text-red-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    ></path>
+                  </svg>
+                  <span class="taken text-red-400 font-medium">
+                    Username must be at least 3 characters and contain only
+                    letters and numbers
+                  </span>
+                </div>
+                <div
+                  class="flex items-center space-x-2"
+                  *ngIf="handleStatus === 'reserved'"
+                >
+                  <svg
+                    class="w-5 h-5 text-red-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    ></path>
+                  </svg>
+                  <span class="taken text-red-400 font-medium"
+                    >This username is reserved</span
+                  >
                 </div>
               </div>
-
-              <button
-                type="button"
-                (click)="navigateToLogin()"
-                [disabled]="handleStatus !== 'available'"
-                [ngClass]="
-                  handleStatus === 'available'
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-purple-500/25'
-                    : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                "
-                class="w-full py-4 px-4 rounded-full font-medium transition-all duration-300 mt-8 transform hover:scale-[1.02] relative overflow-hidden group"
-              >
-                <span class="relative z-10">Continue</span>
-                <div class="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-white/10 to-purple-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-              </button>
             </div>
+
+            <button
+              type="button"
+              (click)="navigateToLogin()"
+              [disabled]="handleStatus !== 'available'"
+              [ngClass]="
+                handleStatus === 'available'
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-purple-500/25'
+                  : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+              "
+              class="w-full py-4 px-4 rounded-lg font-medium transition-all duration-300 mt-8 transform hover:scale-[1.02] relative overflow-hidden group"
+            >
+              <span class="">Continue</span>
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-white/10 to-purple-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"
+              ></div>
+            </button>
           </div>
         </div>
       </div>
