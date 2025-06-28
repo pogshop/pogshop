@@ -95,7 +95,7 @@
         *ngIf="isConnected"
         class="bg-green-900 bg-opacity-20 p-4 rounded-md border border-green-600"
       >
-        <div class="flex items-center justify-between">
+        <div class="flex sm:justify-between flex-col sm:flex-row gap-4">
           <div>
             <h3 class="font-semibold text-green-400 mb-1">Connected</h3>
             <p class="text-gray-300 text-sm">
@@ -104,7 +104,7 @@
           </div>
           <button
             (click)="connectNightbot()"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors w-full sm:w-auto"
           >
             Reconnect
           </button>
@@ -131,12 +131,11 @@
       <h3 class="font-bold text-lg mb-2">How it works</h3>
       <ul class="list-disc list-inside space-y-2 text-gray-300">
         <li>Connect your Nightbot account using OAuth</li>
-        <li>We'll automatically create a custom command in your Nightbot</li>
+        <li>Nightbot will automatically join your stream</li>
         <li>
           When viewers purchase products, Nightbot will announce it in your chat
         </li>
-        <li>Messages include the buyer's username, product name, and price</li>
-        <li>You can customize the message format in your Nightbot dashboard</li>
+        <li>Messages include the buyer's username and product name</li>
       </ul>
     </div>
   </div>
