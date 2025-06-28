@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Product } from '../services/product.service';
 import { CreateProductCardComponent } from '../create-product-card/create-product-card.component';
-import { SuggestProductCardComponent } from '../suggest-product-card/suggest-product-card.component';
 import { ProductCardActionsComponent } from '../product-card-actions/product-card-actions.component';
 import { Subject } from 'rxjs';
 
@@ -23,7 +22,6 @@ import { Subject } from 'rxjs';
     CommonModule,
     ProductCardComponent,
     CreateProductCardComponent,
-    SuggestProductCardComponent,
     ProductCardActionsComponent,
   ],
   templateUrl: './product-grid.component.html',
