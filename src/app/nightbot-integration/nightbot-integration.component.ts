@@ -23,7 +23,6 @@ export class NightbotIntegrationComponent {
     this.isConnected =
       this.usersService.authUser$.value?.providers?.nightbot?.connected ||
       false;
-    console.log(this.usersService.authUser$.value);
   }
 
   connectNightbot(): void {
