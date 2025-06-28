@@ -348,53 +348,50 @@
             ></path>
           </svg>
         </a>
+        <button
+          (click)="handleShare()"
+          class="text-purple-400 hover:text-purple-300 transition-colors"
+          [ngClass]="{ 'text-green-400': copied }"
+        >
+          <ng-container *ngIf="copied; else shareIcon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </ng-container>
+          <ng-template #shareIcon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </ng-template>
+        </button>
       </div>
     </div>
 
     <div class="flex space-y-3 justify-center min-w-fit flex-col">
-      <button
-        (click)="handleShare()"
-        class="flex items-center justify-center bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-all duration-200 rounded-lg px-4 py-2.5 border border-white/20 hover:border-white/30 shadow-sm hover:shadow-md"
-      >
-        <ng-container *ngIf="copied; else shareIcon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="mr-2 text-green-400"
-          >
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span class="font-medium">Copied!</span>
-        </ng-container>
-        <ng-template #shareIcon>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="mr-2"
-          >
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-          </svg>
-          <span class="font-medium">Share shop</span>
-        </ng-template>
-      </button>
       <button
         (click)="openReferralForm()"
         class="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 transition-all duration-200 rounded-lg px-4 py-2.5 font-semibold shadow-sm hover:shadow-lg hover:scale-[1.02] w-full flex items-center justify-center"
