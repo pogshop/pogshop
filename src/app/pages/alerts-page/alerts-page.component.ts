@@ -134,7 +134,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       audioURL: 'https://cdn.pogshop.gg/assets/default_sale_alert.mp3',
       status: 'NEW',
       userId: userId || '',
-      quantity: 1,
+      quantity: 3,
       createdAt: new Date(),
     };
 
@@ -162,6 +162,14 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
           for (let i = 0; i < (alert.quantity || 1); i++) {
             await this.showNewAlert(alert);
           }
+
+          // Remove alert after 2 seconds
+          setTimeout(() => {
+            this.activeAlerts = this.activeAlerts.filter(
+              (a) => a.id !== alert.id
+            );
+            this.cdRef.detectChanges();
+          }, 6000);
         }
       }
     );
@@ -178,16 +186,6 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       });
     }
 
-    // Wait for current audio to finish before showing new alert
-    if (this.audio) {
-      await new Promise<void>((resolve) => {
-        this.audio!.onended = () => {
-          resolve();
-        };
-        this.audio!.play();
-      });
-    }
-
     // Add new alert to the beginning of the array
     this.activeAlerts.unshift(alert);
     this.cdRef.detectChanges();
@@ -197,37 +195,15 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       alert.audioURL || 'https://cdn.pogshop.gg/assets/default_sale_alert.mp3';
     const audio = new Audio(audioURL);
 
-    // If this is the last alert in the sequence, wait for audio to finish before clearing
-    if (
-      alert.quantity &&
-      this.activeAlerts.filter((a) => a.id === alert.id).length ===
-        alert.quantity
-    ) {
-      const startTime = Date.now();
-      const minDuration = 7000; // 7 seconds
+    const startTime = Date.now();
+    const minDuration = 6000; // 6 seconds minimum
 
+    // Wait for audio to finish and ensure minimum duration
+    await new Promise<void>((resolve) => {
       audio.onended = () => {
-        const elapsedTime = Date.now() - startTime;
-        if (elapsedTime < minDuration) {
-          // Display the alert for at least 7 seconds
-          setTimeout(() => {
-            this.activeAlerts = this.activeAlerts.filter(
-              (a) => a.id !== alert.id
-            );
-            this.cdRef.detectChanges();
-            this.stopAudio();
-          }, minDuration - elapsedTime);
-        } else {
-          this.activeAlerts = this.activeAlerts.filter(
-            (a) => a.id !== alert.id
-          );
-          this.cdRef.detectChanges();
-          this.stopAudio();
-        }
+        resolve();
       };
-    }
-
-    this.audio = audio;
-    await audio.play();
+      audio.play();
+    });
   }
 }
