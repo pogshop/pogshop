@@ -12,7 +12,7 @@ export class OauthService {
     const authUserId = this.usersService.authUser$.value?.id;
     const clientId = '93ccc0b3a1b65cb5c2e08f75302050e6';
     const redirectUri = `${environment.apiUrl}/v1/usercredentials/callback/nightbot`;
-    const scope = 'channel_send timers commands';
+    const scope = 'channel_send timers commands channel';
     const responseType = 'code';
     const state = JSON.stringify({
       userId: authUserId,
