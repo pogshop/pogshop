@@ -13,6 +13,7 @@ import { UsersService } from '../../services/users-service.service';
 import { OrdersService } from '../../services/orders-service.service';
 import { environment } from '../../../environments/environment';
 import { getUserDisplayCurrency } from '../../helpers/userHelpers';
+import { AuthService } from '../../services/auth-service.service';
 
 export const TABS = {
   INTEGRATION: 'integrations',
@@ -46,7 +47,8 @@ export class ShopNavbarComponent {
     private usersService: UsersService,
     private route: ActivatedRoute,
     private ordersService: OrdersService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private authService: AuthService
   ) {
     // Use URL constructor to parse the URL and get the first path segment
     const url = new URL(this.router.url, window.location.origin);
@@ -126,5 +128,9 @@ export class ShopNavbarComponent {
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  connectWithTwitch(): void {
+    this.authService.twitchLogin();
   }
 }

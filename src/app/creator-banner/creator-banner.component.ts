@@ -14,14 +14,14 @@ import {
   ReactiveFormsModule,
   FormsModule,
   Validators,
-  AsyncValidatorFn,
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { combineLatest, take, Observable, timer, of } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { take, Observable, timer, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { CdnImagePipe } from '../pipes/cdn-image.pipe';
+import { SellerSuggestionDialogComponent } from '../components/modals/seller-suggestion-dialog';
+import { ModalService } from '../services/modal-service.service';
 
 enum IMAGE_TYPE {
   BANNER = 'BANNER',
@@ -70,7 +70,8 @@ export class CreatorBannerComponent {
   constructor(
     private handleService: HandleServiceService,
     private cdRef: ChangeDetectorRef,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private modalService: ModalService
   ) {}
 
   ngOnChanges() {
@@ -248,6 +249,17 @@ export class CreatorBannerComponent {
           },
         });
     }
+  }
+  openReferralForm() {
+    this.modalService.open(SellerSuggestionDialogComponent, {
+      width: 'fit-content',
+      maxWidth: '600px',
+      closeOnBackdropClick: true,
+      panelClass: ['scrollable-modal-panel'],
+      data: {
+        userHandle: this.user.handle,
+      },
+    });
   }
 
   cancelHandleEdit() {

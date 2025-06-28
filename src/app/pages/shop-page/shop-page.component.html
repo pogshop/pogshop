@@ -10,36 +10,6 @@
   [authUser]="authUser"
 ></app-creator-banner>
 
-<!-- Notification Banner -->
-<div
-  class="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-white my-4"
->
-  <div class="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-    <div
-      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0"
-    >
-      <div class="flex items-center space-x-2 sm:space-x-3">
-        <div class="text-xl sm:text-2xl flex-shrink-0">🎉</div>
-        <div class="min-w-0 flex-1">
-          <p class="font-semibold text-sm sm:text-base leading-tight">
-            @if(user.handle) { Help &#64;{{ user.handle }}! } @else { Help the
-            streamer! }
-          </p>
-          <p class="text-purple-100 text-xs sm:text-sm leading-tight mt-1">
-            Tell them how to make their Pogshop better!
-          </p>
-        </div>
-      </div>
-      <button
-        (click)="openReferralForm()"
-        class="bg-white text-purple-600 hover:bg-purple-50 hover:text-purple-700 hover:shadow-lg hover:scale-105 px-3 sm:px-4 py-2 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 flex-shrink-0 w-full sm:w-auto"
-      >
-        Give Suggestion
-      </button>
-    </div>
-  </div>
-</div>
-
 <div class="max-w-6xl mx-auto">
   @if(viewableSelectedProduct) {
   <app-product-details-section
