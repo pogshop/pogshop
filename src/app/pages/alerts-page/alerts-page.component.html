@@ -1,11 +1,9 @@
-<div class="h-[100vh] flex flex-col items-center justify-center mt-16">
-  <div
-    class="flex flex-col items-center justify-center pointer-events-none p-4 gap-4 max-h-[90vh] w-full h-full relative"
-  >
+<div class="alerts-page">
+  <div class="alerts-container">
     <div
       *ngFor="let alert of activeAlerts; let i = index"
       [@alertAnimation]
-      class="w-full max-w-md transition-all duration-300 ease-in-out absolute"
+      class="alert-item"
       [style.bottom]="'calc(50% - ' + i * 8 + 'px)'"
     >
       <app-simple-stream-alert
@@ -17,10 +15,5 @@
     </div>
   </div>
 
-  <button
-    (click)="testAlert()"
-    class="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg pointer-events-auto"
-  >
-    Test Alert
-  </button>
+  <button (click)="testAlert()" class="test-button">Test Alert</button>
 </div>

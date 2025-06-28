@@ -190,7 +190,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
 
     // Add new alert to the beginning of the array
     this.activeAlerts.unshift(alert);
-    this.cdRef.markForCheck();
+    this.cdRef.detectChanges();
 
     // Play sound if available
     const audioURL =
@@ -214,14 +214,14 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
             this.activeAlerts = this.activeAlerts.filter(
               (a) => a.id !== alert.id
             );
-            this.cdRef.markForCheck();
+            this.cdRef.detectChanges();
             this.stopAudio();
           }, minDuration - elapsedTime);
         } else {
           this.activeAlerts = this.activeAlerts.filter(
             (a) => a.id !== alert.id
           );
-          this.cdRef.markForCheck();
+          this.cdRef.detectChanges();
           this.stopAudio();
         }
       };

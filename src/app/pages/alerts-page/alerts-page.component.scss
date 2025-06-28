@@ -1,5 +1,53 @@
-
-
 ::ng-deep body {
   background: transparent !important;
+}
+
+.alerts-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem; // mt-16
+}
+
+.alerts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  padding: 1rem; // p-4
+  gap: 1rem; // gap-4
+  max-height: 90vh; // max-h-[90vh]
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.alert-item {
+  width: 100%;
+  max-width: 28rem; // max-w-md
+  transition: all 0.3s ease-in-out; // transition-all duration-300 ease-in-out
+  position: absolute;
+}
+
+.test-button {
+  position: fixed;
+  bottom: 1rem; // bottom-4
+  right: 1rem; // right-4
+  background-color: #3b82f6; // bg-blue-500
+  color: white;
+  padding: 0.5rem 1rem; // px-4 py-2
+  border-radius: 0.5rem; // rounded-lg
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); // shadow-lg
+  pointer-events: auto;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #2563eb; // hover:bg-blue-600
+  }
 }
