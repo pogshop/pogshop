@@ -119,7 +119,8 @@ export class ShopPageComponent {
 
   private initializeProducts() {
     const userId = this.route.snapshot.queryParams['userId'];
-    const handle = this.route.snapshot.url.at(-1)?.path;
+    const handle =
+      this.route.snapshot.url[this.route.snapshot.url.length - 1]?.path;
 
     // Always get the auth user first
     const authUser$ = this.usersService.getAuthUser();
@@ -151,7 +152,8 @@ export class ShopPageComponent {
       }
       if (
         this.user.handle &&
-        (this.route.snapshot.url.at(-1)?.path === 'shop' ||
+        (this.route.snapshot.url[this.route.snapshot.url.length - 1]?.path ===
+          'shop' ||
           this.route.snapshot.url.length === 0)
       ) {
         this.router.navigate(['/', this.user.handle]);
