@@ -61,7 +61,7 @@ export class AlertService {
       width: 'fit-content',
       data: {
         displayImage: product?.imageURLs?.[0],
-        displayUsername: 'SuperPog420',
+        displayUsername: user?.handle || 'SuperPog420',
         displayProductName: product?.name,
         displayHandle: user?.handle,
         audioURL: product?.soundEffect.audioURL,
