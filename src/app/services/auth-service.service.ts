@@ -10,6 +10,7 @@ import {
 import { Observable, from, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 const API_URL = `${environment.apiUrl}/v1/emails`;
 
 @Injectable({
@@ -20,13 +21,19 @@ export class AuthService {
   private tokenExpiration: number | null = null;
   private isDevelopment: boolean = false;
 
-  constructor(private auth: Auth, private http: HttpClient) {
+  constructor(
+    private auth: Auth,
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.isDevelopment = !environment.production;
   }
 
   handleRedirectResult() {
     return from(getRedirectResult(this.auth)).subscribe((result) => {
-      console.log(result);
+      if (result?.user) {
+        this.router.navigate(['/']);
+      }
     });
   }
 
