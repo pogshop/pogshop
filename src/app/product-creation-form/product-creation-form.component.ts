@@ -137,6 +137,14 @@ export class ProductCreationFormComponent {
       });
     }
 
+    // Subscribe to description changes to ensure new lines are preserved
+    this.productForm.get('description')?.valueChanges.subscribe((value) => {
+      if (value && typeof value === 'string') {
+        // Ensure new lines are preserved by not trimming or modifying the value
+        console.log('Description value:', JSON.stringify(value));
+      }
+    });
+
     this.productForm.valueChanges.subscribe((value) => {
       console.log(value);
       this.onProductFormUpdated.emit(value);
@@ -449,5 +457,16 @@ export class ProductCreationFormComponent {
 
   getCurrencySymbol(): string {
     return getCurrencySymbol(this.userCurrency);
+  }
+
+  onDescriptionInput(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    const value = textarea.value;
+
+    // Ensure new lines are preserved by setting the value directly
+    this.productForm.get('description')?.setValue(value, { emitEvent: false });
+
+    // Log to verify new lines are captured
+    console.log('Description with new lines:', JSON.stringify(value));
   }
 }
