@@ -11,6 +11,7 @@ import { ProductCreationOverlayComponent } from '../product-creation-overlay/pro
 import { DeleteProductDialogComponent } from '../components/modals/delete-product-dialog';
 import { SimpleStreamAlertDialogComponent } from '../components/modals/simple-stream-alert-dialog';
 import { UsersService } from '../services/users-service.service';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-product-card-actions',
@@ -29,7 +30,8 @@ export class ProductCardActionsComponent {
     private usersService: UsersService,
     private modalService: ModalService,
     private cdRef: ChangeDetectorRef,
-    private productService: ProductService
+    private productService: ProductService,
+    private alertService: AlertService
   ) {}
 
   ngOnInit() {
@@ -70,18 +72,7 @@ export class ProductCardActionsComponent {
 
   testAlert(event: MouseEvent): void {
     (event.target as HTMLButtonElement).blur();
-
-    this.modalService.open(SimpleStreamAlertDialogComponent, {
-      closeOnBackdropClick: true,
-      width: 'fit-content',
-      data: {
-        displayImage: this.product?.imageURLs?.[0],
-        displayUsername: 'SuperPog420',
-        displayProductName: this.product?.name,
-        displayHandle: this.user?.handle || 'poggers',
-        audioURL: this.product?.soundEffect.audioURL,
-      },
-    });
+    this.alertService.testAlertWithProduct(this.product!, this.user);
   }
 
   deleteProduct(event: MouseEvent): void {
