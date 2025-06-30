@@ -134,7 +134,7 @@ export class AlertsPageComponent implements OnInit, OnDestroy {
       audioURL: 'https://cdn.pogshop.gg/assets/default_sale_alert.mp3',
       status: 'NEW',
       userId: userId || '',
-      quantity: 3,
+      quantity: 1,
       createdAt: new Date(),
     };
 
