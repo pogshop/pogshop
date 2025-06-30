@@ -25,15 +25,27 @@ export class IntegrationsPageComponent {
   showDiscordKey: boolean = false;
   copiedOBS: boolean = false;
   copiedDiscord: boolean = false;
+  copiedShopLink: boolean = false;
 
   // Sample keys - in a real app, these would be generated on the server
   obsBrowserUrl: string = '';
   discordBotInvite: string =
     'https://discord.com/oauth2/authorize?client_id=123456789&scope=bot&permissions=0';
+  shopUrl: string = '';
 
   constructor(private usersService: UsersService) {
     this.obsBrowserUrl =
       environment.baseUrl + `/alerts/${this.usersService.authUser$.value?.id}`;
+
+    // Generate shop URL based on user's handle or ID
+    const user = this.usersService.authUser$.value;
+    if (user?.handle) {
+      this.shopUrl = environment.baseUrl + `/${user.handle}`;
+    } else if (user?.id) {
+      this.shopUrl = environment.baseUrl + `?userId=${user.id}`;
+    } else {
+      this.shopUrl = environment.baseUrl;
+    }
   }
 
   toggleShowOBSKey(): void {
@@ -54,5 +66,20 @@ export class IntegrationsPageComponent {
     navigator.clipboard.writeText(this.discordBotInvite);
     this.copiedDiscord = true;
     setTimeout(() => (this.copiedDiscord = false), 2000);
+  }
+
+  handleCopyShopLink(): void {
+    navigator.clipboard.writeText(this.shopUrl);
+    this.copiedShopLink = true;
+    setTimeout(() => (this.copiedShopLink = false), 2000);
+  }
+
+  downloadBanner(): void {
+    const link = document.createElement('a');
+    link.href =
+      'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/my_pogshop_banner.png';
+    link.download = 'pogshop_banner.png';
+    link.target = '_blank';
+    link.click();
   }
 }
