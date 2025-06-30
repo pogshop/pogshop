@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Auth,
   browserPopupRedirectResolver,
+  getRedirectResult,
   OAuthProvider,
   signInWithPopup,
   signInWithRedirect,
@@ -21,6 +22,12 @@ export class AuthService {
 
   constructor(private auth: Auth, private http: HttpClient) {
     this.isDevelopment = !environment.production;
+  }
+
+  handleRedirectResult() {
+    return from(getRedirectResult(this.auth)).subscribe((result) => {
+      console.log(result);
+    });
   }
 
   /**

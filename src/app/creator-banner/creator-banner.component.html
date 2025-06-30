@@ -2,7 +2,7 @@
 <div class="relative">
   <!-- Banner Image -->
   <div
-    class="h-48 max-w-[1200px] mx-auto bg-gradient-to-r from-purple-600 via-pink-500 to-purple-500 relative group overflow-hidden rounded-lg mt-4"
+    class="h-48 max-w-[1200px] mx-auto bg-gradient-to-r from-purple-600 via-pink-500 to-purple-500 relative group overflow-hidden md:rounded-lg mt-4"
     [ngClass]="{ 'cursor-pointer': canEditProfile }"
     (click)="triggerFileInput(IMAGE_TYPE.BANNER)"
   >
@@ -18,7 +18,7 @@
       *ngIf="bannerPhotoURL"
       [src]="bannerPhotoURL | cdnImage"
       alt="Banner"
-      class="absolute inset-0 w-full h-full object-cover"
+      class="absolute inset-0 w-full h-full md:object-cover object-none"
     />
     <div
       *ngIf="canEditProfile"
