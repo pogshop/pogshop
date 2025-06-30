@@ -1,6 +1,9 @@
 <div class="flex flex-col items-center justify-center">
   <img
-    src="https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_pog.png"
+    [src]="
+      imageURL ||
+      'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/pogshop_pog.png'
+    "
     alt="Pog Shop Logo"
     class="w-16 h-16 sm:w-24 sm:h-24 mb-3 sm:mb-4 rounded-full outline outline-2 outline-grey-500"
   />

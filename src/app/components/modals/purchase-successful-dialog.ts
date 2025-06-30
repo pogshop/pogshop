@@ -5,6 +5,7 @@ import { SellerReferralFormComponent } from '../../seller-referral-form/seller-r
 
 interface PurchaseSuccessfulData {
   userHandle: string;
+  imageURL: string;
 }
 
 @Component({

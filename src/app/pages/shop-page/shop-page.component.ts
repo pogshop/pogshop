@@ -16,7 +16,6 @@ import {
   PRODUCT_STATUS,
   ProductService,
 } from '../../services/product.service';
-import { environment } from '../../../environments/environment';
 import { ProductDetailsSectionComponent } from '../../product-details-section/product-details-section.component';
 import { PurchaseSuccessfulDialogComponent } from '../../components/modals/purchase-successful-dialog';
 import { ModalService } from '../../services/modal-service.service';
@@ -80,6 +79,7 @@ export class ShopPageComponent {
           panelClass: ['scrollable-modal-panel'],
           data: {
             userHandle: user?.handle,
+            imageURL: user?.profilePhotoURL,
           },
         });
       });

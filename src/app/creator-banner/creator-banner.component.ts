@@ -258,6 +258,7 @@ export class CreatorBannerComponent {
       panelClass: ['scrollable-modal-panel'],
       data: {
         userHandle: this.user.handle,
+        imageURL: this.user.profilePhotoURL,
       },
     });
   }

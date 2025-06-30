@@ -6,6 +6,7 @@ import { Analytics, logEvent } from '@angular/fire/analytics';
 
 interface SellerSuggestionData {
   userHandle: string;
+  imageURL: string;
 }
 @Component({
   selector: 'app-seller-suggestion-dialog',

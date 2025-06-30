@@ -16,6 +16,7 @@ enum FormState {
 })
 export class SellerReferralFormComponent {
   @Input() userHandle: string | null = null;
+  @Input() imageURL: string | null = null;
   suggestionForm: any;
   isSubmitting = false;
   submitSuccess = false;
