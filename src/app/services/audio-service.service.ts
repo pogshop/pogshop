@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 export interface AudioAdjustmentOptions {
   volume: number; // 0.0 to 5.0 (0 = silent, 1 = original, 5 = 5x volume)
-  fadeIn?: number; // fade in duration in seconds
-  fadeOut?: number; // fade out duration in seconds
 }
 
 export interface AudioProcessingResult {

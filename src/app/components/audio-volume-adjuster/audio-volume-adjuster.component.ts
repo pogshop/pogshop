@@ -212,8 +212,6 @@ export class AudioVolumeAdjusterComponent {
 
     const options: AudioAdjustmentOptions = {
       volume: this.volumeMultiplier,
-      fadeIn: this.fadeIn > 0 ? this.fadeIn : undefined,
-      fadeOut: this.fadeOut > 0 ? this.fadeOut : undefined,
     };
 
     try {
