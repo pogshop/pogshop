@@ -6,6 +6,7 @@ import {
   ViewChild,
   ElementRef,
   ChangeDetectorRef,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +24,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './audio-upload.component.html',
   styleUrl: './audio-upload.component.scss',
 })
-export class AudioUploadComponent {
+export class AudioUploadComponent implements OnInit {
   @Input() currentAudioURL: string | null = null;
   @Input() currentAudioName: string | null = null;
   @Output() audioChanged = new EventEmitter<{
@@ -46,10 +47,14 @@ export class AudioUploadComponent {
     private audioService: AudioServiceService,
     private cdRef: ChangeDetectorRef,
     private httpClient: HttpClient
-  ) {
+  ) {}
+
+  ngOnInit() {
     // Initialize with default audio if no current audio
     if (!this.currentAudioURL) {
       this.audioPlayer.src = '/assets/default_sale_alert.mp3';
+    } else {
+      this.audioPlayer.src = this.currentAudioURL;
     }
 
     this.audioPlayer.addEventListener('ended', () => {
@@ -193,7 +198,7 @@ export class AudioUploadComponent {
         audioFile = this.selectedFile;
       } else {
         // Use default audio file
-        audioFile = await this.getDefaultAudioFile();
+        audioFile = await this.getAudioFileFromURL(this.currentAudioURL);
       }
 
       const options: AudioAdjustmentOptions = {
@@ -228,6 +233,16 @@ export class AudioUploadComponent {
         'An unexpected error occurred while playing the audio';
       this.cdRef.detectChanges();
     }
+  }
+
+  private async getAudioFileFromURL(url?: string | null): Promise<File> {
+    if (!url) {
+      return await this.getDefaultAudioFile();
+    }
+
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], 'audio.mp3', { type: 'audio/mp3' });
   }
 
   private async getDefaultAudioFile(): Promise<File> {

@@ -141,13 +141,6 @@ export class ProductCreationFormComponent {
       });
     }
 
-    // Subscribe to description changes to ensure new lines are preserved
-    this.productForm.get('description')?.valueChanges.subscribe((value) => {
-      if (value && typeof value === 'string') {
-        // Ensure new lines are preserved by not trimming or modifying the value
-      }
-    });
-
     this.productForm.valueChanges.subscribe((value) => {
       this.onProductFormUpdated.emit(value);
       this.productFormStatus.emit(this.productForm.valid);
@@ -165,6 +158,7 @@ export class ProductCreationFormComponent {
     }
     this.productForm.updateValueAndValidity();
 
+    console.log('productForm', this.productForm.value);
     this.cdRef.markForCheck();
   }
 
