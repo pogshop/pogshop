@@ -1,0 +1,233 @@
+<div class="bg-gray-700/50 rounded-lg p-4">
+  <div class="flex items-center gap-4 flex-col md:flex-row">
+    <!-- Audio Info -->
+    <div
+      class="flex-1 flex flex-col items-center justify-center md:items-start md:justify-start"
+    >
+      <div class="text-gray-100 font-medium">
+        {{ currentAudioDisplayName }}
+      </div>
+      <div *ngIf="isDefaultAudio" class="text-xs text-blue-400">
+        Default sound
+      </div>
+    </div>
+
+    <!-- Upload Button -->
+    <div class="flex gap-2 w-full md:w-auto">
+      <button
+        type="button"
+        class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-gray-100 rounded-lg transition-colors w-full md:w-auto"
+        (click)="fileInput.click()"
+      >
+        Upload Custom
+      </button>
+      <input
+        #fileInput
+        type="file"
+        accept="audio/mp3,audio/wav,audio/ogg,audio/aac,audio/flac"
+        class="hidden"
+        (change)="onFileSelected($event)"
+      />
+      <button
+        *ngIf="!isDefaultAudio"
+        type="button"
+        class="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors"
+        (click)="resetAudio()"
+      >
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- Audio Adjustment Section (always shown) -->
+  <div class="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-600">
+    <h4 class="text-sm font-medium text-gray-200 mb-3">Audio Settings</h4>
+
+    <!-- File Info (shown when file is selected) -->
+    <div *ngIf="selectedFile" class="mb-4 p-3 bg-gray-700 rounded-lg">
+      <p class="text-sm text-gray-300 mb-1">
+        Selected: {{ selectedFile.name }}
+      </p>
+      <p class="text-xs text-gray-400">
+        {{ formatFileSize(selectedFile.size) }}
+      </p>
+    </div>
+
+    <!-- Volume Control (always shown) -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-300 mb-2">
+        Volume
+      </label>
+      <div class="flex items-center gap-3">
+        <svg
+          class="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+          ></path>
+        </svg>
+        <input
+          type="range"
+          min="0"
+          max="3"
+          step="0.1"
+          [(ngModel)]="volumeMultiplier"
+          class="volume-slider flex-1"
+        />
+        <span class="text-sm text-gray-400 min-w-[3rem] text-right">
+          {{ (volumeMultiplier * 100).toFixed(0) }}%
+        </span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <!-- Play Audio Button -->
+      <button
+        type="button"
+        (click)="playModifiedAudio()"
+        [disabled]="isProcessingAudio"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+      >
+        <span
+          *ngIf="!isPlaying && !isProcessingAudio"
+          class="flex items-center justify-center"
+        >
+          <svg
+            class="w-5 h-5 text-white mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+            />
+          </svg>
+          Play Audio
+        </span>
+        <span *ngIf="isPlaying" class="flex items-center justify-center">
+          <svg
+            class="w-5 h-5 text-white mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 9v6m4-6v6"
+            />
+          </svg>
+          Pause Audio
+        </span>
+        <span
+          *ngIf="!isPlaying && isProcessingAudio"
+          class="flex items-center justify-center"
+        >
+          <svg
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Processing...
+        </span>
+      </button>
+
+      <!-- Apply Changes Button -->
+      <button
+        type="button"
+        (click)="processAudio()"
+        [disabled]="isProcessingAudio || isPlaying"
+        class="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+      >
+        <span *ngIf="!isProcessingAudio">Apply Changes</span>
+        <span
+          *ngIf="isProcessingAudio"
+          class="flex items-center justify-center"
+        >
+          <svg
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Processing...
+        </span>
+      </button>
+
+      <!-- Cancel Button (only shown when file is selected) -->
+      <button
+        *ngIf="selectedFile"
+        type="button"
+        (click)="cancelAudioSelection()"
+        [disabled]="isProcessingAudio || isPlaying"
+        class="px-4 py-2 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-gray-100 rounded-md transition-colors"
+      >
+        Cancel
+      </button>
+    </div>
+
+    <!-- Info text when no file is selected -->
+    <div *ngIf="!selectedFile" class="mt-3 p-3 bg-gray-700/50 rounded-lg">
+      <p class="text-sm text-gray-400 text-center">
+        Adjust volume and play the default sale alert, or upload a custom audio
+        file
+      </p>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div
+    *ngIf="audioProcessingError"
+    class="mt-4 p-3 bg-red-900/50 border border-red-500 rounded-md"
+  >
+    <p class="text-red-300 text-sm">{{ audioProcessingError }}</p>
+  </div>
+
+  <!-- Success Message -->
+  <div
+    *ngIf="audioProcessingSuccess"
+    class="mt-4 p-3 bg-green-900/50 border border-green-500 rounded-md"
+  >
+    <p class="text-green-300 text-sm">{{ audioProcessingSuccess }}</p>
+  </div>
+</div>

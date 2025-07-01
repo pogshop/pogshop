@@ -27,10 +27,16 @@ import {
   getUserDisplayCurrency,
   getCurrencySymbol,
 } from '../helpers/userHelpers';
+import { AudioUploadComponent } from '../audio-upload/audio-upload.component';
 
 @Component({
   selector: 'app-product-creation-form',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    AudioUploadComponent,
+  ],
   providers: [FormBuilder, ProductService],
   templateUrl: './product-creation-form.component.html',
   styleUrl: './product-creation-form.component.scss',
@@ -54,9 +60,7 @@ export class ProductCreationFormComponent {
   userCurrency = 'USD';
 
   readonly PRODUCT_TYPE = PRODUCT_TYPE;
-  private audioPlayer = new Audio(
-    'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3'
-  );
+  private audioPlayer = new Audio('/assets/default_sale_alert.mp3');
 
   productTypes = [
     {
@@ -141,12 +145,10 @@ export class ProductCreationFormComponent {
     this.productForm.get('description')?.valueChanges.subscribe((value) => {
       if (value && typeof value === 'string') {
         // Ensure new lines are preserved by not trimming or modifying the value
-        console.log('Description value:', JSON.stringify(value));
       }
     });
 
     this.productForm.valueChanges.subscribe((value) => {
-      console.log(value);
       this.onProductFormUpdated.emit(value);
       this.productFormStatus.emit(this.productForm.valid);
     });
@@ -159,8 +161,7 @@ export class ProductCreationFormComponent {
       this.hasDailyLimit = this.product.inventorySettings?.dailyLimit !== null;
 
       this.audioPlayer.src =
-        this.product.soundEffect?.audioURL ||
-        'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3';
+        this.product.soundEffect?.audioURL || '/assets/default_sale_alert.mp3';
     }
     this.productForm.updateValueAndValidity();
 
@@ -186,7 +187,6 @@ export class ProductCreationFormComponent {
         dailyLimit: null,
       },
     });
-    console.log(this.productForm.value);
     this.productForm.updateValueAndValidity();
     this.cdRef.detectChanges();
   }
@@ -381,38 +381,7 @@ export class ProductCreationFormComponent {
   }
 
   onSoundFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      // Check file type
-      if (!file.type.startsWith('audio/')) {
-        alert('Please upload an audio file (MP3, WAV, or OGG)');
-        return;
-      }
-
-      // Check file size (5MB limit)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size must be less than 5MB');
-        return;
-      }
-
-      // Create object URL for preview
-      const objectUrl = URL.createObjectURL(file);
-      this.audioPlayer.src = objectUrl;
-
-      // Convert to base64
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64 = e.target?.result as string;
-        this.productForm.patchValue({
-          soundEffect: {
-            audioURL: base64,
-            audioDisplayName: file.name,
-          },
-        });
-        this.cdRef.detectChanges();
-      };
-      reader.readAsDataURL(file);
-    }
+    // This method is now handled by the audio upload component
   }
 
   resetSoundEffect() {
@@ -422,12 +391,26 @@ export class ProductCreationFormComponent {
         audioDisplayName: '',
       },
     });
-    this.audioPlayer.src =
-      'https://storage.googleapis.com/pogshop-387c5.firebasestorage.app/assets/default_sale_alert.mp3';
+    this.audioPlayer.src = '/assets/default_sale_alert.mp3';
     if (this.soundFileInput) {
       this.soundFileInput.nativeElement.value = '';
     }
     this.cdRef.detectChanges();
+  }
+
+  onAudioChanged(audioData: { audioURL: string; audioName: string }) {
+    this.productForm.patchValue({
+      soundEffect: {
+        audioURL: audioData.audioURL,
+        audioDisplayName: audioData.audioName,
+      },
+    });
+    this.audioPlayer.src = audioData.audioURL;
+    this.cdRef.detectChanges();
+  }
+
+  onAudioReset() {
+    this.resetSoundEffect();
   }
 
   onPriceInput(event: Event) {
@@ -465,8 +448,5 @@ export class ProductCreationFormComponent {
 
     // Ensure new lines are preserved by setting the value directly
     this.productForm.get('description')?.setValue(value, { emitEvent: false });
-
-    // Log to verify new lines are captured
-    console.log('Description with new lines:', JSON.stringify(value));
   }
 }

@@ -12,7 +12,7 @@ import {
   throwError,
 } from 'rxjs';
 import { AuthService } from './auth-service.service';
-import { Auth, getRedirectResult, onIdTokenChanged } from '@angular/fire/auth';
+import { Auth, onIdTokenChanged } from '@angular/fire/auth';
 import {
   Firestore,
   collection,
@@ -62,12 +62,6 @@ export class UsersService {
       if (user) {
         this.getUserCache.set(user.handle, user);
       }
-    });
-  }
-
-  async ngOnInit() {
-    await getRedirectResult(this.auth).then((result) => {
-      console.log(result);
     });
   }
 
