@@ -62,7 +62,7 @@
 
 <!-- Product Grid -->
 <div
-  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 lg:gap-10 w-full sm:w-128 border border-gray-700 rounded-xl p-3 sm:p-6 mx-4 sm:mx-auto h-[500px] overflow-y-auto"
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 lg:gap-10 w-full sm:w-128 border border-gray-700 rounded-xl p-3 sm:p-6 mx-4 sm:mx-auto max-h-[500px] overflow-y-auto"
   cdkDropList
   [cdkDropListAutoScrollStep]="12"
   [cdkDropListData]="productList"
@@ -71,7 +71,7 @@
 >
   <div class="contents">
     @for (product of productList; let i = $index; track i) {
-    <div cdkDrag [attr.data-product-id]="product.id">
+    <div cdkDrag [attr.data-product-id]="product.id" class="h-fit">
       <app-product-card
         [product]="product"
         [hideDescription]="true"
