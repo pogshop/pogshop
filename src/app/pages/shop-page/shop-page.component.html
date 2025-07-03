@@ -21,6 +21,7 @@
   <app-product-grid
     (onProductClick)="navigateToProduct($event.id)"
     [productList]="products"
+    [productSortOrder]="user.productSortOrder"
     [canEdit]="canEdit"
   ></app-product-grid>
   }

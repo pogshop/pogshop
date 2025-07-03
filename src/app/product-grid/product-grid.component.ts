@@ -46,12 +46,12 @@ import { ProductReorderGridComponent } from '../product-reorder-grid/product-reo
 export class ProductGridComponent implements OnInit, OnDestroy {
   @Input() productList: Product[] = [];
   @Input() canEdit: boolean = false;
+  @Input() productSortOrder?: string[] = [];
   @Output() onProductClick = new EventEmitter<Product>();
 
   timeUntilAvailableMap: Map<string, string> = new Map();
   private destroy$ = new Subject<void>();
   private timerId?: number;
-  private currentUser: any = null;
   isReorderMode = false;
 
   constructor(
@@ -61,7 +61,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startTimer();
-    this.loadUserAndSortOrder();
+    this.sortProductsByUserOrder();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,35 +85,29 @@ export class ProductGridComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  private loadUserAndSortOrder() {
-    this.usersService
-      .getAuthUser()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((user) => {
-        this.currentUser = user;
-        this.sortProductsByUserOrder();
-      });
-  }
-
   private sortProductsByUserOrder() {
-    if (!this.currentUser?.productSortOrder) {
+    if (!this.productSortOrder) {
+      // Fall back to default sorting if no custom order exists
       this.productList.sort((a, b) => {
+        // First, separate hidden and non-hidden products
         if (a.isHidden !== b.isHidden) {
-          // Non-hidden products come first
+          // Non-hidden products come first (isHidden: false comes before isHidden: true)
           return a.isHidden ? 1 : -1;
         }
+
+        // Within each group (hidden/non-hidden), sort by createdAt in descending order
         return b.createdAt - a.createdAt;
       });
       return;
     }
 
     // Sort products based on user's custom order
-    const sortOrder = this.currentUser.productSortOrder;
-    this.productList.sort((a, b) => {
-      const aIndex = sortOrder.indexOf(a.id);
-      const bIndex = sortOrder.indexOf(b.id);
 
-      // Prioritize products in the sort order
+    this.productList.sort((a, b) => {
+      const aIndex = this.productSortOrder!.indexOf(a.id);
+      const bIndex = this.productSortOrder!.indexOf(b.id);
+
+      // If both products are in the sort order, sort by their position
       if (aIndex !== -1 && bIndex !== -1) {
         return aIndex - bIndex;
       }
