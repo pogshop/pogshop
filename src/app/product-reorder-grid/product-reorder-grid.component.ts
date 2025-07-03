@@ -31,10 +31,11 @@ export class ProductReorderGridComponent implements OnDestroy {
   selectedProduct: Product | null = null;
   hoveredProductId: string | null = null;
   latestList: Product[] = [];
+  originalList: Product[] = [];
   targetIndex: number = 0;
 
-  @Output() onProductOrderSaved = new EventEmitter<void>();
-  @Output() onBack = new EventEmitter<void>();
+  @Output() onProductOrderSaved = new EventEmitter<Product[]>();
+  @Output() onCancel = new EventEmitter<Product[]>();
 
   private destroy$ = new Subject<void>();
 
@@ -44,6 +45,7 @@ export class ProductReorderGridComponent implements OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.originalList = [...this.productList];
     this.latestList = [...this.productList];
   }
 
@@ -99,13 +101,13 @@ export class ProductReorderGridComponent implements OnDestroy {
       })
       .pipe(
         catchError((error) => {
-          this.onProductOrderSaved.emit();
+          this.onProductOrderSaved.emit(this.productList);
           return throwError(() => error);
         })
       )
       .subscribe(() => {
         this.cdRef.detectChanges();
-        this.onProductOrderSaved.emit();
+        this.onProductOrderSaved.emit(this.productList);
       });
   }
 
@@ -121,5 +123,11 @@ export class ProductReorderGridComponent implements OnDestroy {
 
     // Update the display list for preview
     this.productList = newList;
+  }
+
+  cancelReordering() {
+    this.productList = this.originalList;
+    this.onCancel.emit(this.productList);
+    this.cdRef.detectChanges();
   }
 }

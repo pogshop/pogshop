@@ -2,8 +2,8 @@
 <div class="flex flex-row justify-between mb-4 sm:px-0 gap-4">
   <button
     class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm flex-1 sm:flex-none"
-    (click)="onBack.emit()"
-    [attr.aria-label]="'Go back'"
+    (click)="cancelReordering()"
+    [attr.aria-label]="'Cancel Reordering'"
   >
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
@@ -13,7 +13,7 @@
         d="M15 19l-7-7 7-7"
       ></path>
     </svg>
-    <span>Back</span>
+    <span>Cancel</span>
   </button>
   <button
     class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm flex-1 sm:flex-none"

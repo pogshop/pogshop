@@ -3,7 +3,7 @@
   <button
     *ngIf="canEdit && !isReorderMode"
     class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1.5"
-    (click)="toggleReorderMode()"
+    (click)="handleReorderModeChange(productList)"
   >
     <svg
       class="w-3.5 h-3.5"
@@ -27,8 +27,8 @@
 >
   @if (isReorderMode) {
   <app-product-reorder-grid
-    (onProductOrderSaved)="toggleReorderMode()"
-    (onBack)="toggleReorderMode()"
+    (onProductOrderSaved)="handleReorderModeChange($event)"
+    (onCancel)="handleReorderModeChange($event)"
     [productList]="productList"
   ></app-product-reorder-grid>
   } @else {

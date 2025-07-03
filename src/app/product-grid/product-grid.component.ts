@@ -54,10 +54,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   private timerId?: number;
   isReorderMode = false;
 
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private usersService: UsersService
-  ) {}
+  constructor(private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.startTimer();
@@ -80,7 +77,8 @@ export class ProductGridComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  toggleReorderMode() {
+  handleReorderModeChange(updatedProductList: Product[]) {
+    this.productList = updatedProductList;
     this.isReorderMode = !this.isReorderMode;
     this.cdRef.detectChanges();
   }
