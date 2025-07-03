@@ -1,9 +1,7 @@
 <!-- Drag and Drop Instructions -->
-<div
-  class="flex flex-col sm:flex-row justify-center sm:justify-between mb-4 px-4 sm:px-0"
->
+<div class="flex flex-row justify-between mb-4 sm:px-0 gap-4">
   <button
-    class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm"
+    class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm flex-1 sm:flex-none"
     (click)="onBack.emit()"
     [attr.aria-label]="'Go back'"
   >
@@ -18,7 +16,7 @@
     <span>Back</span>
   </button>
   <button
-    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm flex-1 sm:flex-none"
     (click)="saveProductOrder()"
   >
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,7 +32,7 @@
 </div>
 
 <div
-  class="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-900/20 border-2 border-blue-500/50 rounded-lg shadow-lg mx-4 sm:mx-0"
+  class="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-900/20 border-2 border-blue-500/50 rounded-lg shadow-lg mx-auto"
 >
   <div class="flex items-center justify-center gap-2 text-blue-300 mb-2">
     <svg
@@ -62,7 +60,7 @@
 
 <!-- Product Grid -->
 <div
-  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 lg:gap-10 w-full sm:w-128 border border-gray-700 rounded-xl p-3 sm:p-6 mx-4 sm:mx-auto max-h-[500px] overflow-y-auto"
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 lg:gap-10 w-full sm:w-128 border border-gray-700 rounded-xl p-3 sm:mx-auto max-h-[500px] overflow-y-auto"
   cdkDropList
   [cdkDropListAutoScrollStep]="12"
   [cdkDropListData]="productList"
