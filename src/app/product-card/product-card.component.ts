@@ -52,6 +52,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   @Input() canEdit: boolean = false;
   @Input() timeUntilAvailable: string = '';
   @Input() disableCheckout: boolean = false;
+  @Input() hideDescription: boolean = false;
   @Output() onProductClick = new EventEmitter<Product>();
 
   ProductEventType = ProductEventType;

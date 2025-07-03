@@ -1,0 +1,86 @@
+<!-- Drag and Drop Instructions -->
+<div
+  class="flex flex-col sm:flex-row justify-center sm:justify-between mb-4 px-4 sm:px-0"
+>
+  <button
+    class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm"
+    (click)="onBack.emit()"
+    [attr.aria-label]="'Go back'"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 19l-7-7 7-7"
+      ></path>
+    </svg>
+    <span>Back</span>
+  </button>
+  <button
+    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm"
+    (click)="saveProductOrder()"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M5 13l4 4L19 7"
+      ></path>
+    </svg>
+    <span>Save Ordering</span>
+  </button>
+</div>
+
+<div
+  class="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-900/20 border-2 border-blue-500/50 rounded-lg shadow-lg mx-4 sm:mx-0"
+>
+  <div class="flex items-center justify-center gap-2 text-blue-300 mb-2">
+    <svg
+      class="w-4 h-4 sm:w-5 sm:h-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+      ></path>
+    </svg>
+    <span class="font-medium text-sm sm:text-base">
+      Drag & Drop to Reorder
+    </span>
+  </div>
+  <p class="text-xs sm:text-sm text-gray-400 px-2 sm:px-0">
+    Move products by dragging and dropping or clicking a product and inserting
+    it to a new position.
+  </p>
+</div>
+
+<!-- Product Grid -->
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 lg:gap-10 w-full sm:w-128 border border-gray-700 rounded-xl p-3 sm:p-6 mx-4 sm:mx-auto h-[500px] overflow-y-auto"
+  cdkDropList
+  [cdkDropListAutoScrollStep]="12"
+  [cdkDropListData]="productList"
+  (cdkDropListDropped)="onDrop($event)"
+  cdkDropListOrientation="mixed"
+>
+  <div class="contents">
+    @for (product of productList; let i = $index; track i) {
+    <div cdkDrag [attr.data-product-id]="product.id">
+      <app-product-card
+        [product]="product"
+        [hideDescription]="true"
+        [class.selected]="selectedProduct === product"
+        (click)="handleProductClick(product)"
+        (mouseenter)="onProductHover(product.id)"
+      >
+      </app-product-card>
+    </div>
+    }
+  </div>
+</div>

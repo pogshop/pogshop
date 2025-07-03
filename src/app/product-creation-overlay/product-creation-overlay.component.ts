@@ -103,7 +103,8 @@ export class ProductCreationOverlayComponent {
     this.productFormValid = valid;
   }
 
-  saveProduct(productStatus: PRODUCT_STATUS) {
+  saveProduct(productStatus: PRODUCT_STATUS, event?: Event) {
+    event?.stopPropagation();
     this.product!.status = productStatus;
     this.saveInProgress = true;
     this.productService.upsertProduct(this.product!).subscribe({

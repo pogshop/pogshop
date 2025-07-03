@@ -92,7 +92,7 @@
             *ngIf="!product?.id"
             [disabled]="saveInProgress"
             type="button"
-            (click)="saveProduct(PRODUCT_STATUS.DRAFT)"
+            (click)="saveProduct(PRODUCT_STATUS.DRAFT, $event)"
             class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-100 rounded-lg"
           >
             Save Draft

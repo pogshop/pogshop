@@ -10,11 +10,25 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  CdkDragDrop,
+  CdkDropList,
+  CdkDrag,
+  moveItemInArray,
+  CdkDragEnter,
+  CdkDragExit,
+  CdkDragMove,
+  CdkDragPreview,
+  CdkDragPlaceholder,
+} from '@angular/cdk/drag-drop';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Product } from '../services/product.service';
 import { CreateProductCardComponent } from '../create-product-card/create-product-card.component';
 import { ProductCardActionsComponent } from '../product-card-actions/product-card-actions.component';
+import { UsersService } from '../services/users-service.service';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ProductReorderGridComponent } from '../product-reorder-grid/product-reorder-grid.component';
 
 @Component({
   selector: 'app-product-grid',
@@ -23,6 +37,7 @@ import { Subject } from 'rxjs';
     ProductCardComponent,
     CreateProductCardComponent,
     ProductCardActionsComponent,
+    ProductReorderGridComponent,
   ],
   templateUrl: './product-grid.component.html',
   styleUrl: './product-grid.component.scss',
@@ -36,25 +51,22 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   timeUntilAvailableMap: Map<string, string> = new Map();
   private destroy$ = new Subject<void>();
   private timerId?: number;
+  private currentUser: any = null;
+  isReorderMode = false;
 
-  constructor(private cdRef: ChangeDetectorRef) {}
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private usersService: UsersService
+  ) {}
 
   ngOnInit() {
     this.startTimer();
+    this.loadUserAndSortOrder();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['productList']) {
-      this.productList.sort((a, b) => {
-        // First, separate hidden and non-hidden products
-        if (a.isHidden !== b.isHidden) {
-          // Non-hidden products come first (isHidden: false comes before isHidden: true)
-          return a.isHidden ? 1 : -1;
-        }
-
-        // Within each group (hidden/non-hidden), sort by createdAt in descending order
-        return b.createdAt - a.createdAt;
-      });
+      this.sortProductsByUserOrder();
       this.updateAllTimeDisplays();
     }
   }
@@ -63,8 +75,59 @@ export class ProductGridComponent implements OnInit, OnDestroy {
     if (this.timerId) {
       window.clearTimeout(this.timerId);
     }
+
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  toggleReorderMode() {
+    this.isReorderMode = !this.isReorderMode;
+    this.cdRef.detectChanges();
+  }
+
+  private loadUserAndSortOrder() {
+    this.usersService
+      .getAuthUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        this.currentUser = user;
+        this.sortProductsByUserOrder();
+      });
+  }
+
+  private sortProductsByUserOrder() {
+    if (!this.currentUser?.productSortOrder) {
+      this.productList.sort((a, b) => {
+        if (a.isHidden !== b.isHidden) {
+          // Non-hidden products come first
+          return a.isHidden ? 1 : -1;
+        }
+        return b.createdAt - a.createdAt;
+      });
+      return;
+    }
+
+    // Sort products based on user's custom order
+    const sortOrder = this.currentUser.productSortOrder;
+    this.productList.sort((a, b) => {
+      const aIndex = sortOrder.indexOf(a.id);
+      const bIndex = sortOrder.indexOf(b.id);
+
+      // Prioritize products in the sort order
+      if (aIndex !== -1 && bIndex !== -1) {
+        return aIndex - bIndex;
+      }
+
+      // If only one product is in the sort order, prioritize it
+      if (aIndex !== -1) return -1;
+      if (bIndex !== -1) return 1;
+
+      // If neither product is in the sort order, maintain default sorting
+      if (a.isHidden !== b.isHidden) {
+        return a.isHidden ? 1 : -1;
+      }
+      return b.createdAt - a.createdAt;
+    });
   }
 
   private startTimer(): void {

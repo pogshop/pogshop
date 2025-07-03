@@ -1,16 +1,47 @@
-<div class="bg-gray-900 text-gray-100 font-sans p-6 mb-12">
-  <div class="">
-    <!-- Product Grid -->
-    <div
-      *ngIf="canEdit || productList.length"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+<!-- Reorder Products Button -->
+<div class="flex w-full justify-center md:justify-end">
+  <button
+    *ngIf="canEdit && !isReorderMode"
+    class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1.5"
+    (click)="toggleReorderMode()"
+  >
+    <svg
+      class="w-3.5 h-3.5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
     >
-      <app-create-product-card
-        *ngIf="canEdit"
-        class="flex-auto w-full"
-      ></app-create-product-card>
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 8h16M4 16h16"
+      ></path>
+    </svg>
+    Reorder
+  </button>
+</div>
+
+<div
+  class="bg-gray-900 text-gray-100 font-sans p-6 flex justify-center relative"
+>
+  @if (isReorderMode) {
+  <app-product-reorder-grid
+    (onProductOrderSaved)="toggleReorderMode()"
+    (onBack)="toggleReorderMode()"
+    [productList]="productList"
+  ></app-product-reorder-grid>
+  } @else {
+  <!-- Product Grid -->
+  <div
+    *ngIf="canEdit || productList.length"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+  >
+    <app-create-product-card *ngIf="canEdit"></app-create-product-card>
+
+    <div class="contents">
       @for (product of productList; track product.id) {
-      <div class="flex-auto h-[60vh] md:h-[65vh] md:max-h-[500px]">
+      <div class="h-[60vh] md:h-[65vh] md:max-h-[500px]">
         <app-product-card
           *ngIf="canEdit || !product.isHidden"
           [canEdit]="canEdit"
@@ -27,4 +58,5 @@
       }
     </div>
   </div>
+  }
 </div>
