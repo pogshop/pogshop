@@ -1,61 +1,65 @@
-<!-- Reorder Products Button -->
-<div class="flex w-full justify-center md:justify-end">
-  <button
-    *ngIf="canEdit && !isReorderMode"
-    class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1.5"
-    (click)="handleReorderModeChange(productList)"
-  >
-    <svg
-      class="w-3.5 h-3.5"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
+<div class="p-6">
+  <!-- Reorder Products Button -->
+  <div class="flex w-full justify-center md:justify-end mb-6">
+    <button
+      *ngIf="canEdit && !isReorderMode"
+      class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-3 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1.5"
+      (click)="handleReorderModeChange(productList)"
     >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M4 8h16M4 16h16"
-      ></path>
-    </svg>
-    Reorder
-  </button>
-</div>
+      <svg
+        class="w-3.5 h-3.5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 8h16M4 16h16"
+        ></path>
+      </svg>
+      Reorder Products
+    </button>
+  </div>
 
-<div
-  class="bg-gray-900 text-gray-100 font-sans p-6 flex justify-center relative"
->
   @if (isReorderMode) {
-  <app-product-reorder-grid
-    (onProductOrderSaved)="handleReorderModeChange($event)"
-    (onCancel)="handleReorderModeChange($event)"
-    [productList]="productList"
-  ></app-product-reorder-grid>
+  <div class="flex justify-center w-full min-h-[500px]">
+    <div class="sm:w-4/5 px-4 sm:px-0 box-border max-w-full">
+      <app-product-reorder-grid
+        (onProductOrderSaved)="handleReorderModeChange($event)"
+        (onCancel)="handleReorderModeChange($event)"
+        [productList]="productList"
+      ></app-product-reorder-grid>
+    </div>
+  </div>
   } @else {
-  <!-- Product Grid -->
-  <div
-    *ngIf="canEdit || productList.length"
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
-  >
-    <app-create-product-card *ngIf="canEdit"></app-create-product-card>
+  <div class="bg-gray-900 text-gray-100 font-sans flex justify-center relative">
+    <!-- Product Grid -->
+    <div
+      *ngIf="canEdit || productList.length"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+    >
+      <app-create-product-card *ngIf="canEdit"></app-create-product-card>
 
-    <div class="contents">
-      @for (product of productList; track product.id) {
-      <div class="h-[60vh] md:h-[65vh] md:max-h-[500px]">
-        <app-product-card
-          *ngIf="canEdit || !product.isHidden"
-          [canEdit]="canEdit"
-          [product]="product"
-          [timeUntilAvailable]="timeUntilAvailableMap.get(product.id) || ''"
-          (onProductClick)="handleProductClick(product)"
-        >
-          <app-product-card-actions
-            *ngIf="canEdit"
+      <div class="contents">
+        @for (product of productList; track product.id) {
+        <div class="h-[60vh] md:h-[65vh] md:max-h-[500px]">
+          <app-product-card
+            *ngIf="canEdit || !product.isHidden"
+            [canEdit]="canEdit"
             [product]="product"
-          ></app-product-card-actions>
-        </app-product-card>
+            [timeUntilAvailable]="timeUntilAvailableMap.get(product.id) || ''"
+            (onProductClick)="handleProductClick(product)"
+          >
+            <app-product-card-actions
+              *ngIf="canEdit"
+              [product]="product"
+            ></app-product-card-actions>
+          </app-product-card>
+        </div>
+        }
       </div>
-      }
     </div>
   </div>
   }
