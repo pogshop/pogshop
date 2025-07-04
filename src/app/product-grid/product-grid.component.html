@@ -2,7 +2,7 @@
   <!-- Reorder Products Button -->
   <div class="flex w-full justify-center md:justify-end">
     <button
-      *ngIf="canEdit && !isReorderMode"
+      *ngIf="canEdit && !isReorderMode && productList.length > 1"
       class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-3 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1.5"
       (click)="handleReorderModeChange(productList)"
     >
@@ -35,14 +35,17 @@
   </div>
   } @else {
   <div
-    class="bg-gray-900 text-gray-100 font-sans flex justify-center relative mt-12"
+    class="bg-gray-900 text-gray-100 font-sans flex justify-center relative mt-8"
   >
     <!-- Product Grid -->
     <div
       *ngIf="canEdit || productList.length"
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
     >
-      <app-create-product-card *ngIf="canEdit"></app-create-product-card>
+      <app-create-product-card
+        *ngIf="canEdit"
+        class="md:min-h-[400px]"
+      ></app-create-product-card>
 
       <div class="contents">
         @for (product of productList; track product.id) {
