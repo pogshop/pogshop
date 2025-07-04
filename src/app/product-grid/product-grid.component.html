@@ -1,6 +1,6 @@
-<div class="p-6">
+<div class="sm:px-12 mt-6">
   <!-- Reorder Products Button -->
-  <div class="flex w-full justify-center md:justify-end mb-6">
+  <div class="flex w-full justify-center md:justify-end">
     <button
       *ngIf="canEdit && !isReorderMode"
       class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-3 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1.5"
@@ -25,7 +25,7 @@
 
   @if (isReorderMode) {
   <div class="flex justify-center w-full min-h-[500px]">
-    <div class="sm:w-4/5 px-4 sm:px-0 box-border max-w-full">
+    <div class="px-4 box-border max-w-full flex-1">
       <app-product-reorder-grid
         (onProductOrderSaved)="handleReorderModeChange($event)"
         (onCancel)="handleReorderModeChange($event)"
@@ -34,7 +34,9 @@
     </div>
   </div>
   } @else {
-  <div class="bg-gray-900 text-gray-100 font-sans flex justify-center relative">
+  <div
+    class="bg-gray-900 text-gray-100 font-sans flex justify-center relative mt-12"
+  >
     <!-- Product Grid -->
     <div
       *ngIf="canEdit || productList.length"

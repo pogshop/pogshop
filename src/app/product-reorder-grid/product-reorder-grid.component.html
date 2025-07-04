@@ -1,5 +1,5 @@
 <!-- Drag and Drop Instructions -->
-<div class="flex flex-row justify-between mb-4 sm:px-0 gap-4">
+<div class="flex flex-row justify-between mb-4 sm:px-0 gap-4 w-full">
   <button
     class="w-fit bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 shadow-sm flex-1 sm:flex-none"
     (click)="cancelReordering()"
@@ -60,7 +60,7 @@
 
 <!-- Product Grid -->
 <div
-  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 lg:gap-10 w-full border border-gray-700 rounded-xl p-3 sm:mx-auto max-h-[500px] overflow-y-auto"
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full sm:w-xl border border-gray-700 rounded-xl p-3 sm:mx-auto max-h-[500px] overflow-y-auto"
   cdkDropList
   [cdkDropListAutoScrollStep]="12"
   [cdkDropListData]="productList"
