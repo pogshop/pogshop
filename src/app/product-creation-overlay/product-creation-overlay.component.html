@@ -65,7 +65,7 @@
         <!-- Product Creation Section -->
         <app-product-creation-section
           [baseProduct]="product!"
-          (onBaseProductUpdated)="setBaseProduct($event)"
+          (onBaseProductUpdated)="refreshDisplayPreviewProduct($event)"
           (onProductUpdated)="refreshDisplayPreviewProduct($event)"
           (onProductFormStatusChanged)="updateProductFormStatus($event)"
           (productCreated)="closeModal()"
