@@ -4,7 +4,7 @@
     <!-- Product Card Preview -->
     <div class="mb-6">
       <h4 class="text-sm font-medium text-gray-400 mb-3">Shop Preview</h4>
-      <div class="max-w-[300px] mx-auto">
+      <div class="max-w-[300px] mx-auto scale-90">
         <app-product-card
           [disableCheckout]="true"
           [product]="product"
@@ -18,7 +18,7 @@
       <h4 class="text-sm font-medium text-gray-400 mb-3">
         Stream Alert Preview
       </h4>
-      <div class="mx-auto md:scale-75">
+      <div class="mx-auto scale-75">
         <app-simple-stream-alert
           [displayImage]="product?.imageURLs?.[0]"
           [displayProductName]="product?.name"
