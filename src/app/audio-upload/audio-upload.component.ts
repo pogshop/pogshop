@@ -71,8 +71,6 @@ export class AudioUploadComponent implements OnInit, OnChanges {
       'soundEffect.audioDisplayName'
     )?.value;
 
-    console.log(this.formGroup);
-
     this.cdRef.detectChanges();
   }
 

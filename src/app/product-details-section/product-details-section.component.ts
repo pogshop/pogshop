@@ -31,7 +31,6 @@ export interface ProductInfo {
 interface ProductOption {
   product: Product;
   label: string;
-  isBaseProduct: boolean;
 }
 
 @Component({
@@ -82,26 +81,19 @@ export class ProductDetailsSectionComponent implements OnInit {
   private initializeProductOptions(): void {
     this.productOptions = [];
 
-    // Add base product as first option
-    this.productOptions.push({
-      product: this.product,
-      label: this.product.name,
-      isBaseProduct: true,
-    });
-
     // Add variations if they exist
     if (this.product.variations && this.product.variations.length > 0) {
       this.product.variations.forEach((variation) => {
         this.productOptions.push({
           product: variation,
           label: variation.name,
-          isBaseProduct: false,
         });
       });
+      this.selectedProduct = this.productOptions[0].product;
+    } else {
+      // Set initial selected product
+      this.selectedProduct = this.product;
     }
-
-    // Set initial selected product
-    this.selectedProduct = this.product;
   }
 
   onProductSelectionChange(event: Event): void {
@@ -119,7 +111,6 @@ export class ProductDetailsSectionComponent implements OnInit {
         'product_details_page_variation_selected',
         {
           productName: selectedOption.product.name,
-          isBaseProduct: selectedOption.isBaseProduct,
         }
       );
     }
