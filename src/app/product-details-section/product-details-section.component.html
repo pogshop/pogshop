@@ -49,16 +49,16 @@
       >
         <div class="absolute inset-0 -z-10"></div>
         <img
-          [src]="product.imageURLs[selectedImageIndex]"
-          [alt]="product.name"
+          [src]="selectedProduct.imageURLs[selectedImageIndex]"
+          [alt]="selectedProduct.name"
           class="max-w-full h-80 object-contain rounded-2xl shadow-2xl cursor-pointer hover:opacity-90 transition-opacity"
           (click)="
             openImageModal(
-              product.imageURLs[selectedImageIndex],
+              selectedProduct.imageURLs[selectedImageIndex],
               selectedImageIndex
             )
           "
-          [attr.aria-label]="'View ' + product.name + ' in full size'"
+          [attr.aria-label]="'View ' + selectedProduct.name + ' in full size'"
         />
         <!-- Full size indicator -->
         <div
@@ -70,16 +70,16 @@
 
       <!-- All Product Images Thumbnails -->
       <div
-        *ngIf="product.imageURLs.length > 1"
+        *ngIf="selectedProduct?.imageURLs?.length"
         class="flex gap-3 justify-center flex-wrap"
       >
         <div
-          *ngFor="let image of product.imageURLs; let i = index"
+          *ngFor="let image of selectedProduct.imageURLs; let i = index"
           class="relative overflow-hidden group"
         >
           <img
             [src]="image"
-            [alt]="product.name + ' - Image ' + (i + 1)"
+            [alt]="selectedProduct.name + ' - Image ' + (i + 1)"
             class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity box-border"
             [ngClass]="{
               'border-3 border-violet-500': i === selectedImageIndex,
@@ -90,7 +90,7 @@
             (dblclick)="openImageModal(image, i)"
             [attr.aria-label]="
               'Select ' +
-              product.name +
+              selectedProduct.name +
               ' - Image ' +
               (i + 1) +
               ' (double-click to view full size)'
@@ -102,13 +102,15 @@
 
     <div class="flex flex-col gap-5">
       <h1 class="text-3xl font-bold text-slate-100 mb-2">
-        {{ product.name }}
+        {{ selectedProduct.name }}
       </h1>
 
       <div
         class="text-2xl font-bold text-violet-400 bg-violet-500/10 px-4 py-2 rounded-xl inline-block w-fit"
       >
-        {{ product.price | currency : userCurrency : "symbol" : "1.2-2" }}
+        {{
+          selectedProduct.price | currency : userCurrency : "symbol" : "1.2-2"
+        }}
       </div>
 
       <div class="flex items-center gap-2 my-2">
@@ -123,11 +125,55 @@
         </div>
       </div>
 
+      <!-- Variation Selection Dropdown - Above Description -->
+      <div class="mb-6" *ngIf="product?.variations?.length">
+        <div class="flex items-center gap-3 mb-3">
+          <svg
+            class="w-5 h-5 text-violet-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            ></path>
+          </svg>
+          <label
+            for="product-variation"
+            class="text-sm font-medium text-slate-300"
+          >
+            Select a variation
+          </label>
+        </div>
+        <div class="relative">
+          <select
+            id="product-variation"
+            (change)="onProductSelectionChange($event)"
+            class="w-full bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/30 text-slate-200 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition-all duration-300 hover:border-violet-400/50 hover:from-violet-500/15 hover:to-purple-500/15 appearance-none cursor-pointer backdrop-blur-sm"
+          >
+            <option
+              *ngFor="let option of productOptions; let i = index"
+              [value]="i"
+              [selected]="option.product === selectedProduct"
+              class="bg-gray-800 text-slate-200 py-2"
+            >
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+        <p class="text-xs text-slate-400 mt-2 ml-1">
+          Select from available variations
+        </p>
+      </div>
+
       <button
         class="bg-gradient-to-r from-violet-500 to-purple-500 text-white border-none px-8 py-4 rounded-2xl text-lg font-semibold cursor-pointer transition-all duration-300 relative overflow-hidden hover:-translate-y-0.5 hover:shadow-xl hover:shadow-violet-500/40 active:translate-y-0 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"
         (click)="handlePurchaseClick()"
         [disabled]="!inStock"
-        [attr.aria-label]="'Purchase ' + product.name"
+        [attr.aria-label]="'Purchase ' + selectedProduct.name"
       >
         {{ inStock ? "Buy Now" : "Out of Stock" }}
       </button>
@@ -139,11 +185,11 @@
       <h3
         class="text-lg font-semibold mb-2 text-slate-100 flex items-center gap-2"
       >
-        {{ product.name }}
+        {{ selectedProduct.name }}
       </h3>
       <div class="flex flex-col gap-4">
         <p class="text-slate-300 leading-relaxed whitespace-pre-line">
-          {{ product.description }}
+          {{ selectedProduct.description }}
         </p>
       </div>
     </div>
@@ -151,7 +197,7 @@
     <!-- Product Features/Highlights -->
     <div
       class="bg-white/5 p-5 rounded-2xl border border-white/10 mb-8 flex-1 h-fit"
-      *ngIf="product?.features?.length"
+      *ngIf="selectedProduct?.features?.length"
     >
       <h3
         class="text-lg font-semibold mb-4 text-slate-100 flex items-center gap-2"
@@ -173,7 +219,7 @@
       </h3>
       <div class="flex flex-col gap-3">
         <div
-          *ngFor="let feature of product?.features; let i = index"
+          *ngFor="let feature of selectedProduct?.features; let i = index"
           class="flex items-start gap-3 p-4 rounded-lg"
           [ngClass]="{
             'bg-purple-500/10 border border-purple-500/20': i % 2 === 0,

@@ -1,0 +1,126 @@
+<!-- Header with Back Button -->
+<div class="flex items-center justify-between mb-8" *ngIf="!baseProduct?.id">
+  <button
+    type="button"
+    class="flex items-center text-gray-400 hover:text-gray-100 transition-colors"
+    (click)="onBack.emit()"
+  >
+    <svg
+      class="w-5 h-5 mr-2"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 19l-7-7 7-7"
+      />
+    </svg>
+    Back to Products
+  </button>
+</div>
+
+<!-- Tab Navigation -->
+
+<div class="mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-semibold text-gray-100">
+      Product Variations
+      <span class="text-xs text-gray-400"> (up to 4 variations)</span>
+    </h3>
+    <button
+      [disabled]="productTabs.length >= 5"
+      type="button"
+      (click)="addVariation()"
+      class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        />
+      </svg>
+      Add Variation
+    </button>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="border-b border-gray-700">
+    <nav class="flex space-x-1 overflow-x-auto">
+      <!-- Variation Tabs -->
+      <ng-container *ngFor="let tab of productTabs; let i = index">
+        <button
+          type="button"
+          (click)="switchTab(i)"
+          class="px-4 py-2 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap flex items-center gap-2"
+          [ngClass]="{
+            'bg-purple-600 text-white': isActiveTab(i),
+            'bg-gray-700 text-gray-300 hover:bg-gray-600': !isActiveTab(i)
+          }"
+        >
+          <span class="max-w-32 min-w-4 truncate">{{ tab.title }}</span>
+          <button
+            *ngIf="i > 0"
+            type="button"
+            (click)="removeVariation(i); $event.stopPropagation()"
+            class="w-4 h-4 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white text-xs transition-colors"
+            title="Remove variation"
+          >
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </button>
+      </ng-container>
+    </nav>
+  </div>
+</div>
+
+<!-- Tab Content -->
+<div class="min-h-[400px]">
+  <app-product-creation-form
+    [productForm]="productTabs[activeTabIndex].productForm"
+    (onProductFormUpdated)="onProductFormUpdated($event)"
+    (onProductCreated)="onProductCreated()"
+  ></app-product-creation-form>
+  <!-- Empty State -->
+  <div *ngIf="productTabs.length === 1" class="text-center py-12 text-gray-500">
+    <svg
+      class="w-16 h-16 mx-auto mb-4 text-gray-600"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+      />
+    </svg>
+    <p class="text-sm">No variations added yet</p>
+    <p class="text-xs text-gray-600 mt-1">
+      Click "Add Variation" to create a new product variation with its own
+      complete form
+    </p>
+  </div>
+</div>

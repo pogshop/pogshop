@@ -6,6 +6,8 @@ import {
   ViewChild,
   ElementRef,
   ChangeDetectorRef,
+  DestroyRef,
+  SimpleChanges,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -13,12 +15,10 @@ import {
   FormArray,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
   Product,
-  PRODUCT_STATUS,
   PRODUCT_TYPE,
   ProductService,
 } from '../services/product.service';
@@ -28,6 +28,8 @@ import {
   getCurrencySymbol,
 } from '../helpers/userHelpers';
 import { AudioUploadComponent } from '../audio-upload/audio-upload.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-creation-form',
@@ -43,15 +45,13 @@ import { AudioUploadComponent } from '../audio-upload/audio-upload.component';
   standalone: true,
 })
 export class ProductCreationFormComponent {
-  @Input() product?: Product;
+  @Input({ required: true }) productForm!: FormGroup;
   @Output() onBack = new EventEmitter<void>();
   @Output() onProductCreated = new EventEmitter<void>();
   @Output() onProductFormUpdated = new EventEmitter<Product>();
-  @Output() productFormStatus = new EventEmitter<boolean>();
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('soundFileInput') soundFileInput!: ElementRef;
 
-  productForm!: FormGroup;
   isPlaying = false;
   isDragging = false;
   isLimitedInventory = false;
@@ -60,7 +60,7 @@ export class ProductCreationFormComponent {
   userCurrency = 'USD';
 
   readonly PRODUCT_TYPE = PRODUCT_TYPE;
-  private audioPlayer = new Audio('/assets/default_sale_alert.mp3');
+  private productFormSubscription?: Subscription;
 
   productTypes = [
     {
@@ -83,9 +83,10 @@ export class ProductCreationFormComponent {
   ];
 
   constructor(
-    private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private fb: FormBuilder,
+    private destroyRef: DestroyRef
   ) {}
 
   ngOnInit() {
@@ -94,72 +95,25 @@ export class ProductCreationFormComponent {
     if (currentUser) {
       this.userCurrency = getUserDisplayCurrency(currentUser);
     }
+  }
 
-    this.productForm = this.fb.group({
-      type: [this.product?.type || PRODUCT_TYPE.INTERACTIVE],
-      name: [this.product?.name || '', [Validators.required]],
-      price: [
-        this.product?.price || 4.99,
-        [
-          Validators.required,
-          Validators.min(1),
-          Validators.pattern(/^\d+(\.\d{1,2})?$/),
-          Validators.max(100000),
-        ],
-      ],
-      description: [this.product?.description || null],
-      features: this.fb.array([]),
-      imageURLs: [this.product?.imageURLs || null],
-      digitalLink: [this.product?.digitalLink || null],
-      isHidden: [this.product?.isHidden || false],
-      purchaseSettings: this.fb.group({
-        payWhatYouWant: [
-          this.product?.purchaseSettings?.payWhatYouWant || false,
-        ],
-        acceptTips: [this.product?.purchaseSettings?.acceptTips || false],
-      }),
-      inventorySettings: this.fb.group({
-        requiresShipping: [
-          this.product?.inventorySettings?.requiresShipping || false,
-        ],
-        remainingInventory: [
-          this.product?.inventorySettings?.remainingInventory ?? null,
-        ],
-        purchasedToday: [this.product?.inventorySettings?.purchasedToday || 0],
-        dailyLimit: [this.product?.inventorySettings?.dailyLimit || null],
-      }),
-      soundEffect: this.fb.group({
-        audioURL: [this.product?.soundEffect?.audioURL || null],
-        audioDisplayName: [this.product?.soundEffect?.audioDisplayName || null],
-      }),
-    });
-
-    // Initialize highlights if product has features
-    if (this.product?.features && this.product.features.length > 0) {
-      this.product.features.forEach((feature) => {
-        this.highlightsArray.push(this.fb.control(feature));
-      });
-    }
-
-    this.productForm.valueChanges.subscribe((value) => {
-      this.onProductFormUpdated.emit(value);
-      this.productFormStatus.emit(this.productForm.valid);
-    });
-
-    if (this.product) {
-      this.productForm.patchValue(this.product);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['productForm']) {
+      this.productFormSubscription?.unsubscribe();
       this.isLimitedInventory =
-        this.product.inventorySettings?.remainingInventory !== null;
+        this.productForm.get('inventorySettings.remainingInventory')?.value !==
+        null;
 
-      this.hasDailyLimit = this.product.inventorySettings?.dailyLimit !== null;
+      this.hasDailyLimit =
+        this.productForm.get('inventorySettings.dailyLimit')?.value !== null;
 
-      this.audioPlayer.src =
-        this.product.soundEffect?.audioURL || '/assets/default_sale_alert.mp3';
+      this.productFormSubscription = this.productForm.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((value) => {
+          this.onProductFormUpdated.emit(value);
+        });
+      this.productForm.updateValueAndValidity();
     }
-    this.productForm.updateValueAndValidity();
-
-    console.log('productForm', this.productForm.value);
-    this.cdRef.markForCheck();
   }
 
   get highlightsArray(): FormArray {
@@ -183,16 +137,6 @@ export class ProductCreationFormComponent {
     });
     this.productForm.updateValueAndValidity();
     this.cdRef.detectChanges();
-  }
-
-  toggleSoundPlayback() {
-    this.isPlaying = !this.isPlaying;
-    if (this.isPlaying) {
-      this.audioPlayer.play();
-    } else {
-      this.audioPlayer.pause();
-      this.audioPlayer.currentTime = 0;
-    }
   }
 
   resetPurchaseCount() {
@@ -374,24 +318,6 @@ export class ProductCreationFormComponent {
     return productImages;
   }
 
-  onSoundFileSelected(event: Event) {
-    // This method is now handled by the audio upload component
-  }
-
-  resetSoundEffect() {
-    this.productForm.patchValue({
-      soundEffect: {
-        audioURL: null,
-        audioDisplayName: '',
-      },
-    });
-    this.audioPlayer.src = '/assets/default_sale_alert.mp3';
-    if (this.soundFileInput) {
-      this.soundFileInput.nativeElement.value = '';
-    }
-    this.cdRef.detectChanges();
-  }
-
   onAudioChanged(audioData: { audioURL: string; audioName: string }) {
     this.productForm.patchValue({
       soundEffect: {
@@ -399,12 +325,7 @@ export class ProductCreationFormComponent {
         audioDisplayName: audioData.audioName,
       },
     });
-    this.audioPlayer.src = audioData.audioURL;
     this.cdRef.detectChanges();
-  }
-
-  onAudioReset() {
-    this.resetSoundEffect();
   }
 
   onPriceInput(event: Event) {

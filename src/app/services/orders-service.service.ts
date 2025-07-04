@@ -21,6 +21,7 @@ interface Item {
   productId: string;
   quantity: number;
   purchasePrice: number;
+  baseProductId?: string;
 }
 
 export interface CheckoutSessionRequest {

@@ -62,13 +62,15 @@
           (productSelected)="onProductSelected($event)"
         ></app-create-product-selector>
         } @case (ProductCreationScreen.FORM) {
-        <app-product-creation-form
-          [product]="product"
-          (onProductFormUpdated)="onProductFormUpdated($event)"
+        <!-- Product Creation Section -->
+        <app-product-creation-section
+          [baseProduct]="product!"
+          (onBaseProductUpdated)="setBaseProduct($event)"
+          (onProductUpdated)="refreshDisplayPreviewProduct($event)"
+          (onProductFormStatusChanged)="updateProductFormStatus($event)"
+          (productCreated)="closeModal()"
           (onBack)="resetProductCreation(ProductCreationScreen.SELECTOR)"
-          (onProductCreated)="closeModal()"
-          (productFormStatus)="onProductFormStatus($event)"
-        ></app-product-creation-form>
+        ></app-product-creation-section>
         } }
       </div>
 
@@ -79,7 +81,7 @@
         <div class="flex-1 overflow-y-auto p-4 overflow-x-hidden">
           <div class="pb-4">
             <app-product-edit-preview
-              [product]="product"
+              [product]="displayPreviewProduct"
             ></app-product-edit-preview>
           </div>
         </div>

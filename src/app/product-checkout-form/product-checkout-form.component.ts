@@ -283,6 +283,7 @@ export class ProductCheckoutFormComponent {
           items: [
             {
               productId: this.product.id,
+              baseProductId: this.product?.baseProductId,
               quantity: formValue.quantity,
               purchasePrice:
                 this.checkoutForm.get('purchasePrice')?.value ||

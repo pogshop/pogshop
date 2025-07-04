@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   ChangeDetectorRef,
+  OnInit,
 } from '@angular/core';
 import { Product } from '../services/product.service';
 import { ProductCheckoutFormComponent } from '../product-checkout-form/product-checkout-form.component';
@@ -27,13 +28,19 @@ export interface ProductInfo {
   isInStock: boolean;
 }
 
+interface ProductOption {
+  product: Product;
+  label: string;
+  isBaseProduct: boolean;
+}
+
 @Component({
   selector: 'app-product-details-section',
   templateUrl: './product-details-section.component.html',
   styleUrls: ['./product-details-section.component.scss'],
   imports: [CommonModule],
 })
-export class ProductDetailsSectionComponent {
+export class ProductDetailsSectionComponent implements OnInit {
   @Input() product!: Product;
   @Input() showBackButton: boolean = true;
   @Input() userCurrency: string = 'USD';
@@ -47,6 +54,10 @@ export class ProductDetailsSectionComponent {
   remainingInventory: number | null = null;
   selectedImageIndex: number = 0;
 
+  // Variation selection
+  productOptions: ProductOption[] = [];
+  selectedProduct!: Product;
+
   constructor(
     private modalService: ModalService,
     private cdRef: ChangeDetectorRef,
@@ -57,21 +68,72 @@ export class ProductDetailsSectionComponent {
   }
 
   ngOnInit(): void {
+    this.selectedProduct = this.product;
+
     this.usersService.getUserById(this.product.userId).subscribe((user) => {
       this.userCurrency = getUserDisplayCurrency(user);
       this.cdRef.detectChanges();
     });
 
+    this.initializeProductOptions();
     this.calculateInventoryStatus();
   }
 
+  private initializeProductOptions(): void {
+    this.productOptions = [];
+
+    // Add base product as first option
+    this.productOptions.push({
+      product: this.product,
+      label: this.product.name,
+      isBaseProduct: true,
+    });
+
+    // Add variations if they exist
+    if (this.product.variations && this.product.variations.length > 0) {
+      this.product.variations.forEach((variation) => {
+        this.productOptions.push({
+          product: variation,
+          label: variation.name,
+          isBaseProduct: false,
+        });
+      });
+    }
+
+    // Set initial selected product
+    this.selectedProduct = this.product;
+  }
+
+  onProductSelectionChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedIndex = parseInt(selectElement.value);
+    const selectedOption = this.productOptions[selectedIndex];
+
+    if (selectedOption) {
+      this.selectedProduct = selectedOption.product;
+      this.selectedImageIndex = 0; // Reset image index when switching products
+      this.calculateInventoryStatus();
+      this.cdRef.detectChanges();
+
+      this.analyticsService.logEvent(
+        'product_details_page_variation_selected',
+        {
+          productName: selectedOption.product.name,
+          isBaseProduct: selectedOption.isBaseProduct,
+        }
+      );
+    }
+  }
+
   private calculateInventoryStatus(): void {
+    // Use selectedProduct instead of this.product for inventory calculations
     let remainingInventory =
-      this.product?.inventorySettings?.remainingInventory;
-    const dailyLimit = this.product?.inventorySettings?.dailyLimit;
-    const purchasedToday = this.product?.inventorySettings?.purchasedToday;
+      this.selectedProduct?.inventorySettings?.remainingInventory;
+    const dailyLimit = this.selectedProduct?.inventorySettings?.dailyLimit;
+    const purchasedToday =
+      this.selectedProduct?.inventorySettings?.purchasedToday;
     const firstPurchaseTodayAt =
-      this.product?.inventorySettings?.firstPurchaseTodayAt;
+      this.selectedProduct?.inventorySettings?.firstPurchaseTodayAt;
 
     this.inStock = remainingInventory == null || remainingInventory > 0;
 
@@ -96,8 +158,8 @@ export class ProductDetailsSectionComponent {
       this.stockBadgeText = 'Out of Stock';
     } else if (this.remainingInventory != null && this.remainingInventory > 0) {
       this.stockBadgeText = `${this.remainingInventory} left!`;
-    } else if (this.product.salesCount) {
-      this.stockBadgeText = `${this.product.salesCount} sold`;
+    } else if (this.selectedProduct.salesCount) {
+      this.stockBadgeText = `${this.selectedProduct.salesCount} sold`;
     } else {
       this.stockBadgeText = 'Available!';
     }
@@ -114,7 +176,7 @@ export class ProductDetailsSectionComponent {
     );
     this.modalService.open(ProductCheckoutFormComponent, {
       data: {
-        product: this.product,
+        product: this.selectedProduct,
       },
       closeOnBackdropClick: true,
       width: 'fit-content',
@@ -138,7 +200,7 @@ export class ProductDetailsSectionComponent {
   selectMainImage(imageIndex: number): void {
     this.analyticsService.logEvent('product_details_page_image_clicked', {
       imageIndex: imageIndex,
-      totalImages: this.product.imageURLs.length,
+      totalImages: this.selectedProduct.imageURLs.length, // Use selectedProduct
     });
 
     // Update the selected image index
@@ -148,13 +210,13 @@ export class ProductDetailsSectionComponent {
 
   openImageModal(imageUrl: string, imageIndex: number): void {
     this.analyticsService.logEvent('product_details_page_image_modal_opened', {
-      totalImages: this.product.imageURLs.length,
+      totalImages: this.selectedProduct.imageURLs.length, // Use selectedProduct
     });
 
     const modalData: ImageViewerModalData = {
       imageUrl: imageUrl,
-      imageAlt: `${this.product.name} - Image ${imageIndex + 1}`,
-      productName: this.product.name,
+      imageAlt: `${this.selectedProduct.name} - Image ${imageIndex + 1}`, // Use selectedProduct
+      productName: this.selectedProduct.name, // Use selectedProduct
     };
 
     this.modalService.open(ImageViewerModalComponent, {

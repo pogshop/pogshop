@@ -14,7 +14,7 @@ export interface AudioProcessingResult {
 @Injectable({
   providedIn: 'root',
 })
-export class AudioServiceService {
+export class AudioService {
   constructor() {}
 
   /**

@@ -7,11 +7,13 @@ import {
   ElementRef,
   ChangeDetectorRef,
   OnInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  AudioServiceService,
+  AudioService,
   AudioAdjustmentOptions,
 } from '../services/audio-service.service';
 import { HttpClient } from '@angular/common/http';
@@ -24,9 +26,8 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './audio-upload.component.html',
   styleUrl: './audio-upload.component.scss',
 })
-export class AudioUploadComponent implements OnInit {
-  @Input() currentAudioURL: string | null = null;
-  @Input() currentAudioName: string | null = null;
+export class AudioUploadComponent implements OnInit, OnChanges {
+  @Input() formGroup: any = null; // Add formGroup input
   @Output() audioChanged = new EventEmitter<{
     audioURL: string;
     audioName: string;
@@ -42,25 +43,56 @@ export class AudioUploadComponent implements OnInit {
   audioProcessingSuccess = '';
   audioPlayer = new Audio();
   isPlaying = false;
+  currentAudioURL = '';
+  currentAudioName = '';
 
   constructor(
-    private audioService: AudioServiceService,
+    private audioService: AudioService,
     private cdRef: ChangeDetectorRef,
     private httpClient: HttpClient
   ) {}
 
   ngOnInit() {
-    // Initialize with default audio if no current audio
-    if (!this.currentAudioURL) {
-      this.audioPlayer.src = '/assets/default_sale_alert.mp3';
-    } else {
-      this.audioPlayer.src = this.currentAudioURL;
-    }
-
     this.audioPlayer.addEventListener('ended', () => {
       this.isPlaying = false;
       this.cdRef.detectChanges();
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Reset component when formGroup changes
+    if (changes['formGroup'] && !changes['formGroup'].firstChange) {
+      this.resetComponent();
+    }
+
+    // Initialize with default audio if no current audio
+    this.currentAudioURL = this.formGroup.get('soundEffect.audioURL')?.value;
+    this.currentAudioName = this.formGroup.get(
+      'soundEffect.audioDisplayName'
+    )?.value;
+
+    console.log(this.formGroup);
+
+    this.cdRef.detectChanges();
+  }
+
+  private resetComponent() {
+    this.selectedFile = null;
+    this.volumeMultiplier = 1.0;
+    this.isProcessingAudio = false;
+    this.audioProcessingError = '';
+    this.audioProcessingSuccess = '';
+    this.isPlaying = false;
+
+    // Clear file input
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
+
+    // Reset audio player to default
+    this.audioPlayer.src = '/assets/default_sale_alert.mp3';
+
+    this.cdRef.detectChanges();
   }
 
   onFileSelected(event: Event) {
@@ -84,6 +116,7 @@ export class AudioUploadComponent implements OnInit {
       this.audioProcessingError = '';
       this.audioProcessingSuccess = '';
 
+      this.processAudio();
       this.cdRef.detectChanges();
     }
   }
@@ -101,6 +134,9 @@ export class AudioUploadComponent implements OnInit {
         // Use selected file
         audioFile = this.selectedFile;
         audioName = this.selectedFile.name;
+      } else if (this.currentAudioURL) {
+        audioFile = await this.getAudioFileFromURL(this.currentAudioURL);
+        audioName = this.currentAudioName || 'default_sale_alert.mp3';
       } else {
         // Use default audio file
         audioFile = await this.getDefaultAudioFile();
@@ -131,44 +167,30 @@ export class AudioUploadComponent implements OnInit {
             audioName: audioName,
           });
 
-          // Clear the selected file and show success
-          this.selectedFile = null;
-          this.audioProcessingSuccess = 'Audio processed successfully!';
-
-          // Clear file input
-          if (this.fileInput) {
-            this.fileInput.nativeElement.value = '';
-          }
-
           this.cdRef.detectChanges();
         };
         reader.readAsDataURL(result.audioBlob);
-      } else {
-        this.audioProcessingError = result.error || 'Failed to process audio';
       }
     } catch (error) {
       this.audioProcessingError =
         'An unexpected error occurred while processing the audio';
-      console.error('Processing error:', error);
     } finally {
       this.isProcessingAudio = false;
       this.cdRef.detectChanges();
     }
   }
 
-  cancelAudioSelection() {
-    this.selectedFile = null;
-    this.audioProcessingError = '';
-    this.audioProcessingSuccess = '';
+  resetAudio() {
+    this.formGroup.patchValue({
+      soundEffect: {
+        audioURL: null,
+        audioDisplayName: '',
+      },
+    });
+    this.audioPlayer.src = '/assets/default_sale_alert.mp3';
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
-    this.cdRef.detectChanges();
-  }
-
-  resetAudio() {
-    this.audioPlayer.src = '/assets/default_sale_alert.mp3';
-    this.audioReset.emit();
     this.cdRef.detectChanges();
   }
 
@@ -270,10 +292,6 @@ export class AudioUploadComponent implements OnInit {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
-
-  get currentAudioDisplayName(): string {
-    return this.currentAudioName || 'default_sale_alert.mp3';
   }
 
   get isDefaultAudio(): boolean {

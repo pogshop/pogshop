@@ -25,6 +25,7 @@ export type Product = {
   id: string;
   userId: string;
   name: string;
+  baseProductId?: string;
   createdAt: number;
   price: string | null;
   description: string;
@@ -50,6 +51,7 @@ export type Product = {
     audioURL: string | null;
     audioDisplayName: string;
   };
+  variations: Product[];
 };
 
 const PRODUCTS_COLLECTION = 'products';

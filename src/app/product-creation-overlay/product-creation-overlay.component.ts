@@ -5,11 +5,11 @@ import {
   Inject,
   ViewChild,
 } from '@angular/core';
-import { ProductCreationFormComponent } from '../product-creation-form/product-creation-form.component';
 import { CommonModule } from '@angular/common';
 import { ProductEditPreviewComponent } from '../product-edit-preview/product-edit-preview.component';
 import { MODAL_DATA, ModalRef } from '../services/modal-service.service';
 import { CreateProductSelectorComponent } from '../create-product-selector/create-product-selector.component';
+import { ProductCreationSectionComponent } from '../product-creation-section/product-creation-section.component';
 import {
   Product,
   PRODUCT_STATUS,
@@ -29,9 +29,9 @@ enum ProductCreationScreen {
   selector: 'app-product-creation-overlay',
   imports: [
     CommonModule,
-    ProductCreationFormComponent,
     ProductEditPreviewComponent,
     CreateProductSelectorComponent,
+    ProductCreationSectionComponent,
   ],
   templateUrl: './product-creation-overlay.component.html',
   styleUrl: './product-creation-overlay.component.scss',
@@ -42,19 +42,23 @@ export class ProductCreationOverlayComponent {
   ProductCreationScreen = ProductCreationScreen;
   currentScreen: ProductCreationScreen = ProductCreationScreen.SELECTOR;
   product?: Product;
+  displayPreviewProduct?: Product;
   productFormValid: boolean = false;
   saveInProgress: boolean = false;
-  @ViewChild(ProductCreationFormComponent)
-  productCreationForm!: ProductCreationFormComponent;
+
+  @ViewChild(ProductCreationSectionComponent)
+  productCreationSection!: ProductCreationSectionComponent;
+
   readonly PRODUCT_STATUS = PRODUCT_STATUS;
 
   constructor(
     @Inject(MODAL_DATA) public data: ProductCreationOverlayData,
-    private modalRef: ModalRef<ProductCreationFormComponent, boolean>,
+    private modalRef: ModalRef<ProductCreationSectionComponent, boolean>,
     private cdRef: ChangeDetectorRef,
     private productService: ProductService
   ) {
     this.product = data?.product;
+    this.displayPreviewProduct = this.product;
 
     if (this.product?.id) {
       this.currentScreen = ProductCreationScreen.FORM;
@@ -66,53 +70,40 @@ export class ProductCreationOverlayComponent {
     this.currentScreen = ProductCreationScreen.FORM;
   }
 
-  onProductFormUpdated(updatedProduct?: Product) {
-    this.product = {
-      ...this.product,
-      ...updatedProduct,
-      inventorySettings: {
-        // Each product type has unique inventory settings. Reset them entirely.
-        ...updatedProduct?.inventorySettings,
-      },
-      purchaseSettings: {
-        ...this.product?.purchaseSettings,
-        ...updatedProduct?.purchaseSettings,
-      },
-      soundEffect: {
-        ...this.product?.soundEffect,
-        ...updatedProduct?.soundEffect,
-      },
-    } as Product;
+  refreshDisplayPreviewProduct(updatedProduct?: Product) {
+    this.displayPreviewProduct = updatedProduct;
+    this.cdRef.detectChanges();
+  }
 
-    if (!this.product.inventorySettings?.dailyLimit) {
-      this.product.inventorySettings = {
-        ...this.product.inventorySettings,
-        purchasedToday: 0,
-        firstPurchaseTodayAt: null,
-      };
-    }
+  setBaseProduct(product: Product) {
+    this.product = product;
     this.cdRef.detectChanges();
   }
 
   resetProductCreation(screen: ProductCreationScreen) {
     this.product = undefined;
+    this.displayPreviewProduct = undefined;
     this.currentScreen = screen;
   }
 
-  onProductFormStatus(valid: boolean) {
+  updateProductFormStatus(valid: boolean) {
     this.productFormValid = valid;
   }
 
   saveProduct(productStatus: PRODUCT_STATUS, event?: Event) {
     event?.stopPropagation();
-    this.product!.status = productStatus;
-    this.saveInProgress = true;
-    this.productService.upsertProduct(this.product!).subscribe({
-      next: () => {
-        this.closeModal();
-        this.saveInProgress = false;
-      },
-    });
+
+    if (this.product) {
+      this.product.status = productStatus;
+      this.saveInProgress = true;
+
+      this.productService.upsertProduct(this.product).subscribe({
+        next: () => {
+          this.closeModal();
+          this.saveInProgress = false;
+        },
+      });
+    }
   }
 
   closeModal() {
