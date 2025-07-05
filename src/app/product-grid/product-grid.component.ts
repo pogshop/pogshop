@@ -109,11 +109,6 @@ export class ProductGridComponent implements OnInit, OnDestroy {
       if (aIndex !== -1 && bIndex !== -1) {
         return aIndex - bIndex;
       }
-
-      // If only one product is in the sort order, prioritize it
-      if (aIndex !== -1) return -1;
-      if (bIndex !== -1) return 1;
-
       // If neither product is in the sort order, maintain default sorting
       if (a.isHidden !== b.isHidden) {
         return a.isHidden ? 1 : -1;
