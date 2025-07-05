@@ -179,6 +179,7 @@ export class ProductCreationSectionComponent {
   onProductFormUpdated(updatedProduct: Product) {
     if (this.activeTabIndex === 0) {
       this.baseProduct = updatedProduct;
+      this.onBaseProductUpdated.emit(this.baseProduct);
     }
 
     const activeTab = this.getActiveTab();
