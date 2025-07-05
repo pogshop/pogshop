@@ -29,7 +29,7 @@ export class ProductCreationSectionComponent {
   activeTabIndex = 0;
   productTabs: ProductTab[] = [];
   @Input({ required: true }) baseProduct!: Product;
-  @Output() onProductUpdated = new EventEmitter<Product>();
+  @Output() onProductTabUpdated = new EventEmitter<Product>();
   @Output() onProductFormStatusChanged = new EventEmitter<boolean>();
   @Output() productCreated = new EventEmitter<void>();
   @Output() onBack = new EventEmitter<void>();
@@ -121,7 +121,9 @@ export class ProductCreationSectionComponent {
 
   switchTab(tabIndex: number) {
     this.activeTabIndex = tabIndex;
-    this.onProductUpdated.emit(this.productTabs[this.activeTabIndex].product);
+    this.onProductTabUpdated.emit(
+      this.productTabs[this.activeTabIndex].product
+    );
   }
 
   isActiveTab(tabIndex: number): boolean {
@@ -144,7 +146,9 @@ export class ProductCreationSectionComponent {
     this.activeTabIndex = this.productTabs.length - 1;
 
     this.updateBaseProductVariations();
-    this.onProductUpdated.emit(this.productTabs[this.activeTabIndex].product);
+    this.onProductTabUpdated.emit(
+      this.productTabs[this.activeTabIndex].product
+    );
     this.onProductFormStatusChanged.emit(this.checkProductValidity());
     this.cdRef.detectChanges();
   }
@@ -164,7 +168,9 @@ export class ProductCreationSectionComponent {
     );
 
     this.updateBaseProductVariations();
-    this.onProductUpdated.emit(this.productTabs[this.activeTabIndex].product);
+    this.onProductTabUpdated.emit(
+      this.productTabs[this.activeTabIndex].product
+    );
     this.onProductFormStatusChanged.emit(this.checkProductValidity());
   }
 
@@ -190,7 +196,7 @@ export class ProductCreationSectionComponent {
     }
 
     this.updateBaseProductVariations();
-    this.onProductUpdated.emit(activeTab?.product);
+    this.onProductTabUpdated.emit(activeTab?.product);
     this.onProductFormStatusChanged.emit(this.checkProductValidity());
     this.cdRef.detectChanges();
   }

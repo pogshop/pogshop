@@ -159,6 +159,11 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   handleBuyProduct(event: Event): void {
+    // A product with variations cannot support quick checkout. Display the product details instead.
+    if (this.product?.variations?.length) {
+      this.onProductClick.emit(this.product);
+      return;
+    }
     logEvent(this.analytics, 'product_card_buy_button_clicked');
     event?.stopPropagation();
     this.modalService.open(ProductCheckoutFormComponent, {
