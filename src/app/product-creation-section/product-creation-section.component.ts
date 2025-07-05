@@ -44,8 +44,8 @@ export class ProductCreationSectionComponent {
   private createProductForm(product?: Product): FormGroup {
     // Initialize highlights if product has features
     const featuresFormArray = this.fb.array([]);
-    if (this.baseProduct?.features && this.baseProduct.features.length > 0) {
-      for (const feature of this.baseProduct.features) {
+    if (product?.features && product.features.length > 0) {
+      for (const feature of product.features) {
         featuresFormArray.push(this.fb.control(feature));
       }
     }
