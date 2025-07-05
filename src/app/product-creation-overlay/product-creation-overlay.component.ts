@@ -77,6 +77,7 @@ export class ProductCreationOverlayComponent {
 
   setBaseProduct(product: Product) {
     this.product = product;
+    console.log('Base product set', this.product);
     this.cdRef.detectChanges();
   }
 
@@ -92,6 +93,7 @@ export class ProductCreationOverlayComponent {
 
   saveProduct(productStatus: PRODUCT_STATUS, event?: Event) {
     event?.stopPropagation();
+    console.log('Saving product', this.product);
 
     if (this.product) {
       this.product.status = productStatus;
